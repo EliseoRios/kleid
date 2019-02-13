@@ -1,0 +1,2 @@
+<link href="{{ asset('vendor/circliful-master/css/jquery.circliful.css') }}" rel="stylesheet" type="text/css" />
+<script src="{{ asset('vendor/circliful-master/js/jquery.circliful.min.js') }}"></script>

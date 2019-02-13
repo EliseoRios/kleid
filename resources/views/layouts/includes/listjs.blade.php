@@ -1,0 +1,1 @@
+<script type="text/javascript" src="{{ asset('js/list.min.js') }}"></script>
