@@ -15,22 +15,22 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap Core Css -->
-    <link href="{{ asset('vendor/bsb/plugins/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('templates/bsb/plugins/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
 
     <!-- Waves Effect Css -->
-    <link href="{{ asset('vendor/bsb/plugins/node-waves/waves.css') }}" rel="stylesheet" />
+    <link href="{{ asset('templates/bsb/plugins/node-waves/waves.css') }}" rel="stylesheet" />
 
     <!-- Animation Css -->
-    <link href="{{ asset('vendor/bsb/plugins/animate-css/animate.css') }}" rel="stylesheet" />
+    <link href="{{ asset('templates/bsb/plugins/animate-css/animate.css') }}" rel="stylesheet" />
 
     <!-- Morris Chart Css-->
-    <link href="{{ asset('vendor/bsb/plugins/morrisjs/morris.css') }}" rel="stylesheet" />
+    <link href="{{ asset('templates/bsb/plugins/morrisjs/morris.css') }}" rel="stylesheet" />
 
     <!-- Custom Css -->
-    <link href="{{ asset('vendor/bsb/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('templates/bsb/css/style.css') }}" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
-    <link href="{{ asset('vendor/bsb/css/themes/all-themes.css') }}" rel="stylesheet" />
+    <link href="{{ asset('templates/bsb/css/themes/all-themes.css') }}" rel="stylesheet" />
 
     @yield('css')
 </head>
@@ -282,9 +282,9 @@
         <!-- Left Sidebar -->
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
-            <div class="user-info" style="background-image: url('{{ asset('vendor/bsb/images/fondo2.jpeg') }}')">
+            <div class="user-info" style="background-image: url('{{ asset('templates/bsb/images/fondo2.jpeg') }}')">
                 <div class="image">
-                    <img src="{{ asset('vendor/bsb/images/usuario.png') }}" width="48" height="48" alt="User" />
+                    <img src="{{ asset('templates/bsb/images/usuario.png') }}" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -480,48 +480,48 @@
     </section>
 
     <!-- Jquery Core Js -->
-    <script src="{{ asset('vendor/bsb/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/jquery/jquery.min.js') }}"></script>
 
     <!-- Bootstrap Core Js -->
-    <script src="{{ asset('vendor/bsb/plugins/bootstrap/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/bootstrap/js/bootstrap.js') }}"></script>
 
     <!-- Select Plugin Js -->
-    {{-- <script src="{{ asset('vendor/bsb/plugins/bootstrap-select/js/bootstrap-select.js') }}"></script> --}}
+    {{-- <script src="{{ asset('templates/bsb/plugins/bootstrap-select/js/bootstrap-select.js') }}"></script> --}}
 
     <!-- Slimscroll Plugin Js -->
-    <script src="{{ asset('vendor/bsb/plugins/jquery-slimscroll/jquery.slimscroll.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/jquery-slimscroll/jquery.slimscroll.js') }}"></script>
 
     <!-- Waves Effect Plugin Js -->
-    <script src="{{ asset('vendor/bsb/plugins/node-waves/waves.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/node-waves/waves.js') }}"></script>
 
     <!-- Jquery CountTo Plugin Js -->
-    <script src="{{ asset('vendor/bsb/plugins/jquery-countto/jquery.countTo.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/jquery-countto/jquery.countTo.js') }}"></script>
 
     <!-- Morris Plugin Js -->
-    <script src="{{ asset('vendor/bsb/plugins/raphael/raphael.min.js') }}"></script>
-    <script src="{{ asset('vendor/bsb/plugins/morrisjs/morris.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/raphael/raphael.min.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/morrisjs/morris.js') }}"></script>
 
     <!-- ChartJs -->
-    <script src="{{ asset('vendor/bsb/plugins/chartjs/Chart.bundle.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/chartjs/Chart.bundle.js') }}"></script>
 
     <!-- Flot Charts Plugin Js -->
-    <script src="{{ asset('vendor/bsb/plugins/flot-charts/jquery.flot.js') }}"></script>
-    <script src="{{ asset('vendor/bsb/plugins/flot-charts/jquery.flot.resize.js') }}"></script>
-    <script src="{{ asset('vendor/bsb/plugins/flot-charts/jquery.flot.pie.js') }}"></script>
-    <script src="{{ asset('vendor/bsb/plugins/flot-charts/jquery.flot.categories.js') }}"></script>
-    <script src="{{ asset('vendor/bsb/plugins/flot-charts/jquery.flot.time.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/flot-charts/jquery.flot.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/flot-charts/jquery.flot.resize.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/flot-charts/jquery.flot.pie.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/flot-charts/jquery.flot.categories.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/flot-charts/jquery.flot.time.js') }}"></script>
 
     <!-- Sparkline Chart Plugin Js -->
-    <script src="{{ asset('vendor/bsb/plugins/jquery-sparkline/jquery.sparkline.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/jquery-sparkline/jquery.sparkline.js') }}"></script>
 
     <!-- Custom Js -->
-    <script src="{{ asset('vendor/bsb/js/admin.js') }}"></script>
-    {{-- <script src="{{ asset('vendor/bsb/js/pages/index.js') }}"></script> --}}
+    <script src="{{ asset('templates/bsb/js/admin.js') }}"></script>
+    {{-- <script src="{{ asset('templates/bsb/js/pages/index.js') }}"></script> --}}
 
     <!-- Demo Js -->
-    <script src="{{ asset('vendor/bsb/js/demo.js') }}"></script>
+    <script src="{{ asset('templates/bsb/js/demo.js') }}"></script>
 
-    {{-- <script src="{{ asset('vendor/bsb/js/pages/tables/jquery-datatable.js') }}"></script> --}}
+    {{-- <script src="{{ asset('templates/bsb/js/pages/tables/jquery-datatable.js') }}"></script> --}}
 
     @yield('script')
 </body>
