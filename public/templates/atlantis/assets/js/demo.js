@@ -18,8 +18,8 @@ Circles.create({
 //Notify
 $.notify({
 	icon: 'flaticon-alarm-1',
-	title: 'Atlantis',
-	message: 'Premium Bootstrap 4 Admin Dashboard',
+	title: 'Bienvenido a Kleid!',
+	message: 'Moda al alcance',
 },{
 	type: 'secondary',
 	placement: {

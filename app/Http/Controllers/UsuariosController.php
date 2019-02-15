@@ -35,15 +35,16 @@ class UsuariosController extends Controller
         return Datatables::of($datos)
         ->editcolumn('id',function ($usuario) {
 
-            $opciones = "";
+            $opciones = '<div class="btn-group">';
 
             if (Auth::user()->permiso(array('menu',9001)) == 2 ) {
 
-                $opciones = '<a href="'. url('usuarios/editar/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="material-icons">edit</i> </a>';
+                $opciones .= '<a href="'. url('usuarios/editar/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="fa fa-edit"></i> </a>';
 
-                $opciones .= '<a href="'. url('usuarios/eliminar/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar usuario ?'".')" class="btn btn-xs btn-danger" title="Eliminar"><i class="material-icons">delete</i> </a>';
+                $opciones .= '<a href="'. url('usuarios/eliminar/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar usuario ?'".')" class="btn btn-xs btn-danger" title="Eliminar"><i class="fa fa-trash"></i> </a>';
 
             } 
+            $opciones .= "</div>";
 
             return $opciones;
 
