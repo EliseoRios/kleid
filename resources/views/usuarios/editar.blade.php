@@ -36,7 +36,7 @@
 <div class="col-md-10 offset-1">
 
   <div class="card">
-    <div class="card-header">
+    <div class="card-header card-primary">
       Editar > {{ $usuario->nombre }}
     </div>
     <div class="card-body">
@@ -44,7 +44,7 @@
       {{-- Perfil --}}
         @if(Auth::user()->permiso(array('menu',9001)) == 2)
           <div align="right">
-              <a href="#" class="btn btn-primary btn-xs" id="boton_editar" title="Consultar"><i class="fa fa-edit"></i>  </a>          
+              <a href="#" class="btn btn-secondary btn-xs" id="boton_editar" title="Consultar" style="color: white;"><i class="fa fa-edit"></i>  </a>          
           </div>
         @endif
         
@@ -71,9 +71,7 @@
             {!! Form::text('telefonos',$usuario->telefonos,array( 'class' => 'form-control','placeholder' => 'Telefonos', 'readonly'=>'readonly')) !!}
             <p class="text-danger"> {!! $errors->first('telefonos')!!} </p>
           </div>
-        </div>
-
-          
+        </div>          
 
         <div class="form-group">
           {!! Form::label('Contraseña :', null, array('class'=>'control-label')) !!}
@@ -90,6 +88,7 @@
         </div>
 
         {!! Form::hidden('id',$usuario->id)!!}
+
         <div align="right" class="box-footer">
 
           <div class="icon-and-text-button-demo">
@@ -109,7 +108,7 @@
 
   {{-- Card permisos --}}
   <div class="card">
-    <div class="card-header">
+    <div class="card-header card-primary">
       Permisos
     </div>
     <div class="card-body">
@@ -118,7 +117,7 @@
         <div align="right" style="padding-bottom:20px">
 
           <div class="dropdown open float-left" id="botonesTodosPermisos" style="display: none;" title="Selección rápida de permisos globales">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-star"></i>
               Permisos Globales
             </button>
@@ -129,62 +128,59 @@
             </div>
           </div>
 
-          <a href="" class="btn btn-primary btn-sm" id="boton_editar2" title="Consultar">
+          <a href="" class="btn btn-secondary btn-sm" id="boton_editar2" title="Consultar" style="color: white;">
             <i class="fa fa-edit"></i>
             Editar
           </a> 
         </div>
         @endif
 
+        {{-- Acordion permisos --}}
         {!! Form::open(array('action' => 'UsuariosController@update_permisos','class'=>'','role'=>'form')) !!}
 
-        <div class="panel-group" id="accordion_10" role="tablist" aria-multiselectable="true">
+          <div id="accordion" role="tablist" aria-multiselectable="true">
 
             <?php $elemento= 0;?>
                   
             @foreach ($menus as $menu)
-
-            <div class="panel panel-col-cyan">
-                <div class="panel-heading" role="tab" id="headingTwo_10">
-                    <h4 class="panel-title">
-                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion_10" href="##{!! substr($menu->codigo,0,2) !!}" aria-expanded="false" aria-controls="collapseTwo_10">
-                            {!! $menu->area !!}
-                        </a>
-                    </h4>
+            <div class="card">
+              <a data-toggle="collapse" data-parent="#accordion" href="#{!! substr($menu->codigo,0,2) !!}" aria-expanded="true" aria-controls="menuid">
+                <div class="card-header card-info" role="tab" id="headingOne">
+                  {!! $menu->area !!}
                 </div>
-                <div id="{!! substr($menu->codigo,0,2) !!}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo_10">
-                    <div class="panel-body">
-                       
-                       <?php                                     
-                          $opcs   = DB::table('menus')->where( DB::raw('substr(codigo,1,2)'),'=',substr($menu->codigo,0,2) )->select('id','codigo','dependencia','area','opcion','url')->get();                                    
-                       ?>      
+              </a>
+              <div id="{!! substr($menu->codigo,0,2) !!}" class="card-body collapse in" role="tabpanel" aria-labelledby="headingOne">
 
-                       @foreach( $opcs as $opc)
-                       {!! Form::label($opc->codigo,$opc->opcion, array()) !!}
-                       <div class="form-line">
-                         {!! Form::select($opc->codigo,$opciones, $usuario->permiso(array('menu',$opc->codigo)) ,array( 'class' => 'form-control opciones', 'disabled'=>'disabled')) !!}
-                       </div>
-                       <?php $elemento  = $elemento + 1; ?>
-                       @endforeach
+                <?php                                     
+                  $opcs   = DB::table('menus')->where( DB::raw('substr(codigo,1,2)'),'=',substr($menu->codigo,0,2) )->select('id','codigo','dependencia','area','opcion','url')->get();
+                ?>
 
-                    </div>
+                @foreach( $opcs as $opc)
+                <div class="form-group">
+                  {!! Form::label($opc->codigo,$opc->opcion, array()) !!}
+
+                  {!! Form::select($opc->codigo,$opciones, $usuario->permiso(array('menu',$opc->codigo)) ,array( 'class' => 'form-control opciones', 'disabled'=>'disabled')) !!}
+                  <?php $elemento  = $elemento + 1; ?>
                 </div>
+                @endforeach
+
+              </div>
             </div>
             @endforeach
 
             {!! Form::hidden('usuario_id',$usuario->id)!!}
 
-            <br>
+          </div>
 
-            <div align="right" class="box-footer">
-              <button type="submit" class="btn btn-primary"  id="boton_grabar2", secure = null style="display:none"> 
-                <i class="material-icons">save</i>
-                <span>Guardar</span>
-              </button>
-            </div>
+          <div align="right" class="box-footer">
+            <button type="submit" class="btn btn-primary"  id="boton_grabar2", secure = null style="display:none"> 
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+          </div>
 
-        </div>
         {!! Form::close() !!}
+        {{-- /Acordion permisos --}}
         
       </div>
 

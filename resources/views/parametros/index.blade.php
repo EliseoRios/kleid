@@ -4,41 +4,57 @@
 	Parametros
 @endsection
 
-@section('breadcrumb')
-     <li><a href=""><i class="material-icons">home</i> Inicio</a></li>
-     <li class="active"><i class="material-icons">low_priority</i> Parametros</li>
+@section('header')
+<div class="page-header">
+  <h4 class="page-title">Parametros</h4>
+  <ul class="breadcrumbs">
+    <li class="nav-home">
+      <a href="{{ url('/') }}">
+        <i class="flaticon-home"></i> Inicio
+      </a>
+    </li>
+    <li class="separator">
+      <i class="flaticon-right-arrow"></i>
+    </li>
+    <li class="nav-item">
+      <a href="">Parametros</a>
+    </li>
+  </ul>
+</div>
 @endsection
  
 @section('content')
 
-<div class="card">
-    <div class="header bg-cyan">
-        <h2>
-            Parametros <small>Valores automátios del sistema</small>
-        </h2>
-    </div>
-    <div class="body">
+<div class="col-md-12">
 
-        <!-- Listado de Parametros -->
-		<div class="table-responsive">
-          <table id="dtParametros" class="table table-condensed small table-striped table-bordered table-hover dataTable js-exportable">  				                     
-          <thead>
-                  <tr>
-                      
-                      <th style="max-width:40px"></th>
-                      <th>Identificador</th>
-                      <th>Nombre</th>
-                      <th>Valor</th>
-                                             
-                  </tr>
-           </thead>
-          <tbody>
-          </tbody>
-          </table>
-      	</div>
-      	<!-- /Listado de Parametros -->
+	<div class="card">
+		<div class="card-header">
+			Featured
+		</div>
+		<div class="card-body">
+			
+			<!-- Listado de Parametros -->
+			<div class="table-responsive">
+				<table id="dtParametros" class="table table-condensed small table-striped table-bordered table-hover dataTable js-exportable">  				                     
+					<thead>
+						<tr>
+							
+							<th style="max-width:40px"></th>
+							<th>Identificador</th>
+							<th>Nombre</th>
+							<th>Valor</th>
+							
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<!-- /Listado de Parametros -->
 
-    </div>
+		</div>
+	</div>
+	
 </div>
 
 <!-- Modal Parametros -->
@@ -46,28 +62,18 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title" id="modalParametrosTitle"></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>						
 			<span id="contenido_modal"><!-- Desde script --></span>
 		</div>
 	</div>
 </div>
 <!-- /Modal Parametros -->
-
-{{-- {!! Form::label('Nombre : ', null ,[]) !!}
-<div class="form-group" >
-	<div class="form-line">
-		{!! Form::text('nombre','',array( 'class' => 'form-control', 'placeholder' => 'Nombre completo del usuario')) !!} 
-		<p class="text-danger">	{!! $errors->first('nombre')!!} </p>
-	</div>
-</div>	 --}}
 @endsection 
 
 
 @section('script')
-
-	@include('layouts.includes.datatables')
 
 	<script type="text/javascript">
 

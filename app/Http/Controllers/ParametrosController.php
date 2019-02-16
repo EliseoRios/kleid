@@ -35,7 +35,7 @@ class ParametrosController extends Controller
 
             if (Auth::user()->permiso(array('menu',9002)) == 2 ) {
 
-                $opciones = '<a class="btn btn-primary btn-xs" title="Editar" data-identifier="'.Hashids::encode($registro->id).'" data-formulario="editar" data-toggle="modal" data-target="#modalParametros" style="margin-right: 4px;"><i class="material-icons">edit</i> </a>';
+                $opciones = '<a href="" class="btn btn-outline-primary btn-xs" title="Editar" data-identifier="'.Hashids::encode($registro->id).'" data-formulario="editar" data-toggle="modal" data-target="#modalParametros" style="margin-right: 4px;"><i class="fa fa-edit"></i> </a>';
             }
 
             /*if (Auth::user()->permiso(array('menu',9002)) == 2) {
