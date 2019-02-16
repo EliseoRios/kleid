@@ -38,24 +38,14 @@ class MenusSeeder extends Seeder
             'codigo'       => '2003',
             'dependencia'  => 'Catálogos',
             'area'         => 'Catálogos',
-            'opcion'       => 'Marcas',
-            //'url'          => 'marcas',
-            'created_at' =>  date('Y-m-d H:i:s'),
-            'updated_at' =>  date('Y-m-d H:i:s')
-        ]);
-
-        DB::table('menus')->insert([
-            'codigo'       => '2004',
-            'dependencia'  => 'Catálogos',
-            'area'         => 'Catálogos',
-            'opcion'       => 'Surtidoras',
-            //'url'          => 'surtidoras',
+            'opcion'       => 'Surtidos',
+            'url'          => 'surtidos',
             'created_at' =>  date('Y-m-d H:i:s'),
             'updated_at' =>  date('Y-m-d H:i:s')
         ]);
 
         // CRM 3000
-        DB::table('menus')->insert([
+        /*DB::table('menus')->insert([
             'codigo'       => '3001',
             'dependencia'  => 'CRM',
             'area'         => 'CRM',
@@ -83,7 +73,7 @@ class MenusSeeder extends Seeder
             //'url'          => 'abonos_programados',
             'created_at' =>  date('Y-m-d H:i:s'),
             'updated_at' =>  date('Y-m-d H:i:s')        
-        ]);
+        ]);*/
 
         // Ventas
         DB::table('menus')->insert([
@@ -112,26 +102,6 @@ class MenusSeeder extends Seeder
             'area'         => 'Ventas',
             'opcion'       => 'Tickets',
             'url'          => 'tickets',
-            'created_at' =>  date('Y-m-d H:i:s'),
-            'updated_at' =>  date('Y-m-d H:i:s')        
-        ]);
-
-        DB::table('menus')->insert([
-            'codigo'       => '4004',
-            'dependencia'  => 'Ventas',
-            'area'         => 'Ventas',
-            'opcion'       => 'Comisiones',
-            'url'          => 'comisiones',
-            'created_at' =>  date('Y-m-d H:i:s'),
-            'updated_at' =>  date('Y-m-d H:i:s')        
-        ]);
-
-        DB::table('menus')->insert([
-            'codigo'       => '4009',
-            'dependencia'  => 'Ventas',
-            'area'         => 'Ventas',
-            'opcion'       => 'Productividad',
-            'url'          => 'productividad',
             'created_at' =>  date('Y-m-d H:i:s'),
             'updated_at' =>  date('Y-m-d H:i:s')        
         ]);

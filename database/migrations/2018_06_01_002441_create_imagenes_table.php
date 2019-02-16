@@ -19,10 +19,7 @@ class CreateImagenesTable extends Migration
 
                  $table->bigInteger('usuarios_id')->default(0);
                  $table->bigInteger('productos_id')->default(0);
-                 $table->bigInteger('productosdetalles_id')->default(0);
                  $table->bigInteger('encargos_id')->default(0);
-                 $table->bigInteger('clientes_id')->default(0);
-                 $table->bigInteger('marcas_id')->default(0);
                  $table->bigInteger('correos_id')->default(0);
 
                  $table->string("mime");

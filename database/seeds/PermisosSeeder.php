@@ -16,7 +16,7 @@ class PermisosSeeder extends Seeder
     {
         //DB::table('permisos')->truncate();
       
-        $usuarios = Usuarios::where('departamentos_id','=',1)->get(); 
+        $usuarios = Usuarios::where('perfiles_id','=',1)->get(); 
 
         foreach ($usuarios as  $usuario) {
         

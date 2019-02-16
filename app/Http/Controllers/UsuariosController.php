@@ -98,9 +98,9 @@ class UsuariosController extends Controller
         $opciones = array('0'=>'Sin Permiso','1'=>'Lectura','2'=>'Total');
 
         //$permiso_supervisor_crm = $usuario->permiso(array('permiso_supervisor_crm','9999'));
-        $departamentos = Departamentos::activos()->pluck('nombre','id');
+        $perfiles = config('sistema.perfiles');
 
-        return view('usuarios.editar',compact('usuario','opciones','permiso_supervisor_crm','permiso_crear_proyectos','permiso_reportes_oportunidades','departamentos'));
+        return view('usuarios.editar',compact('usuario','opciones','permiso_supervisor_crm','permiso_crear_proyectos','permiso_reportes_oportunidades','perfiles'));
     }
 
     public function actualizar(Request $request) {
@@ -113,7 +113,7 @@ class UsuariosController extends Controller
             $usuario->nombre = ($request->nombre != null)?$request->nombre:"";
             $usuario->email = ($request->email != null)?$request->email:"";
             $usuario->telefonos = ($request->telefonos != null)?$request->telefonos:"";
-            $usuario->departamentos_id = ($request->departamentos_id != null)?$request->departamentos_id:0;
+            $usuario->perfiles_id = ($request->perfiles_id != null)?$request->perfiles_id:0;
             $usuario->genero = ($request->genero != null)?$request->genero:0;
 
             if ($request->password != "")

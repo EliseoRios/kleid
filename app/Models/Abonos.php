@@ -12,12 +12,8 @@ class Abonos extends Model
     	return $this->belongsTo('App\Models\Usuario','usuarios_id','id');
     }
 
-    public function venta(){
-    	return $this->belongsTo('App\Models\Ventas','ventas_id','id');
-    }
-
     public function cliente(){
-    	return $this->belongsTo('App\Models\Clientes','clientes_id','id');
+    	return $this->belongsTo('App\Models\Usuarios','cliente_usuarios_id','id');
     }
 
     public function scopeActivos($query){

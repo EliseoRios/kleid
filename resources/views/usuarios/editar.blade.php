@@ -81,10 +81,10 @@
         </div>
 
         <div class="form-group">
-          {!! Form::label('Departamento :', null, array('class'=>'control-label')) !!}
+          {!! Form::label('Perfil :', null, array('class'=>'control-label')) !!}
 
-          {!! Form::select('departamentos_id',$departamentos,$usuario->departamentos_id,array( 'class' => 'form-control  show-tick select','placeholder' => '-- Seleccione departamento --', 'disabled'=>'disabled')) !!}
-          <p class="text-danger"> {!! $errors->first('departamentos')!!} </p>
+          {!! Form::select('perfiles_id',$perfiles,$usuario->perfiles_id,array( 'class' => 'form-control  show-tick select','placeholder' => '-- Seleccione perfil --', 'disabled'=>'disabled')) !!}
+          <p class="text-danger"> {!! $errors->first('perfiles_id')!!} </p>
         </div>
 
         {!! Form::hidden('id',$usuario->id)!!}

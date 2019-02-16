@@ -16,8 +16,8 @@ class UsuariosSeeder extends Seeder
     			'id' => 1,
     			'nombre' => 'Roox',
     			'email' => 'Rooxzavala@outlook.com',
-                'departamentos_id' => 1,
-                'genero' => 2,
+                'perfiles_id' => 1,
+                'genero' => 'f',
     			'password' => Hash::make('123456'),
                 'created_at' =>  date('Y-m-d H:i:s'),
                 'updated_at' =>  date('Y-m-d H:i:s')
@@ -27,8 +27,8 @@ class UsuariosSeeder extends Seeder
     			'id' => 2,
     			'nombre' => 'Eliseo Ríos',
     			'email' => 'eliseo.root@gmail.com',
-                'departamentos_id' => 1,
-                'genero' => 1,
+                'perfiles_id' => 1,
+                'genero' => 'm',
     			'password' => Hash::make('123456'),
                 'created_at' =>  date('Y-m-d H:i:s'),
                 'updated_at' =>  date('Y-m-d H:i:s')

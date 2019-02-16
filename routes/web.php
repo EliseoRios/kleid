@@ -19,36 +19,51 @@ Route::get('/home', function () {
 
 Auth::routes();
 
+Route::get('imagen/{id}', 'ImagenesController@imagen');
 
 Route::group(['middleware' => ['auth']], function () {
 	Route::get('/', 'HomeController@index');
 
+	//Surtidos
+	Route::group(['prefix'=>'surtidos'], function(){
+
+		Route::get('/','SurtidosController@index');
+		Route::get('datatables','SurtidosController@datatables');
+		Route::get('editar/{id}','SurtidosController@editar');
+		Route::get('eliminar/{id}','SurtidosController@eliminar');
+
+		Route::post('guardar','SurtidosController@guardar');
+		Route::post('actualizar','SurtidosController@actualizar');
+		Route::post('update_permisos','SurtidosController@update_permisos');      
+
+	});
+
 	//Usuarios
 	Route::group(['prefix'=>'usuarios'], function(){
 
-	      Route::get('/','UsuariosController@index');
-	      Route::get('datatables','UsuariosController@datatables');
-	      Route::get('editar/{id}','UsuariosController@editar');
-	      Route::get('eliminar/{id}','UsuariosController@eliminar');
+		Route::get('/','UsuariosController@index');
+		Route::get('datatables','UsuariosController@datatables');
+		Route::get('editar/{id}','UsuariosController@editar');
+		Route::get('eliminar/{id}','UsuariosController@eliminar');
 
-	      Route::post('guardar','UsuariosController@guardar');
-	      Route::post('actualizar','UsuariosController@actualizar');
-	      Route::post('update_permisos','UsuariosController@update_permisos');      
-	     
+		Route::post('guardar','UsuariosController@guardar');
+		Route::post('actualizar','UsuariosController@actualizar');
+		Route::post('update_permisos','UsuariosController@update_permisos');      
+
 	});
 
 	//Productos
 	Route::group(['prefix'=>'productos'], function(){
 
-	      Route::get('/','ProductosController@index');
-	      Route::get('datatables','ProductosController@datatables');
-	      Route::get('dtdetalles', 'ProductosController@dtdetalles');
-	      Route::get('editar/{id}','ProductosController@editar');
-	      Route::get('eliminar/{id}','ProductosController@eliminar');
+		Route::get('/','ProductosController@index');
+		Route::get('datatables/{id?}','ProductosController@datatables');
+		Route::get('dtdetalles', 'ProductosController@dtdetalles');
+		Route::get('editar/{id}','ProductosController@editar');
+		Route::get('eliminar/{id}','ProductosController@eliminar');
 
-	      Route::post('guardar','ProductosController@guardar');
-	      Route::post('actualizar','ProductosController@actualizar');
-	      Route::post('update_permisos','ProductosController@update_permisos');      
+		Route::post('guardar','ProductosController@guardar');
+		Route::post('actualizar','ProductosController@actualizar');
+		Route::post('update_permisos','ProductosController@update_permisos');      
 	     
 	});
 

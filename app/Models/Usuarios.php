@@ -79,12 +79,12 @@ class Usuarios extends Authenticatable
         return  $usuarios->pluck('nombre','id')->toArray();
     }
 
-    public function departamento(){
-        return $this->belongsTo('App\Models\Departamentos','departamentos_id','id');
-    }
-
     public function ventas(){
         return $this->hasMany('App\Models\Ventas','usuarios_id','id');
+    }
+
+    public function compras(){
+        return $this->hasMany('App\Models\Ventas','cliente_usuarios_id','id');
     }
 
     public function tickets(){

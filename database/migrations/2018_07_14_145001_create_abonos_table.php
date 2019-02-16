@@ -18,14 +18,11 @@ class CreateAbonosTable extends Migration
                 $table->bigIncrements('id');
 
                 $table->bigInteger('usuarios_id')->default(0);
-                $table->bigInteger('ventas_id')->default(0);
+                $table->bigInteger('cliente_usuarios_id')->default(0);
 
                 $table->decimal('abono',19,2)->default(0.00);
 
-                $table->date('fecha')->nullable();
-                $table->bigInteger('fecha_unix')->default(0);
-
-                $table->boolean('estatus')->default(0);
+                $table->boolean('estatus')->default(1);
                 $table->timestamps();
             });
         }

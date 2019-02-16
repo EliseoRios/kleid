@@ -1,20 +1,21 @@
 <?php 
 return [
 	'generos' => [
-		0=>'Unisex', 
-		1=>'Masculino', 
-		2=>'Femenino'
+		'u'=>'Unisex', 
+		'm'=>'Masculino', 
+		'f'=>'Femenino'
 	],
 
 	'tipo_venta' => [
-		0 => 'Venta',
-		1 => 'Abono'
+		'venta' => 'Venta',
+		'abono' => 'Abono'
 	],
 
-	'departamento' => [
-		0 => 'Sin departamento',
+	'perfiles' => [
+		0 => 'Sin perfil',
 		1 => 'Administración',
-		2 => 'Ventas'
+		2 => 'Ventas',
+		3 => 'Clientes'
 	]
 ]
 

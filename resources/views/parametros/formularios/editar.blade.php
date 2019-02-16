@@ -5,18 +5,18 @@
 	<br>
 	@endif
 
-	{!! Form::label('identificador', 'Identificador : ', []) !!}
 	<div class="form-group">
+		{!! Form::label('identificador', 'Identificador : ', ['class'=>'control-label']) !!}
 		{!! Form::text('identificador',  $parametro->identificador, ['class'=>'form-control input-text', 'readonly','required']) !!}
 	</div>
 
-	{!! Form::label('nombre', 'Nombre : ', ['class'=>'control-label']) !!}
 	<div class="form-group">
+		{!! Form::label('nombre', 'Nombre : ', ['class'=>'control-label']) !!}
 		{!! Form::text('nombre', $parametro->nombre, ['class'=>'form-control input-text', 'readonly','required']) !!}
 	</div>
 
-	{!! Form::label('valor', 'Valor : ', ['class'=>'control-label']) !!}
 	<div class="form-group">
+		{!! Form::label('valor', 'Valor : ', ['class'=>'control-label']) !!}
 		{!! Form::number('valor', $parametro->valor, ['class'=>'form-control input-text', 'readonly','required', 'step'=>'any']) !!}
 	</div>
 

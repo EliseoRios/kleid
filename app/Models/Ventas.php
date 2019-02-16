@@ -17,7 +17,7 @@ class Ventas extends Model
     }
 
     public function cliente(){
-    	return $this->belongsTo('App\Models\Clientes','clientes_id','id');
+    	return $this->belongsTo('App\Models\Usuarios','cliente_usuarios_id','id');
     }
 
     public function ticket(){
@@ -28,8 +28,31 @@ class Ventas extends Model
         return $this->hasMany('App\Models\Abonos','usuarios_id','id');
     }
 
-    public function scopeActivos($query){
+    public function scopeActivas($query){
         return $query->where('estatus','<>',0);
     }
 
+    public function scopeAbonos($query){
+        return $query->where('tipo_venta','abono');
+    }
+
+    public function scopeVentas($query){
+        return $query->where('tipo_venta','venta');
+    }
+
+    public function scopeLiquidadas($query){
+        return $query->where('liquidado',1);
+    }
+
+    public function scopeSinLiquidar($query){
+        return $query->where('liquidado',0);
+    }
+
+    public function scopeComisionAdeuda($query){
+        return $query->where('comision_pagada',0);
+    }
+
+    public function scopeComisionPagada($query){
+        return $query->where('comision_pagada',1);
+    }
 }

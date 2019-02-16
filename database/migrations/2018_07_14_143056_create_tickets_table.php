@@ -19,10 +19,7 @@ class CreateTicketsTable extends Migration
                 $table->bigIncrements('id');
                 $table->bigInteger('usuarios_id')->default(0);
 
-                $table->date('fecha')->nullable();
-                $table->integer('fecha_unix')->nullable();
-
-                $table->boolean('estatus')->default(0);
+                $table->boolean('estatus')->default(1);
                 $table->timestamps();
             });
         }

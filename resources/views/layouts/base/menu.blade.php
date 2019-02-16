@@ -9,7 +9,7 @@
                     <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
                         <span>
                             {{ Auth::user()->nombre }}
-                            <span class="user-level">{{ Auth::user()->departamento->nombre }}</span>
+                            <span class="user-level">{{ config('sistema.perfiles')[Auth::user()->perfiles_id] }}</span>
                         </span>
                     </a>
                     <div class="clearfix"></div>

@@ -12,10 +12,6 @@ class Imagenes extends Model
     	return $this->belongsTo('App\Models\Usuarios','usuarios_id','id');
     }
 
-    public function cliente(){
-    	return $this->belongsTo('App\Models\Clientes','clientes_id','id');
-    }
-
     public function marca(){
     	return $this->belongsTo('App\Models\Marcas','marcas_id','id');
     }

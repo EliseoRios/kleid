@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Productos;
-use App\Models\ProductosDetalles;
-use App\Models\Materiales;
 use App\Models\Parametros;
 use App\Models\Usuarios;
-use App\Models\Departamentos;
+use App\Models\Imagenes;
 
 use Auth;
 use Datatables;
@@ -26,29 +24,31 @@ class ProductosController extends Controller
         return view('productos.index');      
     }
 
-    public function datatables() {
+    public function datatables($surtidos_id = 0) {
 
-        $datos = Productos::activos()->get();
+        if ($surtidos_id > 0)
+            $datos = Productos::activos()->where('surtidos_id',$surtidos_id)->get();
+        else
+            $datos = Productos::activos()->get();
 
         return Datatables::of($datos)
         ->editcolumn('id',function ($registro) {
 
-            $opciones = "";
+            $opciones = '<div class="btn-group">';
 
             if (Auth::user()->permiso(array('menu',2002)) == 2 ) {
 
-                $opciones = '<a href="'. url('productos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-primary btn-xs " title="Consultar"><i class="material-icons">edit</i> </a>';
+                $opciones .= '<a href="'. url('productos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-primary btn-xs " title="Consultar" style="width: 28px;"><i class="fa fa-edit"></i> </a>';
 
-                $opciones .= '<a href="'. url('productos/eliminar/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar producto ?'".')" class="btn btn-danger btn-xs " title="Eliminar">   <i class="material-icons">delete</i> </a>';
-
+                if($registro->ventas()->count() <= 0){
+                    $opciones .= '<a href="'. url('productos/eliminar/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar producto ?'".')" class="btn btn-danger btn-xs " title="Eliminar" style="width: 28px;">   <i class="fa fa-trash"></i> </a>';
+                }
             } 
+
+            $opciones .= '</div>';
 
             return $opciones;
 
-        })
-        ->editcolumn('materiales_id', function($producto){
-            $material = ($producto->material != null)?$producto->material->nombre:"N/D";
-            return $material;
         })
         ->editcolumn('genero', function($producto){
             $array_genero = config('sistema.generos');
@@ -56,11 +56,11 @@ class ProductosController extends Controller
             return $genero;
         })
         ->addcolumn('imagen', function($producto){
-            /*'<a href="'.url('imagen/'.$imagen->id).'" class="image-popup-no-margins img-responsive">
-                            <img src="'.url('imagen/'.$imagen->id).'" title="Ver" style="max-width: 100%;">
-                        </a>';*/
+            $primer_imagen= $producto->imagenes()->first();
+            $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
 
-            $imagen = '<img src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2017/03/09/goods-first-img/1493334007827612138.png" class="img-thumbnail" alt="Foto" style="width: 80px;">';
+            $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;">';
+
             return $imagen;
         })
         ->editcolumn('estatus',function ($usuario){ 
@@ -77,95 +77,92 @@ class ProductosController extends Controller
         ->make(TRUE);
     }
 
-    public function dtdetalles() {
+    public function crear(){
+        if(Auth::user()->permiso(array('menu',9002)) < 2)
+            return redirect()->back();
 
-        $datos = ProductosDetalles::activos()->get();
-
-        return Datatables::of($datos)
-        ->editcolumn('id',function ($registro) {
-
-            $opciones = "";
-
-            if (Auth::user()->permiso(array('menu',2002)) == 2 ) {
-
-                $opciones = '<a href="'. url('productos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-primary btn-xs " title="Consultar"><i class="material-icons">edit</i> </a>';
-
-                $opciones .= '<a href="'. url('productos/eliminar/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar producto ?'".')" class="btn btn-danger btn-xs " title="Eliminar">   <i class="material-icons">delete</i> </a>';
-
-            } 
-
-            return $opciones;
-
-        })
-        ->escapeColumns([])       
-        ->make(TRUE);
+        return view('parametros.formularios.crear');
     }
     
     public function guardar(Request $request) {
 
         //dd($request->all());
 
-        $formulario = $request->formulario;
+        $producto = new Productos;
 
-        switch ($formulario) {
-            case 'producto':
-                $producto = new Productos;
+        $producto->usuarios_id = Auth::user()->id;
+        $producto->surtidos_id = ($request->surtidos_id > 0)?$request->surtidos_id:0;
+        $producto->nombre = ($request->nombre != null)?$request->nombre:"";
 
-                $producto->codigo = ($request->codigo)?$request->codigo:"";
-                $producto->usuarios_id = Auth::user()->id;
-                $producto->nombre = ($request->nombre)?$request->nombre:"";
-                $producto->descripcion = ($request->descripcion)?$request->descripcion:"";
+        $producto->genero = ($request->genero != null)?$request->genero:"";
+        $producto->color = ($request->color != null)?$request->color:"";
+        $producto->talla = ($request->talla != null)?$request->talla:"";
 
-                $material = Materiales::find($request->materiales_id);
-                if(isset($material)){
-                    $producto->materiales_id = ($request->materiales_id)?$request->materiales_id:0;
-                }else{
-                    $material = new Materiales;
-                    $material->nombre = $request->materiales_id;
-                    $material->save();
+        $producto->piezas = ($request->piezas > 0)?(int)$request->piezas:0;
 
-                    $producto->materiales_id = $material->id;
-                }
+        $producto->costo = ($request->costo > 0)?(float)$request->costo:0;
+        $producto->precio = ($request->precio > 0)?(float)$request->precio:0;
+        $producto->precio_minimo = ($request->precio_minimo > 0)?(float)$request->precio_minimo:0;
 
-                $producto->genero = ($request->genero)?$request->genero:0;
+        //Automaticos
+        $producto->ganancia = $producto->precio - $producto->costo;
 
-                $producto->costo = ($request->costo)?(float)$request->costo:0;
-                $producto->precio = ($request->precio)?(float)$request->precio:0;
+        $parametro_comision = (int)Parametros::where('identificador','comision')->first()->valor;
 
-                //Automaticos
-                $producto->ganancia = $producto->precio - $producto->costo;
+        $producto->comision = $parametro_comision * $producto->ganancia / 100;
+        $producto->ganancia_final = $producto->ganancia - $producto->comision;
 
-                $parametro_comision = (int)Parametros::where('identificador','comision')->first()->valor;
-                $parametro_abono = (int)Parametros::where('identificador','abono')->first()->valor;
+        $producto->save();
 
-                $producto->comision_propuesta = $parametro_comision * $producto->ganancia / 100;
-                $producto->precio_abono = ($parametro_abono * $producto->precio / 100) + $producto->precio;
-                $producto->ganancia_final = $producto->ganancia - $producto->comision_propuesta;
+        //Subir imagenes
+        if ($request->hasFile('imagen1'))
+            $this->guardar_imagen($request->file('imagen1'), $producto->id);
+        if ($request->hasFile('imagen2'))
+            $this->guardar_imagen($request->file('imagen2'), $producto->id);
+        if ($request->hasFile('imagen3'))
+            $this->guardar_imagen($request->file('imagen3'), $producto->id);
 
-                $producto->save();
-                $producto_id = $request->producto->id;
-                break;
+        return redirect()->back();        
+    }
 
-            case 'detalle':
-                $detalle = new ProductosDetalles;
+    private function guardar_imagen($request_imagen, $objeto_id){
 
-                $detalle->productos_id = ($request->productos_id)?$request->productos_id:0;
-                $detalle->color = ($request->color)?$request->color:"";
-                $detalle->talla = ($request->talla)?$request->talla:"";
-                $detalle->piezas_disponibles = ($request->piezas_disponibles)?$request->piezas_disponibles:0;
-                $detalle->piezas_totales = ($request->piezas_disponibles)?$request->piezas_disponibles:0;
-                $detalle->detalles = ($request->detalles)?$request->detalles:"";
+        //$archivo = $request->file('foto');
+        $archivo = $request_imagen;
+       
+        file_put_contents($archivo->getClientOriginalName(), file_get_contents($archivo->getRealPath()));
+             
+        $imagen = new Imagenes;
 
-                $detalle->save();
-                $producto_id = $request->productos_id;
-                break;
-            
+        $imagen->archivo = $archivo->getClientOriginalName();
+        $imagen->imagen = file_get_contents($archivo->getClientOriginalName());
+        $mime = $archivo->getMimeType();
+
+        switch ($mime) {
+            case 'image/jpeg':
+                $extension = '.jpg';
+                break; 
+            case 'image/png':
+                $extension = '.png';
+                break; 
+            case 'image/gif':
+                $extension = '.gif';
+                break; 
+            case 'image/bmp':
+                $extension = '.bmp';
+                break;                
             default:
-                # code...
+                $extension = '';
                 break;
-        }
+        }                                 
 
-        return redirect('productos/editar/'.Hashids::encode($producto_id));        
+        $imagen->mime         = $mime;
+        $imagen->extension    = $extension ;
+        $imagen->productos_id = $objeto_id;     
+
+        $imagen->save();
+
+        unlink($archivo->getClientOriginalName());
     }
 
     public function editar($hash_id){        
@@ -190,18 +187,7 @@ class ProductosController extends Controller
             $producto->usuarios_id = Auth::user()->id;
             $producto->nombre = ($request->nombre)?$request->nombre:"";
             $producto->descripcion = ($request->descripcion)?$request->descripcion:"";
-
-            $material = Materiales::find($request->materiales_id);
-            if(isset($material)){
-                $producto->materiales_id = ($request->materiales_id)?$request->materiales_id:0;
-            }else{
-                $material = new Materiales;
-                $material->nombre = $request->materiales_id;
-                $material->save();
-
-                $producto->materiales_id = $material->id;
-            }
-
+            
             $producto->genero = ($request->genero)?$request->genero:0;
 
             $producto->costo = ($request->costo)?(float)$request->costo:0;
