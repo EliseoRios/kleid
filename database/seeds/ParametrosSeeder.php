@@ -33,16 +33,6 @@ class ParametrosSeeder extends Seeder
     		    'updated_at' =>  date('Y-m-d H:i:s')
     		]);
 
-    		DB::table('parametros')->insert([
-    			'id' => 3,
-    		    'usuarios_id'       => 1,
-    		    'identificador'  => 'abono',
-    		    'nombre'         => 'Abono',
-    		    'valor'       => '20',
-    		    'created_at' =>  date('Y-m-d H:i:s'),
-    		    'updated_at' =>  date('Y-m-d H:i:s')
-    		]);
-
     	}
         
     }

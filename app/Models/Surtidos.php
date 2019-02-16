@@ -19,4 +19,9 @@ class Surtidos extends Model
     public function scopeActivos($query){
         return $query->where('estatus','<>',0);
     }
+
+    public function getGastoAttribute()
+    {
+        return $this->productos()->activos()->sum('costo');
+    }
 }

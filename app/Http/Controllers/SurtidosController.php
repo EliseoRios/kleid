@@ -46,6 +46,9 @@ class SurtidosController extends Controller
         ->editcolumn('created_at',function ($registro){
         	return date('d/m/Y', strtotime($registro->created_at));
         })
+        ->editcolumn('gasto',function ($registro){
+            return $registro->gasto;
+        })
         ->escapeColumns([])       
         ->make(TRUE);
     }

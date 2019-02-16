@@ -46,8 +46,9 @@
 		    		<thead>
 		    			<tr>		    				
 		    				<th style="min-width:80px"></th>
-		    				<th>Usuario</th>
 		    				<th>Fecha</th>
+		    				<th>Usuario</th>
+		    				<th>Gasto</th>
 		    			</tr>
 		    		</thead>
 		    		<tbody>
@@ -114,8 +115,9 @@
 	            ajax: "{!!URL::to('surtidos/datatables')!!}",
 	            columns: [
 	                {data: 'id', name: 'id'},
-	                {data: 'usuario.id', name: 'usuario.id'},
-	                {data: 'created_at', name: 'created_at'}
+	                {data: 'created_at', name: 'created_at'},
+	                {data: 'usuario.nombre', name: 'usuario.nombre'},
+	                {data: 'gasto', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
                 ],
                 order: [],
 	            language: {
