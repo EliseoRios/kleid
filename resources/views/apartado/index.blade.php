@@ -132,7 +132,7 @@
 	            serverSide: true,
 	            ajax: "{!!URL::to('usuarios/clientes')!!}",
 	            columns: [
-	                {data: 'id', name: 'id'},                
+	                {data: 'clientes_id', name: 'clientes_id'},                
 	                {data: 'nombre', name: 'nombre'},
 	                {data: 'email', name: 'email'},
 	                {data: 'estatus', name: 'estatus'}

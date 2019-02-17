@@ -57,13 +57,21 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::group(['prefix'=>'sistema_apartado'], function(){
 
 		Route::get('/','ApartadoController@index');
-		Route::get('ventas/{clientes_id}','ApartadoController@ventas');		
-		Route::get('abonos/{clientes_id}','ApartadoController@abonos');		
+
+		Route::get('cliente/{hash_id}','ApartadoController@cliente');
+		Route::get('productos/{clientes_id}','ApartadoController@productos');		
+		Route::get('ventas/{clientes_id}','ApartadoController@ventas');
+		Route::get('abonos/{clientes_id}','ApartadoController@abonos');
+
+		Route::get('apartado_frm/{clientes_id}/{productos_id}','ApartadoController@apartado_frm');
+
 		Route::get('editar/{id}','ApartadoController@editar');
 		Route::get('eliminar/{id}','ApartadoController@eliminar');
 
 		Route::post('guardar','ApartadoController@guardar');
-		Route::post('actualizar','ApartadoController@actualizar');    
+		Route::post('actualizar','ApartadoController@actualizar');
+		Route::post('apartar','ApartadoController@apartar');
+		Route::post('agregar_abono','ApartadoController@agregar_abono');    
 
 	});
 
@@ -72,6 +80,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 		Route::get('/','ProductosController@index');
 		Route::get('datatables/{id?}','ProductosController@datatables');
+		Route::get('dtdisponibles','ProductosController@dtdisponibles');
 		Route::get('dtdetalles', 'ProductosController@dtdetalles');
 		Route::get('editar/{id}','ProductosController@editar');
 		Route::get('eliminar/{id}','ProductosController@eliminar');

@@ -44,7 +44,11 @@
   <div class="card">
     <div class="card-header">
       <div class="d-flex align-items-center">
-        <h4 class="card-title">Editar producto <small>> {{ date('d/m/Y h:i A', strtotime($producto->created_at)) }}</small> </h4>
+        <h4 class="card-title">
+          Editar producto 
+          <small class="text-primary"> > Código #{{ str_pad($producto->id, 5,'0',STR_PAD_LEFT) }}</small>
+          <small> > {{ date('d/m/Y h:i A', strtotime($producto->created_at)) }}</small> 
+        </h4>
       </div>
     </div>
     <div class="card-body">
@@ -105,7 +109,7 @@
           <div class="form-group col-md-4" >
             {!! Form::label('piezas', 'Piezas : ',['class'=>'control-label']) !!}
 
-            {!! Form::number('piezas',$producto->piezas,array( 'class' => 'form-control input-readonly', 'min'=>1,'readonly','required')) !!}
+            {!! Form::number('piezas',$producto->piezas,array( 'class' => 'form-control input-readonly', 'min'=>$producto->ventas()->count(),'readonly','required')) !!}
           </div>
         </div>
 
@@ -259,6 +263,7 @@
           language: 'es',
           showUpload: false,
           showCancel: false,
+          showRemove: false,
           allowedFileExtensions: ['jpg', 'png', 'gif']
         });
 

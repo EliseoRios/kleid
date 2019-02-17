@@ -57,7 +57,7 @@ class ProductosController extends Controller
             $primer_imagen= $producto->imagenes()->first();
             $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
 
-            $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;">';
+            $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;" title="#'.str_pad($producto->id, 5,'0',STR_PAD_LEFT).'">';
 
             return $imagen;
         })
@@ -80,6 +80,51 @@ class ProductosController extends Controller
 
         })
 
+        ->escapeColumns([])       
+        ->make(TRUE);
+    }
+
+    public function dtDisponibles($surtidos_id = 0) {
+        $datos = Productos::activos()->get();
+
+        return Datatables::of($datos)
+        ->editcolumn('id',function ($registro) {
+
+            $opciones = '';
+
+            if (Auth::user()->permiso(array('menu',2002)) == 2 ) {
+                if ($registro->ventas()->count() < $registro->piezas) {
+                    $opciones = '<a href="" class="btn btn-primary btn-xs" title="Editar" data-identifier="'.Hashids::encode($registro->id).'" data-formulario="editar" data-toggle="modal" data-target="#modalApartado" style="margin-right: 4px; color: white;"><i class="fa fa-cart-plus"></i> </a>';
+                }else{
+                    $opciones = '<i class="fa fa-stop text-danger"title="Agotado"></i>';
+                }
+            }
+
+            return $opciones;
+
+        })
+        ->editcolumn('genero', function($producto){
+            $array_genero = config('sistema.generos');
+            $genero = (array_key_exists($producto->genero, $array_genero))?$array_genero[$producto->genero]:"N/D";
+            return $genero;
+        })
+        ->addcolumn('imagen', function($producto){
+            $primer_imagen= $producto->imagenes()->first();
+            $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
+
+            $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;" title="#'.str_pad($producto->id, 5,'0',STR_PAD_LEFT).'">';
+
+            return $imagen;
+        })
+        ->addcolumn('disponibles', function($producto){
+            $disponibles = $producto->piezas - $producto->ventas()->activas()->count();
+            $disponibles = '<span class="badge badge-pill badge-success">'.$disponibles.'</span>';
+
+            if($disponibles > 0)
+                $disponibles = '<span class="badge badge-pill badge-danger">VENDIDO</span>';
+
+            return $disponibles;
+        })
         ->escapeColumns([])       
         ->make(TRUE);
     }

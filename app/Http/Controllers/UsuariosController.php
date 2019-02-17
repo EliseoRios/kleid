@@ -87,7 +87,22 @@ class UsuariosController extends Controller
 
             return $opciones;
 
-        })        
+        })
+        ->addColumn('clientes_id',function ($usuario) {
+
+            $opciones = '';
+
+            if (Auth::user()->permiso(array('menu',9001)) == 2 ) {
+
+                $opciones .= '<a href="'. url('sistema_apartado/cliente/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Pedidos" style="color: white; margin: 3px;"><i class="fas fa-tshirt"></i> </a>';
+
+                $opciones .= '<a href="'. url('sistema_apartado/estado_cuenta/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-success" title="Ver estado de cuenta" style="color: white; margin: 3px;"><i class="fas fa-print"></i></a>';
+
+            } 
+
+            return $opciones;
+
+        })  
         ->editcolumn('estatus',function ($usuario){ 
 
             if ($usuario->estatus ==1)  {
