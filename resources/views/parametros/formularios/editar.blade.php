@@ -7,7 +7,7 @@
 
 	<div class="form-group">
 		{!! Form::label('identificador', 'Identificador : ', ['class'=>'control-label']) !!}
-		{!! Form::text('identificador',  $parametro->identificador, ['class'=>'form-control input-text', 'readonly','required']) !!}
+		{!! Form::text('identificador',  $parametro->identificador, ['class'=>'form-control', 'readonly','required']) !!}
 	</div>
 
 	<div class="form-group">

@@ -14,7 +14,7 @@ class MenusSeeder extends Seeder
         DB::table('menus')->truncate();
 
         // Catálogos 2000
-        DB::table('menus')->insert([
+        /*DB::table('menus')->insert([
             'codigo'       => '2001',
             'dependencia'  => 'Catálogos',
             'area'         => 'Catálogos',
@@ -22,7 +22,7 @@ class MenusSeeder extends Seeder
             'url'          => 'clientes',
             'created_at' =>  date('Y-m-d H:i:s'),
             'updated_at' =>  date('Y-m-d H:i:s')
-        ]);
+        ]);*/
 
         DB::table('menus')->insert([
             'codigo'       => '2002',
@@ -91,7 +91,7 @@ class MenusSeeder extends Seeder
             'dependencia'  => 'Ventas',
             'area'         => 'Ventas',
             'opcion'       => 'Sistema de apartado',
-            'url'          => 'abonos',
+            'url'          => 'sistema_apartado',
             'created_at' =>  date('Y-m-d H:i:s'),
             'updated_at' =>  date('Y-m-d H:i:s')        
         ]);

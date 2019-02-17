@@ -1,4 +1,4 @@
-<div class="sidebar sidebar-style-2">           
+<div class="sidebar sidebar-style-2" data-background-color="dark">           
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <div class="user">
@@ -29,7 +29,7 @@
                 <?php 
                   $opcs   = DB::table('menus')->where( DB::raw('substr(codigo,1,2)'),'=',substr($menu->codigo,0,2) )->select('id','codigo','dependencia','area','opcion','url')->OrderBy('id')->get();
                  
-                  $icono = array('Catálogos' => 'book','CRM' => 'users-cog','Ventas' => 'shopping-bag','Configuración'=>'cogs');
+                  $icono = array('Catálogos' => 'diagnoses','CRM' => 'users-cog','Ventas' => 'shopping-cart','Configuración'=>'cog');
                 ?>
 
                 <li class="nav-item">

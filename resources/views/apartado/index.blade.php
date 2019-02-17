@@ -1,12 +1,12 @@
 @extends('layouts.layout')
 
 @section('title')
-	Surtidos
+	Usuarios
 @endsection
 
 @section('header')
 <div class="page-header">
-	<h4 class="page-title">Surtidos</h4>
+	<h4 class="page-title">Usuarios</h4>
 	<ul class="breadcrumbs">
 		<li class="nav-home">
 			<a href="{{ url('/') }}">
@@ -17,7 +17,7 @@
 			<i class="flaticon-right-arrow"></i>
 		</li>
 		<li class="nav-item">
-			<a>Surtidos</a>
+			<a>Usuarios</a>
 		</li>
 	</ul>
 </div>
@@ -28,7 +28,7 @@
 	<div class="card">
 		<div class="card-header">
 			<div class="d-flex align-items-center">
-				<h4 class="card-title"></h4>
+				<h4 class="card-title">Usuarios</h4>
 
 				@if (Auth::user()->permiso(array('menu',9001)) == 2 ) 
 				<a href="" data-target="#modalNuevo" data-toggle="modal" class="btn btn-primary btn-round ml-auto" title="Agregar" style="color: white;">
@@ -40,18 +40,15 @@
 		</div>
 		<div class="card-body">
 			
-		    <!-- Listado de surtidos -->
+		    <!-- Listado de usuarios -->
 		    <div class="table-responsive">
-		    	<table id="datatable" class="display table table-bordered table-striped table-hover small">  				                     
+		    	<table id="dtusuarios" class="display table table-bordered table-striped table-hover small">  				                     
 		    		<thead>
 		    			<tr>		    				
 		    				<th style="min-width:80px"></th>
-		    				<th>Fecha</th>
-		    				<th>Usuario</th>
-		    				<th>Venta</th>
-		    				<th>Costo</th>
-		    				<th>Comisión</th>
-		    				<th>Ganancia</th>
+		    				<th>Nombre</th>
+		    				<th>Correo</th>
+		    				<th>Estatus</th>
 		    			</tr>
 		    		</thead>
 		    		<tbody>
@@ -59,7 +56,7 @@
 
 		    	</table>
 		    </div>
-		  	<!-- /Listado de surtidos -->
+		  	<!-- /Listado de usuarios -->
 
 		</div>
 	</div>
@@ -70,18 +67,36 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header" style="background-color: #f5f5f5">
-				<h4 class="modal-title" id="myModalLabel"></h4>
+				<h4 class="modal-title" id="myModalLabel">Agregar Usuario</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 
-			{!! Form::open(array('action' => 'SurtidosController@guardar','class'=>'','role'=>'form')) !!}			
+			{!! Form::open(array('action' => 'UsuariosController@guardar','class'=>'','role'=>'form')) !!}			
 
 			<div class="modal-body">
 
 				{!! Form::hidden('_token', csrf_token(),array('id'=>'token')) !!}
 
-				<h3>Registrar compras del {{ date('d/m/Y') }}?</h3>
+				<div class="form-group" >
+					{!! Form::label('Nombre : ', null ,['class'=>'control-label']) !!}
 
+					{!! Form::text('nombre','',array( 'class' => 'form-control', 'placeholder' => 'Nombre completo del usuario')) !!} 
+					<p class="text-danger">	{!! $errors->first('nombre')!!} </p>
+				</div>	
+
+				<div class="form-group">
+					{!! Form::label('Correo :',null, ['class'=>'control-label']) !!}
+
+					{!! Form::email('email','',array( 'class' => 'form-control','placeholder' => 'Correo electrónico')) !!}
+					<p class="text-danger">	{!! $errors->first('email')!!} </p>
+				</div>
+
+				<div class="form-group">
+					{!! Form::label('Contraseña :', null, ['class'=>'control-label']) !!}
+
+					{!! Form::text('password','',array( 'class' => 'form-control','placeholder' => '*******')) !!}
+					<p class="text-danger">	{!! $errors->first('password')!!} </p>
+				</div>
 			</div>
 
 			<div class="modal-footer">
@@ -91,8 +106,8 @@
 				</button>
 
 				<button type="submit" class="btn btn-primary" id="grabar", secure = null>
-					<i class="fa fa-store"></i>
-					<span>Surtir</span>
+					<i class="fa fa-save"></i>
+					<span>Guardar</span>
 				</button>
 			</div>
 			{!! Form::close()!!}
@@ -112,18 +127,15 @@
 	            $('#modalNuevo').modal('show');
 		    @endif
 
-		    $('#datatable').DataTable({
+		    $('#dtusuarios').DataTable({
 	            processing: true,
 	            serverSide: true,
-	            ajax: "{!!URL::to('surtidos/datatables')!!}",
+	            ajax: "{!!URL::to('usuarios/clientes')!!}",
 	            columns: [
-	                {data: 'id', name: 'id'},
-	                {data: 'created_at', name: 'created_at'},
-	                {data: 'usuario.nombre', name: 'usuario.nombre'},
-	                {data: 'venta', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
-	                {data: 'costo', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
-	                {data: 'comision', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
-	                {data: 'ganancia', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+	                {data: 'id', name: 'id'},                
+	                {data: 'nombre', name: 'nombre'},
+	                {data: 'email', name: 'email'},
+	                {data: 'estatus', name: 'estatus'}
                 ],
                 order: [],
 	            language: {

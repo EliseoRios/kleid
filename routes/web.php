@@ -43,12 +43,27 @@ Route::group(['middleware' => ['auth']], function () {
 
 		Route::get('/','UsuariosController@index');
 		Route::get('datatables','UsuariosController@datatables');
+		Route::get('clientes','UsuariosController@clientes');
 		Route::get('editar/{id}','UsuariosController@editar');
 		Route::get('eliminar/{id}','UsuariosController@eliminar');
 
 		Route::post('guardar','UsuariosController@guardar');
 		Route::post('actualizar','UsuariosController@actualizar');
 		Route::post('update_permisos','UsuariosController@update_permisos');      
+
+	});
+
+	//Sistema de apartado
+	Route::group(['prefix'=>'sistema_apartado'], function(){
+
+		Route::get('/','ApartadoController@index');
+		Route::get('ventas/{clientes_id}','ApartadoController@ventas');		
+		Route::get('abonos/{clientes_id}','ApartadoController@abonos');		
+		Route::get('editar/{id}','ApartadoController@editar');
+		Route::get('eliminar/{id}','ApartadoController@eliminar');
+
+		Route::post('guardar','ApartadoController@guardar');
+		Route::post('actualizar','ApartadoController@actualizar');    
 
 	});
 

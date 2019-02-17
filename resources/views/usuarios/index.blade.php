@@ -48,6 +48,7 @@
 		    				<th style="min-width:80px"></th>
 		    				<th>Nombre</th>
 		    				<th>Correo</th>
+		    				<th>Perfil</th>
 		    				<th>Estatus</th>
 		    			</tr>
 		    		</thead>
@@ -135,6 +136,7 @@
 	                {data: 'id', name: 'id'},                
 	                {data: 'nombre', name: 'nombre'},
 	                {data: 'email', name: 'email'},
+	                {data: 'perfiles_id', name: 'perfiles_id'},
 	                {data: 'estatus', name: 'estatus'}
                 ],
                 order: [],

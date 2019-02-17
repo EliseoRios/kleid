@@ -38,6 +38,13 @@ class CreateProductosTable extends Migration
                 $table->decimal('ganancia_final',19,2)->default(0.00);//ganancia-comision
                 $table->decimal('comision',19,2)->default(0.00);
 
+                //Totales aproximados
+                $table->decimal('costo_total',19,2)->default(0.00);
+                $table->decimal('comision_total',19,2)->default(0.00);
+                $table->decimal('ganancia_total',19,2)->default(0.00);
+                $table->decimal('venta_total',19,2)->default(0.00);
+                $table->decimal('ganancia_vs_comision',19,2)->default(0.00);
+
                 $table->boolean('ventas_completadas')->default(0);
                 $table->integer('estatus')->default(1);
                 $table->timestamps();

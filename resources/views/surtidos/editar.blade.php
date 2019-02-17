@@ -36,7 +36,7 @@
   <div class="card">
     <div class="card-header">
       <div class="d-flex align-items-center">
-        <h4 class="card-title">Productos</h4>
+        <h4 class="card-title">Productos <small>> {{ date('d/m/Y h:i A', strtotime($surtido->created_at)) }}</small></h4>
 
         @if (Auth::user()->permiso(array('menu',9001)) == 2 ) 
         <a href="" data-target="#modalNuevo" data-toggle="modal" class="btn btn-primary btn-round ml-auto" title="Agregar" style="color: white;">

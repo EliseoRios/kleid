@@ -35,7 +35,10 @@ class SurtidosController extends Controller
 
                 $opciones .= '<a href="'. url('surtidos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="fa fa-edit"></i> </a>';
 
-                $opciones .= '<a href="'. url('surtidos/eliminar/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar ?'".')" class="btn btn-xs btn-danger" title="Eliminar"><i class="fa fa-trash"></i> </a>';
+                //Mientras no hay productos
+                if ($registro->productos()->activos()->count() <= 0) {
+                    $opciones .= '<a href="'. url('surtidos/eliminar/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar ?'".')" class="btn btn-xs btn-danger" title="Eliminar"><i class="fa fa-trash"></i> </a>';
+                }
 
             } 
             $opciones .= "</div>";
@@ -46,8 +49,17 @@ class SurtidosController extends Controller
         ->editcolumn('created_at',function ($registro){
         	return date('d/m/Y', strtotime($registro->created_at));
         })
-        ->editcolumn('gasto',function ($registro){
-            return $registro->gasto;
+        ->editcolumn('costo',function ($registro){
+            return $registro->costo;
+        })
+        ->editcolumn('venta',function ($registro){
+            return $registro->venta;
+        })
+        ->editcolumn('comision',function ($registro){
+            return $registro->comision;
+        })
+        ->editcolumn('ganancia',function ($registro){
+            return $registro->ganancia;
         })
         ->escapeColumns([])       
         ->make(TRUE);

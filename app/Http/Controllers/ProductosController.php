@@ -21,7 +21,7 @@ class ProductosController extends Controller
 	}
 
     public function index(Request $request) {
-        return view('productos.index');      
+        return view('productos.index');
     }
 
     public function datatables($surtidos_id = 0) {
@@ -34,18 +34,16 @@ class ProductosController extends Controller
         return Datatables::of($datos)
         ->editcolumn('id',function ($registro) {
 
-            $opciones = '<div class="btn-group">';
+            $opciones = '';
 
             if (Auth::user()->permiso(array('menu',2002)) == 2 ) {
 
-                $opciones .= '<a href="'. url('productos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-primary btn-xs " title="Consultar" style="width: 28px;"><i class="fa fa-edit"></i> </a>';
+                $opciones .= '<a href="'. url('productos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-primary btn-xs " title="Consultar" style="width: 30px; margin: 3px;"><i class="fa fa-eye"></i> </a>';
 
                 if($registro->ventas()->count() <= 0){
-                    $opciones .= '<a href="'. url('productos/eliminar/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar producto ?'".')" class="btn btn-danger btn-xs " title="Eliminar" style="width: 28px;">   <i class="fa fa-trash"></i> </a>';
+                    $opciones .= '<a href="'. url('productos/eliminar/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar producto ?'".')" class="btn btn-danger btn-xs " title="Eliminar" style="width: 30px; margin: 3px;">   <i class="fa fa-trash"></i> </a>';
                 }
-            } 
-
-            $opciones .= '</div>';
+            }
 
             return $opciones;
 
@@ -63,6 +61,15 @@ class ProductosController extends Controller
 
             return $imagen;
         })
+        ->addcolumn('disponibles', function($producto){
+            $disponibles = $producto->piezas - $producto->ventas()->activas()->count();
+            $disponibles = '<span class="badge badge-pill badge-success">'.$disponibles.'</span>';
+
+            if($disponibles > 0)
+                $disponibles = '<span class="badge badge-pill badge-danger">VENDIDO</span>';
+
+            return $disponibles;
+        })
         ->editcolumn('estatus',function ($usuario){ 
 
             if ($usuario->estatus ==1)  {
@@ -75,13 +82,6 @@ class ProductosController extends Controller
 
         ->escapeColumns([])       
         ->make(TRUE);
-    }
-
-    public function crear(){
-        if(Auth::user()->permiso(array('menu',9002)) < 2)
-            return redirect()->back();
-
-        return view('parametros.formularios.crear');
     }
     
     public function guardar(Request $request) {
@@ -104,13 +104,19 @@ class ProductosController extends Controller
         $producto->precio = ($request->precio > 0)?(float)$request->precio:0;
         $producto->precio_minimo = ($request->precio_minimo > 0)?(float)$request->precio_minimo:0;
 
-        //Automaticos
-        $producto->ganancia = $producto->precio - $producto->costo;
+        //Automaticos (Ganancia minima)
+        $producto->ganancia = $producto->precio_minimo - $producto->costo;
 
-        $parametro_comision = (int)Parametros::where('identificador','comision')->first()->valor;
+        $parametro_comision = (int)Parametros::identificador('comision');
 
         $producto->comision = $parametro_comision * $producto->ganancia / 100;
         $producto->ganancia_final = $producto->ganancia - $producto->comision;
+
+        $producto->costo_total = $producto->costo * $producto->piezas;
+        $producto->comision_total = $producto->comision * $producto->piezas;
+        $producto->ganancia_total = $producto->ganancia * $producto->piezas;
+        $producto->venta_total = $producto->precio_minimo * $producto->piezas;
+        $producto->ganancia_vs_comision = $producto->ganancia_total - $producto->comision_total;
 
         $producto->save();
 
@@ -168,42 +174,67 @@ class ProductosController extends Controller
     public function editar($hash_id){        
         $id = Hashids::decode($hash_id);
                 
-        $producto = Productos::find($id[0]);
-
         if ($id[0] == null)
             return redirect()->back();
 
-        return view('productos.editar',compact('producto'));
+        $producto = Productos::find($id[0]);
+
+        $generos = config('sistema.generos');
+
+        $tallas  = Productos::lista_tallas();
+        $colores = Productos::lista_colores();
+
+        $imagenes = $producto->imagenes()->get();
+
+        return view('productos.editar',compact('producto','generos','tallas','colores','imagenes'));
     }
 
     public function actualizar(Request $request) {
 
         $producto = Productos::find($request->id);
-        //dd($request->all());
 
         if ($producto) {
-
-            $producto->codigo = ($request->codigo)?$request->codigo:"";
             $producto->usuarios_id = Auth::user()->id;
-            $producto->nombre = ($request->nombre)?$request->nombre:"";
-            $producto->descripcion = ($request->descripcion)?$request->descripcion:"";
-            
-            $producto->genero = ($request->genero)?$request->genero:0;
+            $producto->nombre = ($request->nombre != null)?$request->nombre:"";
 
-            $producto->costo = ($request->costo)?(float)$request->costo:0;
-            $producto->precio = ($request->precio)?(float)$request->precio:0;
+            $producto->genero = ($request->genero != null)?$request->genero:"";
+            $producto->color = ($request->color != null)?$request->color:"";
+            $producto->talla = ($request->talla != null)?$request->talla:"";
 
-            //Automaticos
-            $producto->ganancia = $producto->precio - $producto->costo;
+            $producto->piezas = ($request->piezas > 0)?(int)$request->piezas:0;
 
-            $parametro_comision = (int)Parametros::where('identificador','comision')->first()->valor;
-            $parametro_abono = (int)Parametros::where('identificador','abono')->first()->valor;
+            $producto->costo = ($request->costo > 0)?(float)$request->costo:0;
+            $producto->precio = ($request->precio > 0)?(float)$request->precio:0;
+            $producto->precio_minimo = ($request->precio_minimo > 0)?(float)$request->precio_minimo:0;
 
-            $producto->comision_propuesta = $parametro_comision * $producto->ganancia / 100;
-            $producto->precio_abono = ($parametro_abono * $producto->precio / 100) + $producto->precio;
-            $producto->ganancia_final = $producto->ganancia - $producto->comision_propuesta;
+            //Automaticos (Ganancia minima)
+            $producto->ganancia = $producto->precio_minimo - $producto->costo;
+
+            $parametro_comision = (int)Parametros::identificador('comision');
+
+            $producto->comision = $parametro_comision * $producto->ganancia / 100;
+            $producto->ganancia_final = $producto->ganancia - $producto->comision;
+
+            $producto->costo_total = $producto->costo * $producto->piezas;
+            $producto->comision_total = $producto->comision * $producto->piezas;
+            $producto->ganancia_total = $producto->ganancia * $producto->piezas;
+            $producto->venta_total = $producto->precio_minimo * $producto->piezas;
+            $producto->ganancia_vs_comision = $producto->ganancia_total - $producto->comision_total;
 
             $producto->save();
+
+            //Subir imagenes
+            if ($request->hasFile('imagen1') || $request->hasFile('imagen2') || $request->hasFile('imagen3')) 
+            {
+                $producto->imagenes()->delete();
+
+                if ($request->hasFile('imagen1'))
+                    $this->guardar_imagen($request->file('imagen1'), $producto->id);
+                if ($request->hasFile('imagen2'))
+                    $this->guardar_imagen($request->file('imagen2'), $producto->id);
+                if ($request->hasFile('imagen3'))
+                    $this->guardar_imagen($request->file('imagen3'), $producto->id);
+            }            
         }
 
         return redirect()->back();

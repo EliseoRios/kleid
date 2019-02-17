@@ -15,4 +15,15 @@ class Parametros extends Model
     public function scopeActivos($query){
         return $query->where('estatus','<>',0);
     }
+
+    public static function identificador($identificador)
+    {
+    	$valor = '';
+    	$parametro = Parametros::where('identificador','comision')->first();
+
+    	if(isset($parametro))
+    		$valor = $parametro->valor;
+
+    	return $valor;
+    }
 }

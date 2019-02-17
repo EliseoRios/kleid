@@ -68,6 +68,10 @@ class Usuarios extends Authenticatable
         return $query->where('estatus','<>',0);
     }
 
+    public function scopeSonClientes($query){
+        return $query->where('perfiles_id',3);
+    }
+
     public static function addw($filtro = 0)
     {          
         $usuarios = Usuarios::active();

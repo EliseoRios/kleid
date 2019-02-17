@@ -42,7 +42,7 @@
     <div class="card-body">
 
       {{-- Perfil --}}
-        @if(Auth::user()->permiso(array('menu',9001)) == 2)
+        @if(Auth::user()->permiso(array('menu',9001)) == 2 || Auth::user()->id === $usuario->id)
           <div align="right">
               <a href="#" class="btn btn-secondary btn-xs" id="boton_editar" title="Consultar" style="color: white;"><i class="fa fa-edit"></i>  </a>          
           </div>
@@ -80,12 +80,14 @@
           <p class="text-danger"> {!! $errors->first('password')!!} </p>
         </div>
 
-        <div class="form-group">
-          {!! Form::label('Perfil :', null, array('class'=>'control-label')) !!}
+        @if (Auth::user()->permiso(array('menu',9001)) == 2)
+          <div class="form-group">
+            {!! Form::label('Perfil :', null, array('class'=>'control-label')) !!}
 
-          {!! Form::select('perfiles_id',$perfiles,$usuario->perfiles_id,array( 'class' => 'form-control  show-tick select','placeholder' => '-- Seleccione perfil --', 'disabled'=>'disabled')) !!}
-          <p class="text-danger"> {!! $errors->first('perfiles_id')!!} </p>
-        </div>
+            {!! Form::select('perfiles_id',$perfiles,$usuario->perfiles_id,array( 'class' => 'form-control  show-tick select','placeholder' => '-- Seleccione perfil --', 'disabled'=>'disabled')) !!}
+            <p class="text-danger"> {!! $errors->first('perfiles_id')!!} </p>
+          </div>
+        @endif        
 
         {!! Form::hidden('id',$usuario->id)!!}
 
@@ -106,6 +108,7 @@
     </div>
   </div>
 
+  @if (Auth::user()->perfiles_id === 1)
   {{-- Card permisos --}}
   <div class="card">
     <div class="card-header card-primary">
@@ -113,7 +116,7 @@
     </div>
     <div class="card-body">
       
-        @if( Auth::user()->permiso(array('menu',9001)) == 2)   
+        @if(Auth::user()->permiso(array('menu',9001)) == 2)   
         <div align="right" style="padding-bottom:20px">
 
           <div class="dropdown open float-left" id="botonesTodosPermisos" style="display: none;" title="Selección rápida de permisos globales">
@@ -185,8 +188,10 @@
       </div>
 
     </div>
+    {{-- /Card permisos --}}
+    @endif
+
   </div>
-  {{-- /Card permisos --}}
 
 </div>
 @endsection

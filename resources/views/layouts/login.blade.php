@@ -15,16 +15,16 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap Core Css -->
-    <link href="{{ asset('vendor/bsb/plugins/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('templates/bsb/plugins/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
 
     <!-- Waves Effect Css -->
-    <link href="{{ asset('vendor/bsb/plugins/node-waves/waves.css') }}" rel="stylesheet" />
+    <link href="{{ asset('templates/bsb/plugins/node-waves/waves.css') }}" rel="stylesheet" />
 
     <!-- Animation Css -->
-    <link href="{{ asset('vendor/bsb/plugins/animate-css/animate.css') }}" rel="stylesheet" />
+    <link href="{{ asset('templates/bsb/plugins/animate-css/animate.css') }}" rel="stylesheet" />
 
     <!-- Custom Css -->
-    <link href="{{ asset('vendor/bsb/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('templates/bsb/css/style.css') }}" rel="stylesheet">
 
     {{-- Carousel --}}
     <link rel="stylesheet" href="{!! asset('vendor/vegas/vegas.min.css') !!}">
@@ -46,7 +46,7 @@
     
 </head>
 
-<body class="login-page" style="background-image: url({{ asset('vendor/bsb/images/back2.jpg') }}) !important; background-size: cover;>
+<body class="login-page" style="background-image: url({{ asset('templates/bsb/images/back2.jpg') }}) !important; background-size: cover;>
     <div class="login-box">
         <div class="logo">
             <a href="{{ url('/') }}" style="color: #918787 !important;">Kleid<b> Boutique</b></a>
@@ -60,20 +60,20 @@
     </div>
 
     <!-- Jquery Core Js -->
-    <script src="{{ asset('vendor/bsb/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/jquery/jquery.min.js') }}"></script>
 
     <!-- Bootstrap Core Js -->
     <script src="v{{ asset('endor/bsb/plugins/bootstrap/js/bootstrap.js') }}"></script>
 
     <!-- Waves Effect Plugin Js -->
-    <script src="{{ asset('vendor/bsb/plugins/node-waves/waves.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/node-waves/waves.js') }}"></script>
 
     <!-- Validation Plugin Js -->
-    <script src="{{ asset('vendor/bsb/plugins/jquery-validation/jquery.validate.js') }}"></script>
+    <script src="{{ asset('templates/bsb/plugins/jquery-validation/jquery.validate.js') }}"></script>
 
     <!-- Custom Js -->
-    <script src="{{ asset('vendor/bsb/js/admin.js') }}"></script>
-    <script src="{{ asset('vendor/bsb/js/pages/examples/sign-in.js') }}"></script>
+    <script src="{{ asset('templates/bsb/js/admin.js') }}"></script>
+    <script src="{{ asset('templates/bsb/js/pages/examples/sign-in.js') }}"></script>
 
     <script src="{!! asset('vendor/vegas/vegas.min.js') !!}"></script>
     <script type="text/javascript">

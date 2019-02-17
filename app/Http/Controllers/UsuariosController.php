@@ -25,30 +25,69 @@ class UsuariosController extends Controller
 	}
 
     public function index(Request $request) {
+        if(Auth::user()->perfiles_id != 1)
+            return redirect()->back();
+
         return view('usuarios.index');      
     }
 
     public function datatables() {
 
-        $datos = Usuarios::where('estatus','=',1)->select('id','nombre','email','estatus')->get();
+        $datos = Usuarios::activos()->get();
 
         return Datatables::of($datos)
         ->editcolumn('id',function ($usuario) {
 
-            $opciones = '<div class="btn-group">';
+            $opciones = '';
 
             if (Auth::user()->permiso(array('menu',9001)) == 2 ) {
 
-                $opciones .= '<a href="'. url('usuarios/editar/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="fa fa-edit"></i> </a>';
+                $opciones .= '<a href="'. url('usuarios/editar/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Consultar" style="color: white; margin: 3px;"><i class="fa fa-edit"></i> </a>';
 
-                $opciones .= '<a href="'. url('usuarios/eliminar/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar usuario ?'".')" class="btn btn-xs btn-danger" title="Eliminar"><i class="fa fa-trash"></i> </a>';
+                $opciones .= '<a href="'. url('usuarios/eliminar/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar usuario ?'".')" class="btn btn-xs btn-danger" title="Eliminar" style="color: white; margin: 3px;"><i class="fa fa-trash"></i> </a>';
 
             } 
-            $opciones .= "</div>";
 
             return $opciones;
 
         })
+        ->editcolumn('perfiles_id',function ($usuario){ 
+            return config('sistema.perfiles')[$usuario->perfiles_id];
+        })
+        ->editcolumn('estatus',function ($usuario){ 
+
+            if ($usuario->estatus ==1)  {
+                return "Activo";
+            } else {
+                return "Suspendido";
+            }
+
+        })
+
+        ->escapeColumns([])       
+        ->make(TRUE);
+    }
+
+    public function clientes() {
+
+        $datos = Usuarios::activos()->sonClientes()->select('id','nombre','email','estatus')->get();
+
+        return Datatables::of($datos)
+        ->editcolumn('id',function ($usuario) {
+
+            $opciones = '';
+
+            if (Auth::user()->permiso(array('menu',9001)) == 2 ) {
+
+                $opciones .= '<a href="'. url('usuarios/editar/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Consultar" style="color: white; margin: 3px;"><i class="fa fa-edit"></i> </a>';
+
+                $opciones .= '<a href="'. url('usuarios/eliminar/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar usuario ?'".')" class="btn btn-xs btn-danger" title="Eliminar" style="color: white; margin: 3px;"><i class="fa fa-trash"></i> </a>';
+
+            } 
+
+            return $opciones;
+
+        })        
         ->editcolumn('estatus',function ($usuario){ 
 
             if ($usuario->estatus ==1)  {
@@ -79,10 +118,13 @@ class UsuariosController extends Controller
          $usuario->nombre    = $request->nombre;
          $usuario->email     = $request->email;
          $usuario->password  = Hash::make($request->password);
+
+         $usuario->perfiles_id = 3;//Cliente por defecto
                
          $usuario->save();
 
-         return redirect('usuarios/editar/'.Hashids::encode($usuario->id));
+         //eturn redirect('usuarios/editar/'.Hashids::encode($usuario->id));
+         return redirect()->back();
         
     }
 
@@ -113,8 +155,10 @@ class UsuariosController extends Controller
             $usuario->nombre = ($request->nombre != null)?$request->nombre:"";
             $usuario->email = ($request->email != null)?$request->email:"";
             $usuario->telefonos = ($request->telefonos != null)?$request->telefonos:"";
-            $usuario->perfiles_id = ($request->perfiles_id != null)?$request->perfiles_id:0;
             $usuario->genero = ($request->genero != null)?$request->genero:0;
+            
+            if(Auth::user()->permiso(array('menu',9001)) == 2)
+                $usuario->perfiles_id = ($request->perfiles_id != null)?$request->perfiles_id:0;
 
             if ($request->password != "")
                 $usuario->password = Hash::make($request->password);
