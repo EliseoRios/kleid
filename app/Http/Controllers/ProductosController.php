@@ -21,7 +21,11 @@ class ProductosController extends Controller
 	}
 
     public function index(Request $request) {
-        return view('productos.index');
+
+        $generos = config('sistema.generos');
+        $categorias = [];
+
+        return view('productos.index', compact('generos','categorias'));
     }
 
     public function datatables($surtidos_id = 0) {
@@ -79,7 +83,6 @@ class ProductosController extends Controller
             }
 
         })
-
         ->escapeColumns([])       
         ->make(TRUE);
     }
@@ -140,10 +143,10 @@ class ProductosController extends Controller
         $producto->nombre = ($request->nombre != null)?$request->nombre:"";
 
         $producto->genero = ($request->genero != null)?$request->genero:"";
-        $producto->color = ($request->color != null)?$request->color:"";
-        $producto->talla = ($request->talla != null)?$request->talla:"";
+
 
         $producto->piezas = ($request->piezas > 0)?(int)$request->piezas:0;
+        $producto->categorias_id = ($request->categorias_id > 0)?(float)$request->categorias_id:0;
 
         $producto->costo = ($request->costo > 0)?(float)$request->costo:0;
         $producto->precio = ($request->precio > 0)?(float)$request->precio:0;
@@ -225,13 +228,11 @@ class ProductosController extends Controller
         $producto = Productos::find($id[0]);
 
         $generos = config('sistema.generos');
-
-        $tallas  = Productos::lista_tallas();
-        $colores = Productos::lista_colores();
+        $categorias = [];
 
         $imagenes = $producto->imagenes()->get();
 
-        return view('productos.editar',compact('producto','generos','tallas','colores','imagenes'));
+        return view('productos.editar',compact('producto','generos','imagenes','categorias'));
     }
 
     public function actualizar(Request $request) {

@@ -22,9 +22,19 @@ class CreateVentasTable extends Migration
                 $table->bigInteger('tickets_id')->default(0);
                 $table->bigInteger('productos_id')->default(0);
 
+                $table->integer('piezas')->default(0);
+
                 $table->string('tipo_venta')->default('venta');//abono/venta
-                $table->double('pago',19,2)->default(0.00);
-                $table->decimal('comision',19,2)->default(0.00);
+                $table->double('pago',19,2)->default(0.00);//importe
+                $table->decimal('comision',19,2)->default(0.00);                
+
+                $table->double('dinero_recibido',19,2)->default(0.00);
+                $table->double('cambio',19,2)->default(0.00);
+
+                $table->decimal('total_pago',19,2)->default(0.00);
+                $table->decimal('total_comision',19,2)->default(0.00);
+                $table->decimal('ganancia',19,2)->default(0.00);
+                $table->decimal('ganancia_neta',19,2)->default(0.00);
 
                 $table->date('fecha_plazo')->nullable();//Un mes para pagar
                 $table->date('fecha_saldado')->nullable();//Termino de pagar
@@ -33,7 +43,7 @@ class CreateVentasTable extends Migration
                 $table->boolean('liquidado')->default(0);
                 $table->boolean('comision_pagada')->default(0);
 
-                $table->boolean('estatus')->default(1);
+                $table->boolean('estatus')->default(1);//2 aplicada
                 $table->timestamps();
             });
         }

@@ -67,12 +67,11 @@ class SurtidosController extends Controller
     
     public function guardar(Request $request) {
 
-         $surtido = new Surtidos ;
-         $surtido->usuarios_id = Auth::user()->id;               
-         $surtido->save();
+       $surtido = new Surtidos ;
+       $surtido->usuarios_id = Auth::user()->id;               
+       $surtido->save();
 
-         return redirect('surtidos/editar/'.Hashids::encode($surtido->id));
-        
+       return redirect('surtidos/editar/'.Hashids::encode($surtido->id));       
     }
 
     public function editar($hash_id){
@@ -92,7 +91,8 @@ class SurtidosController extends Controller
         return view('surtidos.editar',compact('surtido','productos','generos','tallas','colores'));
     }
 	
-	public function eliminar($hash_id){		
+	public function eliminar($hash_id){
+        
 		$id = Hashids::decode($hash_id);                
         $surtido = Surtidos::find($id[0]);
 

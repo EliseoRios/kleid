@@ -17,7 +17,6 @@ class CreateProductosTable extends Migration
             Schema::create('productos', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->bigInteger('usuarios_id')->default(0);
-                $table->bigInteger('surtidos_id')->default(0);
 
                 //Identificadores
                 $table->string('codigo')->nullable(0);
@@ -26,9 +25,7 @@ class CreateProductosTable extends Migration
                 
                 //Especificaciones
                 $table->string('genero')->default('u');
-                $table->string('color')->nullable();
-                $table->string('talla')->nullable();
-                $table->integer('piezas')->default(0);
+                $table->integer('categorias_id')->default(0);
 
                 //Unitarios
                 $table->decimal('costo',19,2)->default(0.00);
@@ -36,16 +33,8 @@ class CreateProductosTable extends Migration
                 $table->decimal('precio_minimo',19,2)->default(0.00);
                 $table->decimal('ganancia',19,2)->default(0.00);//costo/precio
                 $table->decimal('ganancia_final',19,2)->default(0.00);//ganancia-comision
-                $table->decimal('comision',19,2)->default(0.00);
+                $table->decimal('comision',19,2)->default(0.00);                
 
-                //Totales aproximados
-                $table->decimal('costo_total',19,2)->default(0.00);
-                $table->decimal('comision_total',19,2)->default(0.00);
-                $table->decimal('ganancia_total',19,2)->default(0.00);
-                $table->decimal('venta_total',19,2)->default(0.00);
-                $table->decimal('ganancia_vs_comision',19,2)->default(0.00);
-
-                $table->boolean('ventas_completadas')->default(0);
                 $table->integer('estatus')->default(1);
                 $table->timestamps();
             });

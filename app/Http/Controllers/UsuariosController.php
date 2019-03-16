@@ -112,7 +112,9 @@ class UsuariosController extends Controller
             }
 
         })
-
+        ->addColumn('adeudo',function($usuario){
+            return $usuario->adeudo;
+        })
         ->escapeColumns([])       
         ->make(TRUE);
     }

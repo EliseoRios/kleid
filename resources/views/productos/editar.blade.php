@@ -1,12 +1,12 @@
 @extends('layouts.layout')
 
 @section('title')
-  Surtidos
+  Productos
 @endsection
 
 @section('header')
 <div class="page-header">
-  <h4 class="page-title">Surtidos</h4>
+  <h4 class="page-title">Productos</h4>
   <ul class="breadcrumbs">
     <li class="nav-home">
       <a href="{{ url('/') }}">
@@ -16,24 +16,14 @@
     <li class="separator">
       <i class="flaticon-right-arrow"></i>
     </li>
-    <li class="nav-home">
-      <a href="{{ url('surtidos') }}">
-        Surtidos
-      </a>
-    </li>
-    <li class="separator">
-      <i class="flaticon-right-arrow"></i>
-    </li>
-    <li class="nav-home">
-      <a href="{{ url('surtidos/editar/'.Hashids::encode($producto->surtidos_id)) }}">
-        Editar surtido
-      </a>
+    <li class="nav-item">
+      <a href="{{ url('productos') }}"><i class="fas fa-barcode"></i> Productos</a>
     </li>
     <li class="separator">
       <i class="flaticon-right-arrow"></i>
     </li>
     <li class="nav-item">
-      <a>Producto</a>
+      <a>Editar</a>
     </li>
   </ul>
 </div>
@@ -42,15 +32,16 @@
 @section('content')
 <div class="col-md-12">
   <div class="card">
+
     <div class="card-header">
       <div class="d-flex align-items-center">
         <h4 class="card-title">
           Editar producto 
-          <small class="text-primary"> > Código #{{ str_pad($producto->id, 5,'0',STR_PAD_LEFT) }}</small>
           <small> > {{ date('d/m/Y h:i A', strtotime($producto->created_at)) }}</small> 
         </h4>
       </div>
     </div>
+
     <div class="card-body">
 
       {{-- Caroucel --}}
@@ -87,13 +78,14 @@
 
       {{-- Edicion de producto --}}
       <div class="col-md-8 float-right">
-      <a class="btn btn-success btn-sm float-left" data-toggle="modal" href='#modalResumen' style="margin-top: 25px; color: white;"><i class="fa fa-money-bill-alt"></i> Resumen</a>
+      <a class="btn btn-success btn-sm ml-auto" data-toggle="modal" href='#modalResumen' style="margin-top: 25px; color: white;"><i class="fa fa-money-bill-alt"></i> Resumen</a>
 
       @if ($producto->ventas()->count() <= 0 && (Auth::user()->permiso(['menu',2002]) || Auth::user()->permiso(['menu',2003])))
       <div align="right" style="margin-top: 25px;">
           <button type="button" class="btn btn-info btn-sm" id="boton_editar" title="Consultar" style="color: white;"><i class="fa fa-edit"></i> Editar</button>          
       </div>
       @endif
+
       <hr>
 
       {!! Form::open(array('action' => 'ProductosController@actualizar','class'=>'form','role'=>'form','files'=>'true')) !!}  
@@ -106,14 +98,20 @@
             {!! Form::text('nombre',$producto->nombre,array( 'class' => 'form-control input-readonly', 'placeholder' => 'Descripción del producto','readonly')) !!}
           </div>
 
-          <div class="form-group col-md-4" >
-            {!! Form::label('piezas', 'Piezas : ',['class'=>'control-label']) !!}
+          <div class="form-group col-md-4">
+            {!! Form::label('codigo', 'Código :',['class'=>'control-label']) !!}
 
-            {!! Form::number('piezas',$producto->piezas,array( 'class' => 'form-control input-readonly', 'min'=>$producto->ventas()->count(),'readonly','required')) !!}
-          </div>
+            {!! Form::text('codigo',$producto->codigo,array( 'class' => 'form-control input-readonly', 'placeholder' => 'Código de barras','readonly')) !!}
+          </div>          
         </div>
 
         <div class="row">
+          <div class="form-group col-md-4" >
+            {!! Form::label('categorias_id', 'Categoría : ',['class'=>'control-label']) !!}
+
+            {!! Form::select('categorias_id',$categorias,$producto->categorias_id,array( 'class' => 'form-control input-disabled','placeholder'=>'-- Seleccionar categoria --','disabled')) !!}
+          </div>
+
           <div class="form-group col-md-4" >
             {!! Form::label('genero', 'Genero : ',['class'=>'control-label']) !!}
 
@@ -121,27 +119,9 @@
           </div>
 
           <div class="form-group col-md-4" >
-            {!! Form::label('talla', 'Talla : ',['class'=>'control-label']) !!}
+            {!! Form::label('piezas', 'Disponibles : ',['class'=>'control-label']) !!}
 
-            {!! Form::text('talla',$producto->talla,array( 'class' => 'form-control input-readonly', 'list'=>'tallas','autocomplete'=>'off','placeholder' => '','readonly')) !!}
-
-            <datalist id="tallas">
-            @foreach ($tallas as $talla)
-              <option value="{{ $talla }}"></option>
-            @endforeach
-            </datalist>
-          </div>
-
-          <div class="form-group col-md-4" >
-            {!! Form::label('color', 'Color : ',['class'=>'control-label']) !!}
-
-            {!! Form::text('color',$producto->color,array( 'class' => 'form-control input-readonly', 'list'=>'colores','autocomplete'=>'off','placeholder' => '','readonly')) !!}
-            
-            <datalist id="colores">
-            @foreach ($colores as $color)
-              <option value="{{ $color }}"></option>
-            @endforeach
-            </datalist>
+            {!! Form::number('piezas',$producto->piezas,array( 'class' => 'form-control', 'min'=>1,'required','readonly')) !!}
           </div>
         </div>
 

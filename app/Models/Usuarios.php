@@ -91,6 +91,10 @@ class Usuarios extends Authenticatable
         return $this->hasMany('App\Models\Ventas','cliente_usuarios_id','id');
     }
 
+    public function abonos(){
+        return $this->hasMany('App\Models\Abonos','cliente_usuarios_id','id');
+    }
+
     public function tickets(){
         return $this->hasMany('App\Models\Tickets','usuarios_id','id');
     }
@@ -113,6 +117,31 @@ class Usuarios extends Authenticatable
 
     public function clientes(){
         return $this->hasMany('App\Models\Clientes','usuarios_id','id');
+    }
+
+    public function getSumaSinLiquidarAttribute()
+    {
+        return $this->compras()->activas()->sinLiquidar()->sum('pago');
+    }
+
+    public function getSumaLiquidadasAttribute()
+    {
+        return $this->compras()->activas()->liquidadas()->sum('pago');
+    }
+
+    public function getSumaAbonosAttribute()
+    {
+        return $this->abonos()->activos()->sum('abono');
+    }
+
+    public function getAdeudoAttribute()
+    {
+        return $this->compras()->activas()->sum('pago') - $this->suma_abonos;
+    }
+
+    public function getAFavorAttribute()
+    {
+        return abs($this->suma_liquidadas - $this->suma_abonos);
     }
 
 }

@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
 
                 $table->boolean('frecuente')->default(0);
                 $table->boolean('recibe_publicidad')->default(0);
+                $table->boolean('permiso_comprar')->default(0);
                 
                 $table->integer('estatus')->default(1);
                 $table->rememberToken();

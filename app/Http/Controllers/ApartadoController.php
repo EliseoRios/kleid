@@ -97,22 +97,28 @@ class ApartadoController extends Controller
 
     public function agregar_abono(Request $request)
     {
-    	$venta = new Ventas;
+    	$abono = new Abonos;
 
-    	$venta->usuarios_id = Auth::user()->id;
-    	$venta->cliente_usuarios_id = ($request->clientes_id > 0)?$request->clientes_id:0;
-    	$venta->productos_id = ($request->productos_id > 0)?$request->productos_id:0;
+    	$abono->usuarios_id = Auth::user()->id;
+    	$abono->cliente_usuarios_id = ($request->clientes_id > 0)?$request->clientes_id:0;
+    	$abono->abono = ($request->abono > 0)?$request->abono:0;
 
-    	$producto = Productos::find($venta->productos_id);
+    	$abono->save();
 
-    	$venta->tipo_venta = 'abono';
-    	$venta->pago = ($request->pago > 0)?$request->pago:0;
-    	$venta->comision = $producto->comision;
-    	$venta->fecha_plazo = Carbon::now()->addMonth();
+    	return redirect()->back();
+    }
 
-    	$venta->save();
+    public function abonos($hash_id)
+    {
+        $id = Hashids::decode($hash_id);                
 
-    	return view('apartado.cliente',compact('cliente'));
+        if ($id[0] == null)
+            return redirect()->back();
+
+        $cliente = Usuarios::find($id[0]);
+        $abonos = $cliente->abonos()->activos()->orderBy('created_at','DESC')->get();
+
+        return view('apartado.abonos',compact('cliente','abonos'));
     }
 
 

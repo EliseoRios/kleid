@@ -76,7 +76,7 @@ class MenusSeeder extends Seeder
         ]);*/
 
         // Ventas
-        DB::table('menus')->insert([
+        /*DB::table('menus')->insert([
             'codigo'       => '4001',
             'dependencia'  => 'Ventas',
             'area'         => 'Ventas',
@@ -84,7 +84,7 @@ class MenusSeeder extends Seeder
             'url'          => 'caja',
             'created_at' =>  date('Y-m-d H:i:s'),
             'updated_at' =>  date('Y-m-d H:i:s')        
-        ]);
+        ]);*/
 
         DB::table('menus')->insert([
             'codigo'       => '4002',
@@ -96,7 +96,7 @@ class MenusSeeder extends Seeder
             'updated_at' =>  date('Y-m-d H:i:s')        
         ]);
 
-        DB::table('menus')->insert([
+        /*DB::table('menus')->insert([
             'codigo'       => '4003',
             'dependencia'  => 'Ventas',
             'area'         => 'Ventas',
@@ -104,7 +104,7 @@ class MenusSeeder extends Seeder
             'url'          => 'tickets',
             'created_at' =>  date('Y-m-d H:i:s'),
             'updated_at' =>  date('Y-m-d H:i:s')        
-        ]);
+        ]);*/
 
         // Configuración 9000
         DB::table('menus')->insert([

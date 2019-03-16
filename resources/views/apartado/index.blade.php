@@ -1,12 +1,12 @@
 @extends('layouts.layout')
 
 @section('title')
-	Usuarios
+	Sistema de apartado
 @endsection
 
 @section('header')
 <div class="page-header">
-	<h4 class="page-title">Usuarios</h4>
+	<h4 class="page-title">Apartados</h4>
 	<ul class="breadcrumbs">
 		<li class="nav-home">
 			<a href="{{ url('/') }}">
@@ -17,7 +17,7 @@
 			<i class="flaticon-right-arrow"></i>
 		</li>
 		<li class="nav-item">
-			<a>Usuarios</a>
+			<a>Sistema de apartado</a>
 		</li>
 	</ul>
 </div>
@@ -28,7 +28,7 @@
 	<div class="card">
 		<div class="card-header">
 			<div class="d-flex align-items-center">
-				<h4 class="card-title">Usuarios</h4>
+				<h4 class="card-title">Clientes</h4>
 
 				@if (Auth::user()->permiso(array('menu',9001)) == 2 ) 
 				<a href="" data-target="#modalNuevo" data-toggle="modal" class="btn btn-primary btn-round ml-auto" title="Agregar" style="color: white;">
@@ -48,6 +48,7 @@
 		    				<th style="min-width:80px"></th>
 		    				<th>Nombre</th>
 		    				<th>Correo</th>
+		    				<th>Adeudo</th>
 		    				<th>Estatus</th>
 		    			</tr>
 		    		</thead>
@@ -135,6 +136,7 @@
 	                {data: 'clientes_id', name: 'clientes_id'},                
 	                {data: 'nombre', name: 'nombre'},
 	                {data: 'email', name: 'email'},
+	                {data: 'adeudo', name: 'adeudo',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
 	                {data: 'estatus', name: 'estatus'}
                 ],
                 order: [],
