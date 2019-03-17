@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('title')
-  Productos
+  Sistema de apartado
 @endsection
 
 @section('header')
@@ -12,6 +12,12 @@
       <a href="{{ url('/') }}">
         <i class="flaticon-home"></i> Inicio
       </a>
+    </li>
+    <li class="separator">
+      <i class="flaticon-right-arrow"></i>
+    </li>
+    <li class="nav-item">
+      <a href="{{ url('sistema_apartado') }}"><i class="fas fa-chalkboard-teacher"></i> Sistema de apartado</a>
     </li>
     <li class="separator">
       <i class="flaticon-right-arrow"></i>
@@ -70,7 +76,7 @@
               </tr>   
               <tr>
                 <th>Total adeudo</th>
-                <td class="text-right">${{ number_format($cliente->adeudo,2,'.',',') }}</td>
+                <td class="text-right">${{ number_format(($cliente->adeudo > 0)?$cliente->adeudo:0,2,'.',',') }}</td>
               </tr>
             </tbody>
           </table>

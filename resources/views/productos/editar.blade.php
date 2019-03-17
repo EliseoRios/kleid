@@ -78,9 +78,10 @@
 
       {{-- Edicion de producto --}}
       <div class="col-md-8 float-right">
+        
+      @if ($producto->ventas()->count() <= 0 && Auth::user()->permiso(['menu',2002]) === 2)
       <a class="btn btn-success btn-sm ml-auto" data-toggle="modal" href='#modalResumen' style="margin-top: 25px; color: white;"><i class="fa fa-money-bill-alt"></i> Resumen</a>
 
-      @if ($producto->ventas()->count() <= 0 && (Auth::user()->permiso(['menu',2002]) || Auth::user()->permiso(['menu',2003])))
       <div align="right" style="margin-top: 25px;">
           <button type="button" class="btn btn-info btn-sm" id="boton_editar" title="Consultar" style="color: white;"><i class="fa fa-edit"></i> Editar</button>          
       </div>
@@ -121,7 +122,7 @@
           <div class="form-group col-md-4" >
             {!! Form::label('piezas', 'Disponibles : ',['class'=>'control-label']) !!}
 
-            {!! Form::number('piezas',$producto->piezas,array( 'class' => 'form-control', 'min'=>1,'required','readonly')) !!}
+            {!! Form::number('piezas',$producto->existencia->disponibles,array( 'class' => 'form-control', 'min'=>1,'required','readonly')) !!}
           </div>
         </div>
 

@@ -25,7 +25,7 @@ class UsuariosController extends Controller
 	}
 
     public function index(Request $request) {
-        if(Auth::user()->perfiles_id != 1)
+        if(Auth::user()->perfiles_id != 1 || Auth::user()->permiso(['menu',9001]) < 2)
             return redirect()->back();
 
         return view('usuarios.index');      
@@ -40,11 +40,13 @@ class UsuariosController extends Controller
 
             $opciones = '';
 
-            if (Auth::user()->permiso(array('menu',9001)) == 2 ) {
+            if (Auth::user()->permiso(array('menu',9001)) === 2 ) {
 
                 $opciones .= '<a href="'. url('usuarios/editar/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Consultar" style="color: white; margin: 3px;"><i class="fa fa-edit"></i> </a>';
 
-                $opciones .= '<a href="'. url('usuarios/eliminar/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar usuario ?'".')" class="btn btn-xs btn-danger" title="Eliminar" style="color: white; margin: 3px;"><i class="fa fa-trash"></i> </a>';
+                if ($usuario->compras()->count() <= 0 && $usuario->ventas()->count() <= 0) {
+                    $opciones .= '<a href="'. url('usuarios/eliminar/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar usuario ?'".')" class="btn btn-xs btn-danger" title="Eliminar" style="color: white; margin: 3px;"><i class="fa fa-trash"></i> </a>';
+                }
 
             } 
 
@@ -67,81 +69,28 @@ class UsuariosController extends Controller
         ->escapeColumns([])       
         ->make(TRUE);
     }
-
-    public function clientes() {
-
-        $datos = Usuarios::activos()->sonClientes()->select('id','nombre','email','estatus')->get();
-
-        return Datatables::of($datos)
-        ->editcolumn('id',function ($usuario) {
-
-            $opciones = '';
-
-            if (Auth::user()->permiso(array('menu',9001)) == 2 ) {
-
-                $opciones .= '<a href="'. url('usuarios/editar/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Consultar" style="color: white; margin: 3px;"><i class="fa fa-edit"></i> </a>';
-
-                $opciones .= '<a href="'. url('usuarios/eliminar/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar usuario ?'".')" class="btn btn-xs btn-danger" title="Eliminar" style="color: white; margin: 3px;"><i class="fa fa-trash"></i> </a>';
-
-            } 
-
-            return $opciones;
-
-        })
-        ->addColumn('clientes_id',function ($usuario) {
-
-            $opciones = '';
-
-            if (Auth::user()->permiso(array('menu',9001)) == 2 ) {
-
-                $opciones .= '<a href="'. url('sistema_apartado/cliente/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Pedidos" style="color: white; margin: 3px;"><i class="fas fa-tshirt"></i> </a>';
-
-                $opciones .= '<a href="'. url('sistema_apartado/estado_cuenta/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-success" title="Ver estado de cuenta" style="color: white; margin: 3px;"><i class="fas fa-print"></i></a>';
-
-            } 
-
-            return $opciones;
-
-        })  
-        ->editcolumn('estatus',function ($usuario){ 
-
-            if ($usuario->estatus ==1)  {
-                return "Activo";
-            } else {
-                return "Suspendido";
-            }
-
-        })
-        ->addColumn('adeudo',function($usuario){
-            return $usuario->adeudo;
-        })
-        ->escapeColumns([])       
-        ->make(TRUE);
-    }
     
     public function guardar(Request $request) {
 
         $error = Validator::make($request->all(),['nombre' => 'required|max:255',
             'email' => 'required|email|max:255|unique:usuarios']);
 
-        if ($error->fails()) {
-           
+        if ($error->fails()) {           
           return redirect()->back()->withErrors($error)->withInput();
-
         }
 
-         $usuario = new Usuarios ;
+        $usuario = new Usuarios ;
 
-         $usuario->nombre    = $request->nombre;
-         $usuario->email     = $request->email;
-         $usuario->password  = Hash::make($request->password);
+        $usuario->nombre    = $request->nombre;
+        $usuario->email     = $request->email;
+        $usuario->password  = Hash::make($request->password);
 
-         $usuario->perfiles_id = 3;//Cliente por defecto
-               
-         $usuario->save();
+        $usuario->perfiles_id = 2;//Ventas por defecto
 
-         //eturn redirect('usuarios/editar/'.Hashids::encode($usuario->id));
-         return redirect()->back();
+        $usuario->save();
+
+        //eturn redirect('usuarios/editar/'.Hashids::encode($usuario->id));
+        return redirect()->back();
         
     }
 
@@ -173,6 +122,7 @@ class UsuariosController extends Controller
             $usuario->email = ($request->email != null)?$request->email:"";
             $usuario->telefonos = ($request->telefonos != null)?$request->telefonos:"";
             $usuario->genero = ($request->genero != null)?$request->genero:0;
+            $usuario->permiso_comprar = ($request->permiso_comprar > 0)?1:0;
             
             if(Auth::user()->permiso(array('menu',9001)) == 2)
                 $usuario->perfiles_id = ($request->perfiles_id != null)?$request->perfiles_id:0;

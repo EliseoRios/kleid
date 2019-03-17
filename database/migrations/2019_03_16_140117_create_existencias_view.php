@@ -28,7 +28,7 @@ class CreateExistenciasView extends Migration
              FROM productos
             LEFT JOIN productos_detalles ON productos.id = productos_detalles.productos_id
             LEFT JOIN ventas ON productos.id = ventas.productos_id         
-            WHERE productos.estatus<>0 && (ventas.estatus=2 or ventas.id IS NULL) && (productos_detalles.estatus<>0 or productos_detalles.id IS NULL)
+            WHERE productos.estatus<>0 && (ventas.estatus<>0 or ventas.id IS NULL) && (productos_detalles.estatus<>0 or productos_detalles.id IS NULL)
             GROUP BY productos_id";
 
             DB::statement($sql);

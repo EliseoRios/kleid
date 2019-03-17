@@ -22,6 +22,9 @@ class SurtidosController extends Controller
 
     public function index(Request $request) {
 
+        if (Auth::user()->permiso(['menu',2003]) < 1)
+            return redirect()->back();
+
         $productos = Productos::activos()->select(DB::raw("CONCAT(codigo,' | ',nombre) as nuevo_nombre, id"))->pluck('nuevo_nombre','id');
 
         return view('surtidos.index', compact('productos'));      
@@ -31,14 +34,12 @@ class SurtidosController extends Controller
 
         $datos = Surtidos::all();
 
-        //dd($datos);
-
         return Datatables::of($datos)
         ->editcolumn('id',function ($registro) {
 
             $opciones = '<div class="btn-group">';
 
-            if (Auth::user()->permiso(array('menu',2003)) == 2 ) {
+            if (Auth::user()->permiso(array('menu',2003)) === 2) {
                 $opciones .= '<a href="'. url('surtidos/editar/'.$registro->fecha) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="fa fa-folder-open"></i> </a>';
             }
 
@@ -67,7 +68,7 @@ class SurtidosController extends Controller
 
             $opciones = '';
 
-            if (Auth::user()->permiso(array('menu',2002)) == 2 ) {
+            if (Auth::user()->permiso(array('menu',2003)) === 2) {
                 $opciones .= '<a href="'. url('productos/del_detalle/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar registro ?'".')" class="btn btn-danger btn-xs " title="Eliminar" style="width: 30px; margin: 3px; color: white;">   <i class="fa fa-trash"></i> </a>';
             }
 
@@ -92,9 +93,9 @@ class SurtidosController extends Controller
     }
 
     public function editar($fecha = null){
+        if (Auth::user()->permiso(['menu',2003]) < 1)
+            return redirect()->back();
 
-        $generos = config('sistema.generos');
-
-        return view('surtidos.editar',compact('fecha','productos','generos'));
+        return view('surtidos.editar',compact('fecha'));
     }
 }

@@ -39,12 +39,38 @@ Route::group(['middleware' => ['auth']], function () {
 
 	});
 
+	//Clientes
+	Route::group(['prefix'=>'clientes'], function(){
+
+		Route::get('/','ClientesController@index');
+		Route::get('datatables','ClientesController@datatables');
+		Route::get('crear','ClientesController@crear');
+		Route::get('editar/{id}','ClientesController@editar');
+		Route::get('eliminar/{id}','ClientesController@eliminar');
+
+		Route::post('guardar','ClientesController@guardar');
+		Route::post('actualizar','ClientesController@actualizar');    
+
+	});
+
+	//Caja
+	Route::group(['prefix'=>'caja'], function(){
+
+		Route::get('/{hash_ticket?}','CajaController@index');
+		Route::get('ventas/{ticket}','CajaController@ventas');
+		Route::get('imprimir/{ticket}','CajaController@imprimir');
+
+		Route::post('guardar','CajaController@guardar');
+		Route::post('actualizar','CajaController@actualizar');    
+		Route::post('eliminar','CajaController@eliminar');
+
+	});
+
 	//Usuarios
 	Route::group(['prefix'=>'usuarios'], function(){
 
 		Route::get('/','UsuariosController@index');
 		Route::get('datatables','UsuariosController@datatables');
-		Route::get('clientes','UsuariosController@clientes');
 		Route::get('editar/{id}','UsuariosController@editar');
 		Route::get('eliminar/{id}','UsuariosController@eliminar');
 
@@ -59,6 +85,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 		Route::get('/','ApartadoController@index');
 
+		Route::get('datatables','ApartadoController@datatables');
+
 		Route::get('cliente/{hash_id}','ApartadoController@cliente');
 		Route::get('productos/{clientes_id}','ApartadoController@productos');		
 		Route::get('ventas/{clientes_id}','ApartadoController@ventas');
@@ -68,6 +96,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 		Route::get('editar/{id}','ApartadoController@editar');
 		Route::get('eliminar/{id}','ApartadoController@eliminar');
+		Route::get('liquidar/{id}','ApartadoController@liquidar');
+		Route::get('entregar/{id}','ApartadoController@entregar');
+		Route::get('saldar_comision/{id}','ApartadoController@saldar_comision');
 
 		Route::post('guardar','ApartadoController@guardar');
 		Route::post('actualizar','ApartadoController@actualizar');
@@ -86,6 +117,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::get('editar/{id}','ProductosController@editar');
 		Route::get('eliminar/{id}','ProductosController@eliminar');
 		Route::get('del_detalle/{id}','ProductosController@del_detalle');
+		Route::get('existencia/{id}','ProductosController@existencia');
 
 		Route::post('guardar','ProductosController@guardar');
 		Route::post('add_detalle','ProductosController@add_detalle');

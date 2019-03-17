@@ -1,12 +1,12 @@
 @extends('layouts.layout')
 
 @section('title')
-	Sistema de apartado
+	Clientes
 @endsection
 
 @section('header')
 <div class="page-header">
-	<h4 class="page-title">Apartados</h4>
+	<h4 class="page-title">Clientes</h4>
 	<ul class="breadcrumbs">
 		<li class="nav-home">
 			<a href="{{ url('/') }}">
@@ -17,7 +17,7 @@
 			<i class="flaticon-right-arrow"></i>
 		</li>
 		<li class="nav-item">
-			<a><i class="fas fa-chalkboard-teacher"></i> Sistema de apartado</a>
+			<a><i class="fas fa-user-tag"></i> Clientes</a>
 		</li>
 	</ul>
 </div>
@@ -30,10 +30,10 @@
 			<div class="d-flex align-items-center">
 				<h4 class="card-title">Clientes</h4>
 
-				@if (Auth::user()->permiso(array('menu',4002)) === 2) 
-				<a href="" data-target="#modalNuevo" data-toggle="modal" class="btn btn-primary btn-round ml-auto" title="Agregar" style="color: white;">
-				    <i class="fas fa-user-plus"></i>
-				    Agregar cliente
+				@if (Auth::user()->permiso(array('menu',2001)) === 2) 
+				<a href="" data-target="#modalNuevo" data-toggle="modal" data-formulario="crear" data-identifier="0" class="btn btn-primary btn-round ml-auto" title="Agregar" style="color: white;">
+				    <i class="fa fa-plus"></i>
+				    Agregar
 				</a>
 			    @endif
 			</div>
@@ -48,7 +48,6 @@
 		    				<th style="min-width:80px"></th>
 		    				<th>Nombre</th>
 		    				<th>Correo</th>
-		    				<th>Adeudo</th>
 		    				<th>Estatus</th>
 		    			</tr>
 		    		</thead>
@@ -68,50 +67,11 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header" style="background-color: #f5f5f5">
-				<h4 class="modal-title" id="myModalLabel">Agregar cliente</h4>
+				<h4 class="modal-title" id="myModalLabel">Agregar Usuario</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 
-			{!! Form::open(array('action' => 'ClientesController@guardar','class'=>'','role'=>'form')) !!}			
-
-			<div class="modal-body">
-
-				{!! Form::hidden('_token', csrf_token(),array('id'=>'token')) !!}
-
-				<div class="form-group" >
-					{!! Form::label('Nombre : ', null ,['class'=>'control-label']) !!}
-
-					{!! Form::text('nombre','',array( 'class' => 'form-control', 'placeholder' => 'Nombre completo del usuario','autocomplete'=>'off','required')) !!} 
-					<p class="text-danger">	{!! $errors->first('nombre')!!} </p>
-				</div>	
-
-				<div class="form-group">
-					{!! Form::label('Correo :',null, ['class'=>'control-label']) !!}
-
-					{!! Form::email('email','',array( 'class' => 'form-control','placeholder' => 'Correo electrónico','autocomplete'=>'off','required')) !!}
-					<p class="text-danger">	{!! $errors->first('email')!!} </p>
-				</div>
-
-				<div class="form-group">
-					{!! Form::label('Contraseña :', null, ['class'=>'control-label']) !!}
-
-					{!! Form::text('password','',array( 'class' => 'form-control','placeholder' => '*******','autocomplete'=>'off','required')) !!}
-					<p class="text-danger">	{!! $errors->first('password')!!} </p>
-				</div>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn bg-grey waves-effect" data-dismiss="modal"> 
-					<i class="fa fa-times"></i>
-					<span>Cancelar</span>
-				</button>
-
-				<button type="submit" class="btn btn-primary" id="grabar", secure = null>
-					<i class="fa fa-save"></i>
-					<span>Guardar</span>
-				</button>
-			</div>
-			{!! Form::close()!!}
+			<span id="loadFormulario"></span>
 		</div>
 	</div>
 </div>
@@ -128,15 +88,36 @@
 	            $('#modalNuevo').modal('show');
 		    @endif
 
+		    $('#modalNuevo').on('shown.bs.modal', function(e){
+		    	var id = $(e.relatedTarget).data('identifier');
+		    	var formulario = $(e.relatedTarget).data('formulario');
+		    	var url = "";
+
+		    	switch (formulario) {
+		    		case 'crear':
+		    			url = "{{ url('clientes/crear') }}";
+		    			break;
+
+		    		case 'editar':
+			    		url = "{{ url('clientes/editar/') }}/"+id;
+			    		break;
+
+		    		default:
+		    			// statements_def
+		    			break;
+		    	}
+
+		    	$('#loadFormulario').load(url);
+		    });
+
 		    $('#dtusuarios').DataTable({
 	            processing: true,
 	            serverSide: true,
-	            ajax: "{!!URL::to('sistema_apartado/datatables')!!}",
+	            ajax: "{!!URL::to('clientes/datatables')!!}",
 	            columns: [
 	                {data: 'id', name: 'id'},                
 	                {data: 'nombre', name: 'nombre'},
 	                {data: 'email', name: 'email'},
-	                {data: 'adeudo', name: 'adeudo',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
 	                {data: 'estatus', name: 'estatus'}
                 ],
                 order: [],

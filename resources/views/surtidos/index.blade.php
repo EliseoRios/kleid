@@ -30,7 +30,7 @@
 			<div class="d-flex align-items-center">
 				<h4 class="card-title"></h4>
 
-				@if (Auth::user()->permiso(array('menu',9001)) == 2 ) 
+				@if (Auth::user()->permiso(array('menu',2003)) == 2) 
 				<a href="" data-target="#modalNuevo" data-toggle="modal" class="btn btn-primary btn-round ml-auto" title="Agregar" style="color: white;">
 				    <i class="fa fa-plus"></i>
 				    Agregar

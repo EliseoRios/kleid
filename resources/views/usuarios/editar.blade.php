@@ -87,7 +87,12 @@
             {!! Form::select('perfiles_id',$perfiles,$usuario->perfiles_id,array( 'class' => 'form-control  show-tick select','placeholder' => '-- Seleccione perfil --', 'disabled'=>'disabled')) !!}
             <p class="text-danger"> {!! $errors->first('perfiles_id')!!} </p>
           </div>
-        @endif        
+        @endif
+
+        <label class="checkbox-inline">
+          {!! Form::checkbox('permiso_comprar', 1, $usuario->permiso_comprar, ['class'=>'input-disabled','disabled']) !!}
+          &nbsp; Permiso para comprar
+        </label>
 
         {!! Form::hidden('id',$usuario->id)!!}
 
@@ -261,7 +266,8 @@
 				$('#smtp_security').removeAttr("readonly");
 				$('#smtp_security').removeAttr("disabled");
 
-				$('.empresas_id').removeAttr("disabled",false);
+        $('.empresas_id').removeAttr("disabled",false);
+				$('.input-disabled').removeAttr("disabled",false);
 
 			});
 

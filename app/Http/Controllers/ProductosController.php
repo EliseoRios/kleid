@@ -23,6 +23,9 @@ class ProductosController extends Controller
 
     public function index(Request $request) {
 
+        if (Auth::user()->permiso(['menu',2002]) < 1)
+            return redirect()->back();
+
         $generos = config('sistema.generos');
         $categorias = [];
 
@@ -38,7 +41,7 @@ class ProductosController extends Controller
 
             $opciones = '';
 
-            if (Auth::user()->permiso(array('menu',2002)) == 2 ) {
+            if (Auth::user()->permiso(array('menu',2002)) === 2) {
 
                 $opciones .= '<a href="'. url('productos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-primary btn-xs " title="Consultar" style="width: 30px; margin: 3px;"><i class="fa fa-eye"></i> </a>';
 
@@ -84,53 +87,11 @@ class ProductosController extends Controller
         ->escapeColumns([])       
         ->make(TRUE);
     }
-
-    public function dtDisponibles($surtidos_id = 0) {
-        $datos = Productos::activos()->get();
-
-        return Datatables::of($datos)
-        ->editcolumn('id',function ($registro) {
-
-            $opciones = '';
-
-            if (Auth::user()->permiso(array('menu',2002)) == 2 ) {
-                if ($registro->ventas()->count() < $registro->piezas) {
-                    $opciones = '<a href="" class="btn btn-primary btn-xs" title="Editar" data-identifier="'.Hashids::encode($registro->id).'" data-formulario="editar" data-toggle="modal" data-target="#modalApartado" style="margin-right: 4px; color: white;"><i class="fa fa-cart-plus"></i> </a>';
-                }else{
-                    $opciones = '<i class="fa fa-stop text-danger"title="Agotado"></i>';
-                }
-            }
-
-            return $opciones;
-
-        })
-        ->editcolumn('genero', function($producto){
-            $array_genero = config('sistema.generos');
-            $genero = (array_key_exists($producto->genero, $array_genero))?$array_genero[$producto->genero]:"N/D";
-            return $genero;
-        })
-        ->addcolumn('imagen', function($producto){
-            $primer_imagen= $producto->imagenes()->first();
-            $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
-
-            $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;" title="#'.str_pad($producto->id, 5,'0',STR_PAD_LEFT).'">';
-
-            return $imagen;
-        })
-        ->addcolumn('disponibles', function($producto){
-            $disponibles = $producto->piezas - $producto->ventas()->activas()->count();
-            $disponibles = '<span class="badge badge-pill badge-success">'.$disponibles.'</span>';
-
-            if($disponibles > 0)
-                $disponibles = '<span class="badge badge-pill badge-danger">VENDIDO</span>';
-
-            return $disponibles;
-        })
-        ->escapeColumns([])       
-        ->make(TRUE);
-    }
     
     public function guardar(Request $request) {
+
+        if (Auth::user()->permiso(['menu',2002]) < 2)
+            return redirect()->back();
 
         //dd($request->all());
 
@@ -262,6 +223,9 @@ class ProductosController extends Controller
 
     public function actualizar(Request $request) {
 
+        if (Auth::user()->permiso(['menu',2002]) < 2)
+            return redirect()->back();
+
         $producto = Productos::find($request->id);
 
         if ($producto) {
@@ -310,6 +274,9 @@ class ProductosController extends Controller
     }	
 	
 	public function eliminar($hash_id){
+        
+        if (Auth::user()->permiso(['menu',2002]) < 2)
+            return redirect()->back();
 		
 		$id = Hashids::decode($hash_id);                
         $producto = Productos::find($id[0]);
@@ -339,6 +306,19 @@ class ProductosController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function existencia($productos_id)
+    {
+        $producto = Productos::find($productos_id);
+        $existencia = $producto->existencia;
+        $precio['max'] = $producto->precio;
+        $precio['min'] = $producto->precio_minimo;
+
+        $data['existencia'] = $existencia;
+        $data['precio'] = $precio;
+
+        return response()->json($data);
     }
 
 }
