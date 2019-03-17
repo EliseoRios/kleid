@@ -29,7 +29,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 		Route::get('/','SurtidosController@index');
 		Route::get('datatables','SurtidosController@datatables');
-		Route::get('editar/{id}','SurtidosController@editar');
+		Route::get('dtproductos/{fecha?}','SurtidosController@dtproductos');
+		Route::get('editar/{fecha?}','SurtidosController@editar');
 		Route::get('eliminar/{id}','SurtidosController@eliminar');
 
 		Route::post('guardar','SurtidosController@guardar');
@@ -79,13 +80,15 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::group(['prefix'=>'productos'], function(){
 
 		Route::get('/','ProductosController@index');
-		Route::get('datatables/{id?}','ProductosController@datatables');
+		Route::get('datatables','ProductosController@datatables');
 		Route::get('dtdisponibles','ProductosController@dtdisponibles');
 		Route::get('dtdetalles', 'ProductosController@dtdetalles');
 		Route::get('editar/{id}','ProductosController@editar');
 		Route::get('eliminar/{id}','ProductosController@eliminar');
+		Route::get('del_detalle/{id}','ProductosController@del_detalle');
 
 		Route::post('guardar','ProductosController@guardar');
+		Route::post('add_detalle','ProductosController@add_detalle');
 		Route::post('actualizar','ProductosController@actualizar');
 		Route::post('update_permisos','ProductosController@update_permisos');      
 	     

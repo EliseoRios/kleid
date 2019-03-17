@@ -48,6 +48,7 @@
 
                 <th style="max-width:40px"></th>
                 <th>Foto</th>
+                <th>Código</th>
                 <th>Nombre</th>
                 <th>Género</th>
                 <th>Costo</th>
@@ -121,19 +122,19 @@
           <div class="form-group col-md-4" >
             {!! Form::label('costo', 'Costo : ',['class'=>'control-label']) !!}
 
-            {!! Form::number('costo',0,array( 'class' => 'form-control', 'step'=>'any','required')) !!}
+            {!! Form::number('costo',null,array( 'class' => 'form-control', 'step'=>'any','min'=>'0','required')) !!}
           </div>
 
           <div class="form-group col-md-4" >
             {!! Form::label('precio', 'Precio : ',['class'=>'control-label']) !!}
 
-            {!! Form::number('precio',0,array( 'class' => 'form-control', 'step'=>'any','required')) !!}
+            {!! Form::number('precio',null,array( 'class' => 'form-control', 'step'=>'any','min'=>'0','required')) !!}
           </div>
 
           <div class="form-group col-md-4" >
             {!! Form::label('precio_minimo', 'Precio mínino : ',['class'=>'control-label']) !!}
 
-            {!! Form::number('precio_minimo',0,array( 'class' => 'form-control', 'placeholder'=>'Precio mímino','step'=>'any','required')) !!}
+            {!! Form::number('precio_minimo',null,array( 'class' => 'form-control', 'placeholder'=>'Precio mímino','step'=>'any','min'=>'0','required')) !!}
           </div>
         </div>
 
@@ -197,6 +198,7 @@
             columns: [
               {data: 'id', name: 'id'},                
               {data: 'imagen', name: 'imagen'},
+              {data: 'codigo', name: 'codigo'},
               {data: 'nombre', name: 'nombre'},
               {data: 'genero', name: 'genero'},
               {data: 'costo', name: 'costo',render: $.fn.dataTable.render.number(',', '.', 2, '$')},

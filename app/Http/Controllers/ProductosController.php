@@ -8,6 +8,7 @@ use App\Models\Productos;
 use App\Models\Parametros;
 use App\Models\Usuarios;
 use App\Models\Imagenes;
+use App\Models\ProductosDetalles;
 
 use Auth;
 use Datatables;
@@ -28,12 +29,9 @@ class ProductosController extends Controller
         return view('productos.index', compact('generos','categorias'));
     }
 
-    public function datatables($surtidos_id = 0) {
+    public function datatables() {
 
-        if ($surtidos_id > 0)
-            $datos = Productos::activos()->where('surtidos_id',$surtidos_id)->get();
-        else
-            $datos = Productos::activos()->get();
+        $datos = Productos::activos()->with('existencia')->get();
 
         return Datatables::of($datos)
         ->editcolumn('id',function ($registro) {
@@ -44,7 +42,7 @@ class ProductosController extends Controller
 
                 $opciones .= '<a href="'. url('productos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-primary btn-xs " title="Consultar" style="width: 30px; margin: 3px;"><i class="fa fa-eye"></i> </a>';
 
-                if($registro->ventas()->count() <= 0){
+                if($registro->ventas()->count() <= 0 && $registro->detalles()->count() <= 0){
                     $opciones .= '<a href="'. url('productos/eliminar/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar producto ?'".')" class="btn btn-danger btn-xs " title="Eliminar" style="width: 30px; margin: 3px;">   <i class="fa fa-trash"></i> </a>';
                 }
             }
@@ -61,16 +59,16 @@ class ProductosController extends Controller
             $primer_imagen= $producto->imagenes()->first();
             $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
 
-            $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;" title="#'.str_pad($producto->id, 5,'0',STR_PAD_LEFT).'">';
+            $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;">';
 
             return $imagen;
         })
         ->addcolumn('disponibles', function($producto){
-            $disponibles = $producto->piezas - $producto->ventas()->activas()->count();
-            $disponibles = '<span class="badge badge-pill badge-success">'.$disponibles.'</span>';
+            $cantidad = $producto->existencia->disponibles;
+            $disponibles = '<span class="badge badge-pill badge-success">'.$cantidad.'</span>';
 
-            if($disponibles > 0)
-                $disponibles = '<span class="badge badge-pill badge-danger">VENDIDO</span>';
+            if($cantidad === 0)
+                $disponibles = '<span class="badge badge-pill badge-danger">AGOTADO</span>';
 
             return $disponibles;
         })
@@ -139,13 +137,10 @@ class ProductosController extends Controller
         $producto = new Productos;
 
         $producto->usuarios_id = Auth::user()->id;
-        $producto->surtidos_id = ($request->surtidos_id > 0)?$request->surtidos_id:0;
         $producto->nombre = ($request->nombre != null)?$request->nombre:"";
+        $producto->codigo = ($request->codigo != null)?$request->codigo:"";
 
         $producto->genero = ($request->genero != null)?$request->genero:"";
-
-
-        $producto->piezas = ($request->piezas > 0)?(int)$request->piezas:0;
         $producto->categorias_id = ($request->categorias_id > 0)?(float)$request->categorias_id:0;
 
         $producto->costo = ($request->costo > 0)?(float)$request->costo:0;
@@ -160,12 +155,6 @@ class ProductosController extends Controller
         $producto->comision = $parametro_comision * $producto->ganancia / 100;
         $producto->ganancia_final = $producto->ganancia - $producto->comision;
 
-        $producto->costo_total = $producto->costo * $producto->piezas;
-        $producto->comision_total = $producto->comision * $producto->piezas;
-        $producto->ganancia_total = $producto->ganancia * $producto->piezas;
-        $producto->venta_total = $producto->precio_minimo * $producto->piezas;
-        $producto->ganancia_vs_comision = $producto->ganancia_total - $producto->comision_total;
-
         $producto->save();
 
         //Subir imagenes
@@ -176,7 +165,43 @@ class ProductosController extends Controller
         if ($request->hasFile('imagen3'))
             $this->guardar_imagen($request->file('imagen3'), $producto->id);
 
+        //Crear primer surtido
+        $detalle = new ProductosDetalles;
+
+        $detalle->usuarios_id = Auth::user()->id;
+        $detalle->productos_id = $producto->id;
+        $detalle->piezas = ($request->piezas > 0)?(int)$request->piezas:0;
+
+        $detalle->costo_total = $producto->costo * $detalle->piezas;
+        $detalle->comision_total = $producto->comision * $detalle->piezas;
+        $detalle->ganancia_total = $producto->ganancia * $detalle->piezas;
+        $detalle->venta_total = $producto->precio_minimo * $detalle->piezas;
+        $detalle->ganancia_vs_comision = $detalle->ganancia_total - $detalle->comision_total;
+
+        $detalle->save();
+
         return redirect()->back();        
+    }
+
+    public function add_detalle(Request $request)
+    {
+        //Crear primer surtido
+        $detalle = new ProductosDetalles;
+        $producto = Productos::find($request->productos_id);
+
+        $detalle->usuarios_id = Auth::user()->id;
+        $detalle->productos_id = $producto->id;
+        $detalle->piezas = ($request->piezas > 0)?(int)$request->piezas:0;
+
+        $detalle->costo_total = $producto->costo * $detalle->piezas;
+        $detalle->comision_total = $producto->comision * $detalle->piezas;
+        $detalle->ganancia_total = $producto->ganancia * $detalle->piezas;
+        $detalle->venta_total = $producto->precio_minimo * $detalle->piezas;
+        $detalle->ganancia_vs_comision = $detalle->ganancia_total - $detalle->comision_total;
+
+        $detalle->save();
+
+        return redirect()->back();
     }
 
     private function guardar_imagen($request_imagen, $objeto_id){
@@ -242,12 +267,10 @@ class ProductosController extends Controller
         if ($producto) {
             $producto->usuarios_id = Auth::user()->id;
             $producto->nombre = ($request->nombre != null)?$request->nombre:"";
+            $producto->codigo = ($request->codigo != null)?$request->codigo:"";
 
             $producto->genero = ($request->genero != null)?$request->genero:"";
-            $producto->color = ($request->color != null)?$request->color:"";
-            $producto->talla = ($request->talla != null)?$request->talla:"";
-
-            $producto->piezas = ($request->piezas > 0)?(int)$request->piezas:0;
+            $producto->categorias_id = ($request->categorias_id > 0)?(float)$request->categorias_id:0;
 
             $producto->costo = ($request->costo > 0)?(float)$request->costo:0;
             $producto->precio = ($request->precio > 0)?(float)$request->precio:0;
@@ -261,11 +284,11 @@ class ProductosController extends Controller
             $producto->comision = $parametro_comision * $producto->ganancia / 100;
             $producto->ganancia_final = $producto->ganancia - $producto->comision;
 
-            $producto->costo_total = $producto->costo * $producto->piezas;
+            /*$producto->costo_total = $producto->costo * $producto->piezas;
             $producto->comision_total = $producto->comision * $producto->piezas;
             $producto->ganancia_total = $producto->ganancia * $producto->piezas;
             $producto->venta_total = $producto->precio_minimo * $producto->piezas;
-            $producto->ganancia_vs_comision = $producto->ganancia_total - $producto->comision_total;
+            $producto->ganancia_vs_comision = $producto->ganancia_total - $producto->comision_total;*/
 
             $producto->save();
 
@@ -288,19 +311,34 @@ class ProductosController extends Controller
 	
 	public function eliminar($hash_id){
 		
-		$id = Hashids::decode($hash_id);
-                
+		$id = Hashids::decode($hash_id);                
         $producto = Productos::find($id[0]);
 
         if ($id[0] == null)
             return redirect()->back();
 
-		if ($usuario) { 
+		if ($producto) { 
 			$producto->estatus = 0;
-			$usuario->save();
+			$producto->save();
 		}
 
 		return redirect()->back();
-	}	
+	}
+
+    public function del_detalle($hash_id){
+        
+        $id = Hashids::decode($hash_id);                
+        $detalle = ProductosDetalles::find($id[0]);
+
+        if ($id[0] == null)
+            return redirect()->back();
+
+        if ($detalle) { 
+            $detalle->estatus = 0;
+            $detalle->save();
+        }
+
+        return redirect()->back();
+    }
 
 }

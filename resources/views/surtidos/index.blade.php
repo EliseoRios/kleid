@@ -17,7 +17,7 @@
 			<i class="flaticon-right-arrow"></i>
 		</li>
 		<li class="nav-item">
-			<a>Surtidos</a>
+			<a><i class="fas fa-dolly"></i> Surtidos</a>
 		</li>
 	</ul>
 </div>
@@ -47,7 +47,6 @@
 		    			<tr>		    				
 		    				<th style="min-width:80px"></th>
 		    				<th>Fecha</th>
-		    				<th>Usuario</th>
 		    				<th>Venta</th>
 		    				<th>Costo</th>
 		    				<th>Comisión</th>
@@ -65,44 +64,57 @@
 	</div>
 </div>
 
-<!-- Modal -->
+
+<!-- Modal nuevo -->
 <div class="modal fade" id="modalNuevo" role="dialog" aria-labelledby="modalNuevo">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header" style="background-color: #f5f5f5">
-				<h4 class="modal-title" id="myModalLabel"></h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			</div>
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #f5f5f5">
+        <h4 class="modal-title" id="myModalLabel">Surtir producto</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
 
-			{!! Form::open(array('action' => 'SurtidosController@guardar','class'=>'','role'=>'form')) !!}			
+      {!! Form::open(array('action' => 'ProductosController@add_detalle','class'=>'form','role'=>'form','files'=>'true')) !!}      
 
-			<div class="modal-body">
+      <div class="modal-body">
 
-				{!! Form::hidden('_token', csrf_token(),array('id'=>'token')) !!}
+        {!! Form::hidden('_token', csrf_token(),array('id'=>'token')) !!}
 
-				<h3>Registrar compras del {{ date('d/m/Y') }}?</h3>
+        <div class="form-group">
+          {!! Form::label('productos_id', 'Nombre :',['class'=>'control-label']) !!}
 
-			</div>
+          {!! Form::select('productos_id', $productos, null, ['class'=>'form-control select2','style'=>'width: 100%;height: 24px;','placeholder'=>'-- Seleccionar producto --','required']) !!}
+        </div>
 
-			<div class="modal-footer">
-				<button type="button" class="btn bg-grey waves-effect" data-dismiss="modal"> 
-					<i class="fa fa-times"></i>
-					<span>Cancelar</span>
-				</button>
+        <div class="form-group" >
+          {!! Form::label('piezas', 'Piezas : ',['class'=>'control-label']) !!}
 
-				<button type="submit" class="btn btn-primary" id="grabar", secure = null>
-					<i class="fa fa-store"></i>
-					<span>Surtir</span>
-				</button>
-			</div>
-			{!! Form::close()!!}
-		</div>
-	</div>
+          {!! Form::number('piezas',1,array( 'class' => 'form-control', 'min'=>1,'required')) !!}
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal"> 
+          <i class="fa fa-times"></i>
+          <span>Cancelar</span>
+        </button>
+
+        <button type="submit" class="btn btn-primary" id="grabar", secure = null>
+          <i class="fa fa-save"></i>
+          <span>Guardar</span>
+        </button>
+      </div>
+      {!! Form::close()!!}
+    </div>
+  </div>
 </div>
+<!-- /Modal nuevo -->
 
 @endsection 
 
 @section('script')
+    @include('layouts.includes.select2')
 
 	<script type="text/javascript">
 
@@ -112,14 +124,15 @@
 	            $('#modalNuevo').modal('show');
 		    @endif
 
+		    $('.select2').select2();
+
 		    $('#datatable').DataTable({
 	            processing: true,
 	            serverSide: true,
 	            ajax: "{!!URL::to('surtidos/datatables')!!}",
 	            columns: [
 	                {data: 'id', name: 'id'},
-	                {data: 'created_at', name: 'created_at'},
-	                {data: 'usuario.nombre', name: 'usuario.nombre'},
+	                {data: 'fecha', name: 'fecha'},
 	                {data: 'venta', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
 	                {data: 'costo', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
 	                {data: 'comision', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},

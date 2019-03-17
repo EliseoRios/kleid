@@ -12,7 +12,6 @@ class CreateProductosDetallesTable extends Migration
             Schema::create('productos_detalles', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->bigInteger('usuarios_id')->default(0);
-                $table->bigInteger('surtidos_id')->default(0);
                 $table->bigInteger('productos_id')->default(0);
 
                 $table->bigInteger('piezas')->default(1);

@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Surtidos;
 use App\Models\Productos;
+use App\Models\ProductosDetalles;
+use App\Models\Surtidos;
 
 use Auth;
 use Hashids;
 use Datatables;
+use DB;
 
 class SurtidosController extends Controller
 {
@@ -19,12 +21,17 @@ class SurtidosController extends Controller
 	}
 
     public function index(Request $request) {
-        return view('surtidos.index');      
+
+        $productos = Productos::activos()->select(DB::raw("CONCAT(codigo,' | ',nombre) as nuevo_nombre, id"))->pluck('nuevo_nombre','id');
+
+        return view('surtidos.index', compact('productos'));      
     }
 
     public function datatables() {
 
-        $datos = Surtidos::where('estatus','=',1)->with('usuario')->get();
+        $datos = Surtidos::all();
+
+        //dd($datos);
 
         return Datatables::of($datos)
         ->editcolumn('id',function ($registro) {
@@ -32,80 +39,62 @@ class SurtidosController extends Controller
             $opciones = '<div class="btn-group">';
 
             if (Auth::user()->permiso(array('menu',2003)) == 2 ) {
+                $opciones .= '<a href="'. url('surtidos/editar/'.$registro->fecha) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="fa fa-folder-open"></i> </a>';
+            }
 
-                $opciones .= '<a href="'. url('surtidos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="fa fa-edit"></i> </a>';
-
-                //Mientras no hay productos
-                if ($registro->productos()->activos()->count() <= 0) {
-                    $opciones .= '<a href="'. url('surtidos/eliminar/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar ?'".')" class="btn btn-xs btn-danger" title="Eliminar"><i class="fa fa-trash"></i> </a>';
-                }
-
-            } 
             $opciones .= "</div>";
 
             return $opciones;
 
         })
-        ->editcolumn('created_at',function ($registro){
-        	return date('d/m/Y', strtotime($registro->created_at));
-        })
-        ->editcolumn('costo',function ($registro){
-            return $registro->costo;
-        })
-        ->editcolumn('venta',function ($registro){
-            return $registro->venta;
-        })
-        ->editcolumn('comision',function ($registro){
-            return $registro->comision;
-        })
-        ->editcolumn('ganancia',function ($registro){
-            return $registro->ganancia;
+        ->addColumn('fecha',function ($registro){
+        	return date('d/m/Y', strtotime($registro->fecha));
         })
         ->escapeColumns([])       
         ->make(TRUE);
     }
-    
-    public function guardar(Request $request) {
 
-       $surtido = new Surtidos ;
-       $surtido->usuarios_id = Auth::user()->id;               
-       $surtido->save();
+    public function dtproductos($fecha = null) {
 
-       return redirect('surtidos/editar/'.Hashids::encode($surtido->id));       
+        if ($fecha != null){
+            $datos = ProductosDetalles::activos()->whereDate('created_at',$fecha)->with('producto')->get();
+        }else{
+            $datos = ProductosDetalles::activos()->with('producto')->get();
+        }
+
+        return Datatables::of($datos)
+        ->editcolumn('id',function ($registro) {
+
+            $opciones = '';
+
+            if (Auth::user()->permiso(array('menu',2002)) == 2 ) {
+                $opciones .= '<a href="'. url('productos/del_detalle/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar registro ?'".')" class="btn btn-danger btn-xs " title="Eliminar" style="width: 30px; margin: 3px; color: white;">   <i class="fa fa-trash"></i> </a>';
+            }
+
+            return $opciones;
+
+        })
+        ->editcolumn('genero', function($registro){
+            $array_genero = config('sistema.generos');
+            $genero = (array_key_exists($registro->producto->genero, $array_genero))?$array_genero[$registro->producto->genero]:"N/D";
+            return $genero;
+        })
+        ->addcolumn('imagen', function($registro){
+            $primer_imagen= $registro->producto->imagenes()->first();
+            $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
+
+            $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;">';
+
+            return $imagen;
+        })
+        ->escapeColumns([])       
+        ->make(TRUE);
     }
 
-    public function editar($hash_id){
-        
-        $id = Hashids::decode($hash_id);                
-        $surtido = Surtidos::find($id[0]);
+    public function editar($fecha = null){
 
-        if ($id[0] == null)
-            return redirect()->back();
-
-        $productos = $surtido->productos()->activos()->get();
         $generos = config('sistema.generos');
 
-        $tallas  = Productos::lista_tallas();
-        $colores = Productos::lista_colores();
-
-        return view('surtidos.editar',compact('surtido','productos','generos','tallas','colores'));
+        return view('surtidos.editar',compact('fecha','productos','generos'));
     }
-	
-	public function eliminar($hash_id){
-        
-		$id = Hashids::decode($hash_id);                
-        $surtido = Surtidos::find($id[0]);
-
-        if ($id[0] == null)
-            return redirect()->back();
-
-		if ($surtido) { 
-			$surtido->estatus = 0;
-			$surtido->save();
-
-			$surtido->productos()->update(['estatus'=>0]);
-		}
-
-		return redirect()->back();
-	}	
 }

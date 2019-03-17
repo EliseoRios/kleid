@@ -12,8 +12,8 @@ class Productos extends Model
     	return $this->belongsTo('App\Models\Usuarios','usuarios_id','id');
     }
 
-    public function surtido(){
-        return $this->belongsTo('App\Models\Surtidos','surtidos_id','id');
+    public function existencia(){
+        return $this->hasOne('App\Models\Existencias','productos_id','id');
     }
 
     public function ventas(){
@@ -22,6 +22,10 @@ class Productos extends Model
 
     public function imagenes(){
         return $this->hasMany('App\Models\Imagenes','productos_id','id');
+    }
+
+    public function detalles(){
+        return $this->hasMany('App\Models\ProductosDetalles','productos_id','id');
     }
 
     public function scopeActivos($query)

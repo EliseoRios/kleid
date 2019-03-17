@@ -189,35 +189,35 @@
       </div>
       <div class="modal-body">
 
-        @php
-          $venta_aproximada = $producto->precio_minimo*$producto->piezas;
-        @endphp
-
         <table class="table table-sm table-hover">
           <tbody>
             <tr>
-              <th>Venta aprox.</th>
-              <td>${{ number_format($venta_aproximada,2,'.',',') }}</td>
+              <th>Total compras</th>
+              <td>${{ number_format($producto->existencia->total_compras,2,'.',',') }}</td>
             </tr>
             <tr>
-              <th>Costo total</th>
-              <td>${{ number_format($producto->costo_total,2,'.',',') }}</td>
-            </tr>            
+              <th>Total ventas</th>
+              <td>${{ number_format($producto->existencia->total_ventas,2,'.',',') }}</td>
+            </tr> 
             <tr>
-              <th>Ganancia gral. aprox.</th>
-              <td>${{ number_format($producto->ganancia_total,2,'.',',') }}</td>
+              <th>Total comisiones</th>
+              <td>${{ number_format($producto->existencia->total_comisiones,2,'.',',') }}</td>
+            </tr>                                  
+            <tr>
+              <th>Total ganancia</th>
+              <td>${{ number_format($producto->existencia->total_ganancias,2,'.',',') }}</td>
             </tr>
             <tr>
-              <th>Comisión total</th>
-              <td>${{ number_format($producto->comision_total,2,'.',',') }}</td>
-            </tr>            
-            <tr>
-              <th>Ganancia - Comisión</th>
-              <td>${{ number_format($producto->ganancia_vs_comision,2,'.',',') }}</td>
+              <th>Total ganancia neta</th>
+              <td>${{ number_format($producto->existencia->total_ganancias_netas,2,'.',',') }}</td>
             </tr>
+            <tr>
+              <th>Vedidas</th>
+              <td>{{ $producto->ventas()->count() }}</td>
+            </tr>          
             <tr>
               <th>Disponibles</th>
-              <td>{{ $producto->piezas - $producto->ventas()->activas()->count() }}</td>
+              <td>{{ $producto->existencia->disponibles }}</td>
             </tr>
           </tbody>
         </table>
