@@ -40,7 +40,7 @@ class SurtidosController extends Controller
             $opciones = '<div class="btn-group">';
 
             if (Auth::user()->permiso(array('menu',2003)) === 2) {
-                $opciones .= '<a href="'. url('surtidos/editar/'.$registro->fecha) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="fa fa-folder-open"></i> </a>';
+                $opciones .= '<a href="'. url('surtidos/editar/'.$registro->fecha) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="fas fa-dolly-flatbed"></i> </a>';
             }
 
             $opciones .= "</div>";

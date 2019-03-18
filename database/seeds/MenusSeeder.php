@@ -44,6 +44,16 @@ class MenusSeeder extends Seeder
             'updated_at' =>  date('Y-m-d H:i:s')
         ]);
 
+        DB::table('menus')->insert([
+            'codigo'       => '2004',
+            'dependencia'  => 'Catálogos',
+            'area'         => 'Catálogos',
+            'opcion'       => 'Categorías',
+            'url'          => 'categorias',
+            'created_at' =>  date('Y-m-d H:i:s'),
+            'updated_at' =>  date('Y-m-d H:i:s')
+        ]);
+
         // CRM 3000
         /*DB::table('menus')->insert([
             'codigo'       => '3001',
@@ -76,7 +86,7 @@ class MenusSeeder extends Seeder
         ]);*/
 
         // Ventas
-        DB::table('menus')->insert([
+        /*DB::table('menus')->insert([
             'codigo'       => '4001',
             'dependencia'  => 'Ventas',
             'area'         => 'Ventas',
@@ -84,7 +94,7 @@ class MenusSeeder extends Seeder
             'url'          => 'caja',
             'created_at' =>  date('Y-m-d H:i:s'),
             'updated_at' =>  date('Y-m-d H:i:s')        
-        ]);
+        ]);*/
 
         DB::table('menus')->insert([
             'codigo'       => '4002',

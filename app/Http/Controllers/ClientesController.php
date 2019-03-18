@@ -45,7 +45,7 @@ class ClientesController extends Controller
                 $opciones .= '<a href="" class="btn btn-xs btn-primary" title="Editar" style="color: white; margin: 3px;" data-toggle="modal" data-target="#modalNuevo" data-formulario="editar" data-identifier="'.Hashids::encode($usuario->id).'"><i class="fa fa-edit"></i> </a>';
 
                 if($usuario->ventas()->count() <= 0 && $usuario->compras()->count() <= 0){
-                	$opciones .= '<a href="'. url('clientes/clientes/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar cliente ?'".')" class="btn btn-xs btn-danger" title="Eliminar" style="color: white; margin: 3px;"><i class="fa fa-trash"></i> </a>';
+                	$opciones .= '<a href="'. url('clientes/eliminar/'.  Hashids::encode($usuario->id) ) .'"  onclick="return confirm('."' Eliminar cliente ?'".')" class="btn btn-xs btn-danger" title="Eliminar" style="color: white; margin: 3px;"><i class="fa fa-trash"></i> </a>';
                 }                
 
             } 

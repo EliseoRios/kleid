@@ -55,7 +55,7 @@ class ApartadoController extends Controller
 
         })
         ->addColumn('adeudo',function($usuario){
-            return 0;//$usuario->adeudo;
+            return ($usuario->adeudo > 0)?$usuario->adeudo:0;
         })
         ->editcolumn('estatus',function ($usuario){ 
 

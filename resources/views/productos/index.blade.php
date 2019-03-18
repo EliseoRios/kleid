@@ -102,7 +102,7 @@
           <div class="form-group col-md-4" >
             {!! Form::label('categorias_id', 'Categoría : ',['class'=>'control-label']) !!}
 
-            {!! Form::select('categorias_id',$categorias,null,array( 'class' => 'form-control','placeholder'=>'-- Seleccionar categoria --')) !!}
+            {!! Form::select('categorias_id',$categorias,null,array( 'class' => 'form-control select2','placeholder'=>'-- Seleccionar categoria --','style'=>'width: 100%;')) !!}
           </div>
 
           <div class="form-group col-md-4" >
@@ -177,10 +177,12 @@
 
 @section('script')
   @include('layouts.includes.bootstrap-file-upload')
+  @include('layouts.includes.select2')
 
   <script type="text/javascript">
 
     $(function(){
+        $('.select2').select2();
 
         $('.imagen').fileinput({
           language: 'es',

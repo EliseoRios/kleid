@@ -26,10 +26,7 @@ class CreateVentasTable extends Migration
 
                 $table->string('tipo_venta')->default('venta');//abono/venta
                 $table->double('pago',19,2)->default(0.00);//importe
-                $table->decimal('comision',19,2)->default(0.00);                
-
-                $table->double('dinero_recibido',19,2)->default(0.00);
-                $table->double('cambio',19,2)->default(0.00);
+                $table->decimal('comision',19,2)->default(0.00);
 
                 $table->decimal('total_pago',19,2)->default(0.00);
                 $table->decimal('total_comision',19,2)->default(0.00);

@@ -9,6 +9,7 @@ use App\Models\Parametros;
 use App\Models\Usuarios;
 use App\Models\Imagenes;
 use App\Models\ProductosDetalles;
+use App\Models\Categorias;
 
 use Auth;
 use Datatables;
@@ -27,7 +28,7 @@ class ProductosController extends Controller
             return redirect()->back();
 
         $generos = config('sistema.generos');
-        $categorias = [];
+        $categorias = Categorias::activas()->pluck('categoria','id');
 
         return view('productos.index', compact('generos','categorias'));
     }
@@ -142,28 +143,7 @@ class ProductosController extends Controller
         $detalle->save();
 
         return redirect()->back();        
-    }
-
-    public function add_detalle(Request $request)
-    {
-        //Crear primer surtido
-        $detalle = new ProductosDetalles;
-        $producto = Productos::find($request->productos_id);
-
-        $detalle->usuarios_id = Auth::user()->id;
-        $detalle->productos_id = $producto->id;
-        $detalle->piezas = ($request->piezas > 0)?(int)$request->piezas:0;
-
-        $detalle->costo_total = $producto->costo * $detalle->piezas;
-        $detalle->comision_total = $producto->comision * $detalle->piezas;
-        $detalle->ganancia_total = $producto->ganancia * $detalle->piezas;
-        $detalle->venta_total = $producto->precio_minimo * $detalle->piezas;
-        $detalle->ganancia_vs_comision = $detalle->ganancia_total - $detalle->comision_total;
-
-        $detalle->save();
-
-        return redirect()->back();
-    }
+    }    
 
     private function guardar_imagen($request_imagen, $objeto_id){
 
@@ -214,7 +194,7 @@ class ProductosController extends Controller
         $producto = Productos::find($id[0]);
 
         $generos = config('sistema.generos');
-        $categorias = [];
+        $categorias = Categorias::activas()->pluck('categoria','id');
 
         $imagenes = $producto->imagenes()->get();
 
@@ -291,6 +271,27 @@ class ProductosController extends Controller
 
 		return redirect()->back();
 	}
+
+    public function add_detalle(Request $request)
+    {
+        //Crear primer surtido
+        $detalle = new ProductosDetalles;
+        $producto = Productos::find($request->productos_id);
+
+        $detalle->usuarios_id = Auth::user()->id;
+        $detalle->productos_id = $producto->id;
+        $detalle->piezas = ($request->piezas > 0)?(int)$request->piezas:0;
+
+        $detalle->costo_total = $producto->costo * $detalle->piezas;
+        $detalle->comision_total = $producto->comision * $detalle->piezas;
+        $detalle->ganancia_total = $producto->ganancia * $detalle->piezas;
+        $detalle->venta_total = $producto->precio_minimo * $detalle->piezas;
+        $detalle->ganancia_vs_comision = $detalle->ganancia_total - $detalle->comision_total;
+
+        $detalle->save();
+
+        return redirect()->back();
+    }
 
     public function del_detalle($hash_id){
         

@@ -19,6 +19,10 @@ class CreateTicketsTable extends Migration
                 $table->bigIncrements('id');
                 $table->bigInteger('usuarios_id')->default(0);
 
+                $table->double('total',19,2)->default(0.00);
+                $table->double('dinero_recibido',19,2)->default(0.00);
+                $table->double('cambio',19,2)->default(0.00);
+
                 $table->boolean('estatus')->default(1);
                 $table->timestamps();
             });

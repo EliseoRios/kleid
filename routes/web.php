@@ -53,16 +53,35 @@ Route::group(['middleware' => ['auth']], function () {
 
 	});
 
+	//Categorias
+	Route::group(['prefix'=>'categorias'], function(){
+
+		Route::get('/','CategoriasController@index');
+		Route::get('datatables','CategoriasController@datatables');
+		Route::get('crear','CategoriasController@crear');
+		Route::get('editar/{id}','CategoriasController@editar');
+		Route::get('eliminar/{id}','CategoriasController@eliminar');
+
+		Route::post('guardar','CategoriasController@guardar');
+		Route::post('actualizar','CategoriasController@actualizar');    
+
+	});
+
 	//Caja
 	Route::group(['prefix'=>'caja'], function(){
 
-		Route::get('/{hash_ticket?}','CajaController@index');
-		Route::get('ventas/{ticket}','CajaController@ventas');
-		Route::get('imprimir/{ticket}','CajaController@imprimir');
+		Route::get('{hash_ticket?}','CajaController@index');
 
-		Route::post('guardar','CajaController@guardar');
-		Route::post('actualizar','CajaController@actualizar');    
-		Route::post('eliminar','CajaController@eliminar');
+		Route::group(['prefix'=>'ticket'], function(){
+
+			Route::get('generar','CajaController@generar');
+			Route::get('imprimir/{ticket}','CajaController@imprimir');
+
+			Route::post('guardar','CajaController@guardar');
+			Route::post('completar','CajaController@completar');    
+			Route::post('eliminar','CajaController@eliminar');
+
+		});
 
 	});
 

@@ -1,12 +1,12 @@
 @extends('layouts.layout')
 
 @section('title')
-  Sistema de apartado
+  Caja
 @endsection
 
 @section('header')
 <div class="page-header">
-  <h4 class="page-title">Apartado</h4>
+  <h4 class="page-title">Cajero</h4>
   <ul class="breadcrumbs">
     <li class="nav-home">
       <a href="{{ url('/') }}">
@@ -17,7 +17,7 @@
       <i class="flaticon-right-arrow"></i>
     </li>
     <li class="nav-item">
-      <a href="{{ url('sistema_apartado') }}"><i class="fas fa-chalkboard-teacher"></i> Sistema de apartado</a>
+      <a href="{{ url('sistema_apartado') }}"><i class="fas fa-desktop"></i> Caja</a>
     </li>
     <li class="separator">
       <i class="flaticon-right-arrow"></i>
@@ -35,7 +35,7 @@
   <div class="card">
     <div class="card-header">
       <div class="d-flex align-items-center">
-        <h4 class="card-title" title="Pendientes de pagar">Productos apartados</h4>        
+        <h4 class="card-title" title="Pendientes de pagar">Caja</h4>        
       </div>
     </div>
     <div class="card-body">
