@@ -25,7 +25,7 @@ class SurtidosController extends Controller
         if (Auth::user()->permiso(['menu',2003]) < 1)
             return redirect()->back();
 
-        $productos = Productos::activos()->select(DB::raw("CONCAT(codigo,' | ',nombre) as nuevo_nombre, id"))->pluck('nuevo_nombre','id');
+        $productos = Productos::activos()->select(DB::raw("CONCAT(id,' | ',codigo,' | ',nombre) as nuevo_nombre, id"))->pluck('nuevo_nombre','id');
 
         return view('surtidos.index', compact('productos'));      
     }

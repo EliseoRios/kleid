@@ -85,7 +85,7 @@ class ApartadoController extends Controller
     	//$ventas_liquidadas = $cliente->compras()->liquidadas()->activas()->get();
 
         $existencias = Existencias::where('disponibles','>',0)->pluck('productos_id','productos_id')->toArray();
-        $productos = Productos::activos()->whereIn('id',$existencias)->select(DB::raw("CONCAT(codigo,' | ',nombre) as nuevo_nombre, id"))->pluck('nuevo_nombre','id');
+        $productos = Productos::activos()->whereIn('id',$existencias)->select(DB::raw("CONCAT(id,' | ',codigo,' | ',nombre) as nuevo_nombre, id"))->pluck('nuevo_nombre','id');
 
     	return view('apartado.cliente',compact('cliente','ventas_sin_liquidar','ventas_liquidadas','productos'));
     }

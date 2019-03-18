@@ -82,6 +82,7 @@
 
                 <th style="max-width:40px"></th>
                 <th>Foto</th>
+                <th title="Código del sistema">C.S</th>
                 <th>Código</th>
                 <th>Nombre</th>
                 <th>Género</th>
@@ -135,6 +136,7 @@
                     </div>
                   </td>
                   <td><?php echo $imagen; ?></td>
+                  <td>{{ $producto->id }}</td>
                   <td>{{ $producto->codigo }}</td>
                   <td>{{ $producto->nombre }}</td>
                   <td>{{ config('sistema.generos')[$venta->producto->genero] }}</td>
@@ -146,7 +148,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <th class="text-right" colspan="5">TOTAL</th>
+                <th class="text-right" colspan="6">TOTAL</th>
                 <th class="text-right" colspan="1">${{ number_format(($cliente->adeudo > 0)?$cliente->adeudo:0,2,'.',',') }}</th>
               </tr>
             </tfoot>

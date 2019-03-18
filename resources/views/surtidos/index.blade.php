@@ -133,10 +133,10 @@
 	            columns: [
 	                {data: 'id', name: 'id'},
 	                {data: 'fecha', name: 'fecha'},
-	                {data: 'venta', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
-	                {data: 'costo', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
-	                {data: 'comision', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
-	                {data: 'ganancia', name: 'gasto',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+	                {data: 'venta', name: 'venta',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+	                {data: 'costo', name: 'costo',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+	                {data: 'comision', name: 'comision',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+	                {data: 'ganancia_total', name: 'ganancia_total',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
                 ],
                 order: [],
 	            language: {

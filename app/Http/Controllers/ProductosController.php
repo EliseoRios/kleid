@@ -38,7 +38,7 @@ class ProductosController extends Controller
         $datos = Productos::activos()->with('existencia')->get();
 
         return Datatables::of($datos)
-        ->editcolumn('id',function ($registro) {
+        ->addColumn('opciones',function ($registro) {
 
             $opciones = '';
 

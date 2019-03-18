@@ -50,6 +50,8 @@
 
                 <th style="max-width:40px"></th>
                 <th>Foto</th>
+                <th title="Código del sistema">C.S</th>
+                <th>Código</th>
                 <th>Nombre</th>
                 <th>Género</th>
                 <th>Costo</th>
@@ -88,6 +90,8 @@
           columns: [
             {data: 'id', name: 'id'},                
             {data: 'imagen', name: 'imagen'},
+            {data: 'productos_id', name: 'productos_id'},
+            {data: 'producto.codigo', name: 'producto.codigo'},
             {data: 'producto.nombre', name: 'producto.nombre'},
             {data: 'genero', name: 'genero'},
             {data: 'costo_total', name: 'costo_total',render: $.fn.dataTable.render.number(',', '.', 2, '$')},

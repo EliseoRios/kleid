@@ -48,6 +48,7 @@
 
                 <th style="max-width:40px"></th>
                 <th>Foto</th>
+                <th title="Código del sistema">C.S</th>
                 <th>Código</th>
                 <th>Nombre</th>
                 <th>Género</th>
@@ -198,8 +199,9 @@
             order: [],
             ajax: "{!!URL::to('productos/datatables')!!}",
             columns: [
-              {data: 'id', name: 'id'},                
+              {data: 'opciones', name: 'opciones'},                
               {data: 'imagen', name: 'imagen'},
+              {data: 'id', name: 'id'},
               {data: 'codigo', name: 'codigo'},
               {data: 'nombre', name: 'nombre'},
               {data: 'genero', name: 'genero'},

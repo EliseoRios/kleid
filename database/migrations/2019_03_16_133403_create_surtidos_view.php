@@ -18,7 +18,8 @@ class CreateSurtidosView extends Migration
                     SELECT DATE(created_at) as fecha, 
                         SUM(piezas) as piezas, SUM(costo_total) as costo, 
                         SUM(comision_total) as comision, 
-                        SUM(ganancia_total) as ganancia, 
+                        SUM(ganancia_total) as ganancia,
+                        (SUM(ganancia_total) - SUM(comision_total)) as ganancia_total,
                         SUM(venta_total) as venta 
                     FROM `productos_detalles` 
                     WHERE estatus=1 
