@@ -76,10 +76,10 @@ Route::group(['middleware' => ['auth']], function () {
 
 			Route::get('generar','CajaController@generar');
 			Route::get('imprimir/{ticket}','CajaController@imprimir');
+			Route::get('eliminar','CajaController@eliminar');
 
-			Route::post('guardar','CajaController@guardar');
+			Route::post('agregar','CajaController@agregar');
 			Route::post('completar','CajaController@completar');    
-			Route::post('eliminar','CajaController@eliminar');
 
 		});
 

@@ -168,7 +168,7 @@ class ApartadoController extends Controller
         if ($id[0] == null)
             return redirect()->back();
 
-        if ($venta) { 
+        if (isset($venta)) { 
             $venta->delete();
         }
 
@@ -185,7 +185,6 @@ class ApartadoController extends Controller
 
         if ($venta) { 
             $venta->liquidado = 1;
-            $venta->estatus = 2;
             $venta->save();
         }
 

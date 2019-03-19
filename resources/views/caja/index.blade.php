@@ -17,269 +17,33 @@
       <i class="flaticon-right-arrow"></i>
     </li>
     <li class="nav-item">
-      <a href="{{ url('sistema_apartado') }}"><i class="fas fa-desktop"></i> Caja</a>
+      <a href="{{ url('caja') }}"><i class="fas fa-desktop"></i> Caja</a>
     </li>
+    @if(isset($ticket))
     <li class="separator">
       <i class="flaticon-right-arrow"></i>
     </li>
     <li class="nav-home">
-      <a>{{ $cliente->nombre }}</a>
+      <a>{{ str_pad($ticket->id,5,0,STR_PAD_LEFT) }}</a>
     </li>
+    @endif
   </ul>
 </div>
 @endsection
  
 @section('content')
-{{-- Ventas sin liquidar --}}
-<div class="col-md-12">
+{{-- Registros en caja --}}
+<div class="col-md-4 float-left">
   <div class="card">
     <div class="card-header">
-      <div class="d-flex align-items-center">
-        <h4 class="card-title" title="Pendientes de pagar">Caja</h4>        
-      </div>
+      <h4 class="card-title text-center">AGREGAR PRODUCTO</h4>
     </div>
     <div class="card-body">
-      @if (Auth::user()->permiso(array('menu',2002)) == 2 || in_array(Auth::user()->perfiles_id, [1,2]))
-      <div class="float-right" style="margin-bottom: 15px;">
 
-        @if(Auth::user()->permiso(['menu',4002]) === 2)
-        <div class="btn-group" role="group" aria-label="Basic example">
-          
-          <a href="" data-toggle="modal" data-target="#modalAbono" class="btn btn-secondary btn-sm" title="Abonar" style="color: white;">
-              <i class="fas fa-piggy-bank"></i>
-              &nbsp;Abonar
-          </a>
+    @if(Auth::user()->permiso(['menu',4001]))
+      @if(isset($ticket))
 
-          @if($cliente->a_favor > 0)
-          <a href="" data-toggle="modal" data-target="#modalReembolso" class="btn btn-dark btn-sm" title="Reembolsar" style="color: white;">
-              <i class="far fa-frown"></i>
-              &nbsp;Reembolso
-          </a>
-          @endif
-
-          <a href="" data-target="#modalApartar" data-toggle="modal" class="btn btn-primary btn-sm" title="Agregar" style="color: white;">
-              <i class="fas fa-cart-plus"></i>
-              &nbsp;Apartar productos
-          </a>
-
-        </div>
-        @endif
-        
-      </div>
-      @endif
-
-      <div class="float-left" style="margin-bottom: 15px;">
-        <a href="" class="btn btn-dark btn-xs" data-toggle="modal" data-target="#modalResumen" style="color: white;"><i class="fa fa-file"></i> RESUMEN</a>
-
-        <a href="{{ url('sistema_apartado/abonos/'.Hashids::encode($cliente->id)) }}" class="btn btn-info btn-xs" style="color: white;"><i class="fa fa-money-bill-alt"></i> ABONOS</a>
-      </div>        
-      
-        <!-- Listado de productos -->
-        <div class="table-responsive">
-          <table id="" class="display table table-condensed small">                               
-            <thead>
-              <tr>
-
-                <th style="max-width:40px"></th>
-                <th>Foto</th>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Género</th>
-                <th>Costo</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              {!! Form::open(['action'=>'ApartadoController@agregar_abono', 'role'=>'form', 'class'=>'form']) !!}
-              @foreach ($ventas_sin_liquidar as $venta)
-
-                @php
-                  $producto = $venta->producto;
-
-                  $primer_imagen= $producto->imagenes()->first();
-                  $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
-
-                  $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;" title="#'.str_pad($producto->id, 5,'0',STR_PAD_LEFT).'">';
-                @endphp
-                
-                <tr>
-                  <td style="max-width: 30px;">
-                    <div role="group" aria-label="Toolbar with button groups">
-
-
-                      @if(!$venta->liquidado && $venta->comision_pagada && $venta->entregado && $venta->pago < $cliente->a_favor)
-                      <a href="{{ url('sistema_apartado/liquidar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-primary" style="margin: 1px; width: 30px;" title="Liquidar" onclick="return confirm('Liquidar pieza?');"><i class="fas fa-donate"></i></a>
-                      @elseif($venta->pago < $cliente->a_favor)
-                      <i class="fa fa-hand-holding-usd text-primary text-center" style="width: 30px; font-size: 18px;" title="Puede liquidarse"></i>
-                      @endif                      
-
-                      @if(!$venta->entregado)
-                      <a href="{{ url('sistema_apartado/entregar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-success" style="margin: 1px; width: 30px;" title="Entregar" onclick="return confirm('Entregar pieza?');"><i class="fas fa-diagnoses"></i></a>
-                      @endif
-                      @if($venta->entregado)
-                      <i class="fas fa-diagnoses text-success text-center" style="width: 30px;" title="Entregado"></i>
-                      @endif
-
-                      @if(!$venta->comision_pagada)
-                        @if(Auth::user()->perfiles_id === 1)
-                        <a href="{{ url('sistema_apartado/saldar_comision/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-dark" style="margin: 1px; width: 30px;" title="Pagar comisión ${{ number_format($venta->comision,2) }}" onclick="return confirm('Pagar comisión?');"><i class="fas fa-golf-ball"></i></a>
-                        @endif                      
-                      @else
-                      <i class="fas fa-golf-ball text-dark text-center" style="width: 30px;" title="Comisión pagada ${{ number_format($venta->comision,2) }}"></i>
-                      @endif
-
-                      @if(!$venta->comision_pagada)
-                      <a href="{{ url('sistema_apartado/eliminar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-danger" style="margin: 1px; width: 30px;" title="Eliminar" onclick="return confirm('Eliminar apartado?');"><i class="fas fa-trash"></i></a>
-                      @endif                     
-
-                    </div>
-                  </td>
-                  <td><?php echo $imagen; ?></td>
-                  <td>{{ $producto->codigo }}</td>
-                  <td>{{ $producto->nombre }}</td>
-                  <td>{{ config('sistema.generos')[$venta->producto->genero] }}</td>
-                  <td class="text-right">${{ number_format($venta->pago,2,'.',',') }}</td>
-                </tr>
-
-              @endforeach
-              {!! Form::close() !!}
-            </tbody>
-            <tfoot>
-              <tr>
-                <th class="text-right" colspan="5">TOTAL</th>
-                <th class="text-right" colspan="1">${{ number_format(($cliente->adeudo > 0)?$cliente->adeudo:0,2,'.',',') }}</th>
-              </tr>
-            </tfoot>
-
-          </table>
-        </div>
-        <!-- /Listado de productos -->
-
-    </div>
-  </div>
-</div>
-{{-- /Ventas sin liquidar --}}
-
-{{-- Modal resumen --}}
-<div class="modal fade" id="modalResumen">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Resumen</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        
-        <table class="table table-sm table-hover">
-          <tbody>
-            <tr>
-              <th>Sin liquidar</th>
-              <td class="text-right">${{ number_format($cliente->suma_sin_liquidar,2,'.',',') }}</td>
-            </tr>
-            <tr>
-              <th>Saldo a favor</th>
-              <td class="text-right">${{ number_format($cliente->a_favor,2,'.',',') }}</td>
-            </tr>   
-            <tr>
-              <th>Total adeudo</th>
-              <td class="text-right">${{ number_format(($cliente->adeudo > 0)?$cliente->adeudo:0,2,'.',',') }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-{{-- /Modal resumen --}}
-
-{{-- Modal abono --}}
-<div class="modal fade" id="modalAbono">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title"><i class="fa fa-hand-holding-usd"></i> Abono</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-          <span class="sr-only">Close</span>
-        </button>
-      </div>
-
-      {!! Form::open(array('action' => 'ApartadoController@agregar_abono','class'=>'form','role'=>'form','files'=>'true')) !!}  
-      {!! Form::hidden('_token', csrf_token(),array('id'=>'token')) !!}
-      <div class="modal-body">
-        <div class="form-group">
-          {!! Form::label('abono', 'Cantidad :', ['class'=>'control-label']) !!}
-
-          {!! Form::number('abono', null, ['min'=>1, 'class'=>'form-control','step'=>'any','required']) !!}
-        </div>
-
-        {!! Form::hidden('clientes_id', $cliente->id, []) !!}
-        {!! Form::hidden('formulario', 'abono', []) !!}
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
-        <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Abonar</button>
-      </div>
-      {!! Form::close() !!}
-
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-{{-- /Modal abono --}}
-
-{{-- Modal reembolso --}}
-<div class="modal fade" id="modalReembolso">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title"><i class="far fa-frown"></i> Reembolso</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-          <span class="sr-only">Close</span>
-        </button>
-      </div>
-
-      {!! Form::open(array('action' => 'ApartadoController@agregar_abono','class'=>'form','role'=>'form','files'=>'true')) !!}  
-      {!! Form::hidden('_token', csrf_token(),array('id'=>'token')) !!}
-      <div class="modal-body">
-        <div class="form-group">
-          {!! Form::label('abono', 'Cantidad :', ['class'=>'control-label']) !!}
-
-          {!! Form::number('abono', null, ['min'=>0, 'max'=>$cliente->a_favor,'class'=>'form-control','step'=>'any','required']) !!}
-        </div>
-
-        {!! Form::hidden('clientes_id', $cliente->id, []) !!}
-        {!! Form::hidden('formulario', 'reembolso', []) !!}
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
-        <button type="submit" class="btn btn-primary"><i class="fa fa-minus"></i> Reembolsar</button>
-      </div>
-      {!! Form::close() !!}
-
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-{{-- /Modal reembolso --}}
-
-{{-- Modal apartar --}}
-<div class="modal fade" id="modalApartar" role="dialog" aria-labelledby="modalApartar">
-  <div class="modal-dialog ">
-    <div class="modal-content">
-      <div class="modal-header" style="background-color: #f5f5f5">
-        <h4 class="modal-title" id="myModalLabel"><i class="fas fa-cart-plus"></i> Apartar producto</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div>
-
-      {!! Form::open(array('action' => 'ApartadoController@apartar','class'=>'form','role'=>'form','files'=>'true')) !!}      
-
-      <div class="modal-body">
+      {!! Form::open(array('action' => 'CajaController@agregar','class'=>'form','role'=>'form','files'=>'true')) !!}
 
         {!! Form::hidden('_token', csrf_token(),array('id'=>'token')) !!}
 
@@ -301,26 +65,179 @@
           {!! Form::number('piezas',1,array( 'class' => 'form-control', 'min'=>1,'id'=>'apartado_piezas','required')) !!}
         </div>
 
-        {!! Form::hidden('clientes_id', $cliente->id, ['style'=>'width: 0px;']) !!}
+        {!! Form::hidden('tickets_id', (isset($ticket))?$ticket->id:0, []) !!}
 
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal"> 
-          <i class="fa fa-times"></i>
-          <span>Cancelar</span>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+          <i class="fas fa-cart-plus"></i> AGREGAR
         </button>
 
-        <button type="submit" class="btn btn-primary" id="grabar", secure = null>
-          <i class="fas fa-people-carry"></i>
-          <span>Apartar</span>
-        </button>
-      </div>
-      {!! Form::close()!!}
+        @else
+
+        <a href="{{ url('caja/ticket/generar') }}" class="btn btn-info btn-lg btn-block">
+          <i class="fas fa-shopping-bag"></i> NUEVO TICKET
+        </a>
+
+        @endif
+      @endif
+
+      {!! Form::close()!!}      
+
     </div>
   </div>
 </div>
-{{-- /Modal apartar --}}
+{{-- /Registros en caja --}}
+
+{{-- Ventas sin liquidar --}}
+<div class="col-md-8 float-right">
+  <div class="card">
+    <div class="card-header">
+      <div class="d-flex align-items-center">
+
+        <h5 class="card-title" title="Pendientes de pagar">
+          VENTAS |&nbsp;<strong class="float-right">Total: $ {{ number_format($total,2) }}</strong>
+        </h5>
+
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      @if (Auth::user()->permiso(array('menu',4001)) == 2 || in_array(Auth::user()->perfiles_id, [1,2]))
+      <div class="float-right" style="margin-bottom: 15px;">
+
+        <div class="btn-group">
+          
+          @if($total > 0 && Auth::user()->permiso(['menu',4001]))
+          <a href="" data-toggle="modal" data-target="#modalCompletar" class="btn btn-secondary btn-sm" title="Cobrar" style="color: white; width: 120px;">
+              <i class="fas fa-hand-holding-usd"></i>
+              &nbsp;Cobrar
+          </a>                    
+          @endif          
+
+        </div>
+        
+      </div>
+      @endif
+
+      <a href="{{ url('caja/ticket/eliminar/'.Hashids::encode($ticket_id)) }}" class="btn btn-warning btn-sm" style="color: white; width: 120px;" title="Eliminar Ticket" onclick="return confirm('Eliminar Ticket ?');"><i class="fas fa-trash"></i> Cancelar ticket</a>
+
+      <br><br>
+      
+      @if($total > 0 && Auth::user()->permiso(['menu',4001]))
+
+      <!-- Listado de productos -->
+      <div class="table-responsive">
+        <table id="" class="display table table-condensed small">                               
+          <thead>
+            <tr>
+
+              <th style="max-width:40px"></th>
+              <th>Foto</th>
+              <th title="Código del sistema">C.S</th>
+              <th>Nombre</th>
+              <th>Género</th>
+              <th>Pzas</th>
+              <th>Importe</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {!! Form::open(['action'=>'ApartadoController@agregar_abono', 'role'=>'form', 'class'=>'form']) !!}
+            @foreach ($ventas as $venta)
+
+              @php
+                $producto = $venta->producto;
+
+                $primer_imagen= $producto->imagenes()->first();
+                $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
+
+                $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;" title="#'.str_pad($producto->id, 5,'0',STR_PAD_LEFT).'">';
+              @endphp
+              
+              <tr>
+                <td style="max-width: 30px;">
+                  <div role="group" aria-label="Toolbar with button groups">
+
+                    @if($venta->estatus !== 2 && Auth::user()->permiso(['menu',4001]))
+                    <a href="{{ url('sistema_apartado/eliminar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-danger" style="margin: 1px; width: 30px; color: white;" title="Eliminar" onclick="return confirm('Eliminar ?');"><i class="fas fa-trash"></i></a>
+                    @endif                     
+
+                  </div>
+                </td>
+                <td><?php echo $imagen; ?></td>
+                <td>{{ $producto->id }}</td>
+                <td>{{ $producto->nombre }}</td>
+                <td>{{ config('sistema.generos')[$producto->genero] }}</td>
+                <td>{{ $venta->piezas }}</td>
+                <td class="text-right">${{ number_format($venta->total_pago,2,'.',',') }}</td>
+              </tr>
+
+            @endforeach
+            {!! Form::close() !!}
+          </tbody>
+
+        </table>
+      </div>
+      <!-- /Listado de productos -->
+
+      @else
+
+      <div class="alert alert-info alert-important" role="alert">
+        <strong>Sin registros!</strong>
+      </div>
+
+      @endif
+
+    </div>
+  </div>
+</div>
+{{-- /Ventas sin liquidar --}}
+
+{{-- Modal completar venta --}}
+<div class="modal fade" id="modalCompletar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Completar venta</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+
+      {!! Form::open(['action'=>'CajaController@completar','class'=>'form']) !!}
+
+      <div class="modal-body">
+
+        <div class="form-group">
+          {!! Form::label('dinero_recibido', 'Dinero recibido :', ['class'=>'control-label']) !!}
+
+          {!! Form::number('dinero_recibido', null, ['class'=>'form-control','min'=>$total,'id'=>'dinero_recibido','step'=>'any','required']) !!}
+        </div>
+
+        <div class="form-group">
+          {!! Form::label('total', 'Total :', ['class'=>'control-label']) !!}
+
+          {!! Form::number('total', $total, ['class'=>'form-control','id'=>'total','step'=>'any','readonly','required']) !!}
+        </div>
+
+        <div class="form-group">
+          {!! Form::label('cambio', 'Cambio :', ['class'=>'control-label']) !!}
+
+          {!! Form::number('cambio', 0, ['class'=>'form-control','id'=>'cambio','step'=>'any','readonly','required']) !!}
+        </div>
+
+        {!! Form::hidden('id', (isset($ticket))?$ticket->id:0, []) !!}
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Cobrar</button>
+      </div>
+
+      {!! Form::close() !!}
+
+    </div>
+  </div>
+</div>
+{{-- /Modal completar venta --}}
 
 @endsection 
 
@@ -340,6 +257,15 @@
           allowedFileExtensions: ['jpg', 'png', 'gif']
         });
 
+        var total = $('#total');
+        var dinero_recibido = $('#dinero_recibido');
+        var cambio = $('#cambio');
+
+        dinero_recibido.bind('change keyup', function(event) {
+          var resta_cambio = Number(dinero_recibido.val() - total.val());
+          cambio.val(resta_cambio);
+        });
+
         var select_producto = $('#apartado_producto');
         var input_piezas = $('#apartado_piezas');
         var select_precio = $('#apartado_precio');
@@ -355,8 +281,8 @@
             $.get(url_existencia, function(resultado) {
               input_piezas.prop('max', resultado.existencia.disponibles);
 
-              select_precio.append('<option val="'+resultado.precio.min+'" selected>'+resultado.precio.min+'</option>');
-              select_precio.append('<option val="'+resultado.precio.max+'">'+resultado.precio.max+'</option>');
+              select_precio.append('<option val="'+resultado.precio.min+'">'+resultado.precio.min+'</option>');
+              select_precio.append('<option val="'+resultado.precio.max+'" selected>'+resultado.precio.max+'</option>');
 
             });
           }          
