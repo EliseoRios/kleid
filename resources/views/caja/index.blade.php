@@ -24,7 +24,7 @@
       <i class="flaticon-right-arrow"></i>
     </li>
     <li class="nav-home">
-      <a>{{ str_pad($ticket->id,5,0,STR_PAD_LEFT) }}</a>
+      <a>Ticket {{ str_pad($ticket->id,5,0,STR_PAD_LEFT) }}</a>
     </li>
     @endif
   </ul>
