@@ -67,6 +67,13 @@ Route::group(['middleware' => ['auth']], function () {
 
 	});
 
+	//Formatos
+	Route::group(['prefix'=>'formatos'], function(){
+
+		Route::get('venta_libre','FormatosController@venta_libre');    
+
+	});
+
 	//Caja
 	Route::group(['prefix'=>'caja'], function(){
 

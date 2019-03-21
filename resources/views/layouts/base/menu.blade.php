@@ -29,7 +29,7 @@
                 <?php 
                   $opcs   = DB::table('menus')->where( DB::raw('substr(codigo,1,2)'),'=',substr($menu->codigo,0,2) )->select('id','codigo','dependencia','area','opcion','url')->OrderBy('id')->get();
                  
-                  $icono = array('Catálogos' => 'diagnoses','CRM' => 'users-cog','Ventas' => 'shopping-cart','Configuración'=>'cog');
+                  $icono = array('Catálogos' => 'diagnoses','CRM' => 'users-cog','Ventas' => 'shopping-cart','Configuración'=>'cog','Formatos'=>'file-pdf');
                 ?>
 
                 @if(Auth::user()->permiso_area($menu->area))

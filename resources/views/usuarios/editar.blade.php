@@ -44,6 +44,7 @@
       {{-- Perfil --}}
         @if(Auth::user()->permiso(array('menu',9001)) == 2 || Auth::user()->id === $usuario->id)
           <div align="right">
+            @if (Auth::user()->perfiles_id === 1)
             <a href="{{ url('caja/saldar_comision/ventas/'.Hashids::encode($usuario->id)) }}" class="btn btn-xs btn-dark" onclick="return confirm('Saldar comisión de ${{ number_format($comision_ventas,2) }}');">
               Saldar comisión ventas <b style="font-size: 12px;">${{ number_format($comision_ventas,2) }}</b>
             </a>
@@ -51,6 +52,7 @@
             <a href="{{ url('caja/saldar_comision/apartado/'.Hashids::encode($usuario->id)) }}" class="btn btn-xs btn-info" onclick="return confirm('Saldar comisión de ${{ number_format($comision_abonos,2) }}');">
               Saldar comisión apartado <b style="font-size: 12px;">${{ number_format($comision_abonos,2) }}</b>
             </a>
+            @endif
 
             <a href="#" class="btn btn-secondary btn-xs" id="boton_editar" title="Consultar" style="color: white;"><i class="fa fa-edit"></i>  </a>          
           </div>
@@ -97,10 +99,12 @@
           </div>
         @endif
 
+        @if (Auth::user()->perfiles_id === 1)
         <label class="checkbox-inline">
           {!! Form::checkbox('permiso_comprar', 1, $usuario->permiso_comprar, ['class'=>'input-disabled','disabled']) !!}
           &nbsp; Permiso para comprar
         </label>
+        @endif
 
         {!! Form::hidden('id',$usuario->id)!!}
 

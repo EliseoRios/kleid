@@ -116,6 +116,19 @@ class MenusSeeder extends Seeder
             'updated_at' =>  date('Y-m-d H:i:s')        
         ]);*/
 
+        //Administracion 5000
+
+        //Formatos 6000
+        DB::table('menus')->insert([
+            'codigo'       => '6001',
+            'dependencia'  => 'Formatos',
+            'area'         => 'Formatos',
+            'opcion'       => 'Formato venta libre',
+            'url'          => 'formatos/venta_libre',
+            'created_at' =>  date('Y-m-d H:i:s'),
+            'updated_at' =>  date('Y-m-d H:i:s')        
+        ]);
+
         // Configuración 9000
         DB::table('menus')->insert([
             'codigo'       => '9001',
