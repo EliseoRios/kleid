@@ -108,7 +108,10 @@ class UsuariosController extends Controller
         //$permiso_supervisor_crm = $usuario->permiso(array('permiso_supervisor_crm','9999'));
         $perfiles = config('sistema.perfiles');
 
-        return view('usuarios.editar',compact('usuario','opciones','permiso_supervisor_crm','permiso_crear_proyectos','permiso_reportes_oportunidades','perfiles'));
+        $comision_ventas = $usuario->ventas()->ventas()->comisionAdeuda()->sum('total_comision');
+        $comision_abonos = $usuario->ventas()->apartado()->comisionAdeuda()->sum('total_comision');
+
+        return view('usuarios.editar',compact('usuario','opciones','permiso_supervisor_crm','permiso_crear_proyectos','permiso_reportes_oportunidades','perfiles','comision_ventas','comision_abonos'));
     }
 
     public function actualizar(Request $request) {

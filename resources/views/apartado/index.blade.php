@@ -139,7 +139,7 @@
 	                {data: 'adeudo', name: 'adeudo',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
 	                {data: 'estatus', name: 'estatus'}
                 ],
-                order: [],
+                order: [3,'DESC'],
 	            language: {
 	                "sProcessing":     "Procesando...",
 					"sLengthMenu":     "Mostrar _MENU_ registros",

@@ -71,12 +71,13 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::group(['prefix'=>'caja'], function(){
 
 		Route::get('{hash_ticket?}','CajaController@index');
+		Route::get('saldar_comision/{formulario}/{hash}','CajaController@saldar_comision');
 
 		Route::group(['prefix'=>'ticket'], function(){
 
 			Route::get('generar','CajaController@generar');
 			Route::get('imprimir/{ticket}','CajaController@imprimir');
-			Route::get('eliminar','CajaController@eliminar');
+			Route::get('eliminar/{hash}','CajaController@eliminar');
 
 			Route::post('agregar','CajaController@agregar');
 			Route::post('completar','CajaController@completar');    

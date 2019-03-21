@@ -36,8 +36,8 @@
     <div class="card-header">
       <div class="d-flex align-items-center">
         <h4 class="card-title">
-          Editar producto 
-          <small> > {{ date('d/m/Y h:i A', strtotime($producto->created_at)) }}</small> 
+          Editar producto > CS #{{ $producto->id }}
+          <small> > {{ date('d/m/Y h:i A', strtotime($producto->created_at)) }}</small>
         </h4>
       </div>
     </div>
@@ -79,7 +79,7 @@
       {{-- Edicion de producto --}}
       <div class="col-md-8 float-right">
         
-      @if ($producto->ventas()->count() <= 0 && Auth::user()->permiso(['menu',2002]) === 2)
+      @if (Auth::user()->permiso(['menu',2002]) === 2){{-- $producto->ventas()->count() <= 0 && --}}
       <a class="btn btn-success btn-sm ml-auto" data-toggle="modal" href='#modalResumen' style="margin-top: 25px; color: white;"><i class="fa fa-money-bill-alt"></i> Resumen</a>
 
       <div align="right" style="margin-top: 25px;">
@@ -245,7 +245,7 @@
           showUpload: false,
           showCancel: false,
           showRemove: false,
-          allowedFileExtensions: ['jpg', 'png', 'gif']
+          allowedFileExtensions: ['jpg', 'jpeg','png', 'gif']
         });
 
         $('#boton_editar').click(function(event) {

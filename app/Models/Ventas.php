@@ -32,7 +32,7 @@ class Ventas extends Model
         return $query->where('estatus','<>',0);
     }
 
-    public function scopeAbonos($query){
+    public function scopeApartado($query){
         return $query->where('tipo_venta','abono');
     }
 

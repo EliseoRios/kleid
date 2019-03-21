@@ -107,6 +107,7 @@ class ApartadoController extends Controller
     		$producto = Productos::find($venta->productos_id);
 
     		$venta->tipo_venta = 'abono';
+            $venta->piezas = 1;
             $venta->pago = ($request->pago > 0)?$request->pago:0;
             $venta->comision = $producto->comision;
             $venta->fecha_plazo = Carbon::now()->addMonth();

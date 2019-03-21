@@ -87,6 +87,7 @@
                 <th>Nombre</th>
                 <th>Género</th>
                 <th>Costo</th>
+                <th>Vencimiento</th>
 
               </tr>
             </thead>
@@ -109,13 +110,17 @@
 
 
                       @if(!$venta->liquidado && $venta->comision_pagada && $venta->entregado && $venta->pago < $cliente->a_favor)
-                      <a href="{{ url('sistema_apartado/liquidar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-primary" style="margin: 1px; width: 30px;" title="Liquidar" onclick="return confirm('Liquidar pieza?');"><i class="fas fa-donate"></i></a>
+                        @if(Auth::user()->perfiles_id === 1 || Auth::user()->id == $venta->usuarios_id)
+                        <a href="{{ url('sistema_apartado/liquidar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-primary" style="margin: 1px; width: 30px;" title="Liquidar" onclick="return confirm('Liquidar pieza?');"><i class="fas fa-donate"></i></a>
+                        @endif  
                       @elseif($venta->pago < $cliente->a_favor)
                       <i class="fa fa-hand-holding-usd text-primary text-center" style="width: 30px; font-size: 18px;" title="Puede liquidarse"></i>
-                      @endif                      
+                      @endif
 
                       @if(!$venta->entregado)
-                      <a href="{{ url('sistema_apartado/entregar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-success" style="margin: 1px; width: 30px;" title="Entregar" onclick="return confirm('Entregar pieza?');"><i class="fas fa-diagnoses"></i></a>
+                        @if(Auth::user()->perfiles_id === 1 || Auth::user()->id == $venta->usuarios_id)
+                        <a href="{{ url('sistema_apartado/entregar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-success" style="margin: 1px; width: 30px;" title="Entregar" onclick="return confirm('Entregar pieza?');"><i class="fas fa-diagnoses"></i></a>
+                        @endif
                       @endif
                       @if($venta->entregado)
                       <i class="fas fa-diagnoses text-success text-center" style="width: 30px;" title="Entregado"></i>
@@ -130,7 +135,9 @@
                       @endif
 
                       @if(!$venta->comision_pagada)
-                      <a href="{{ url('sistema_apartado/eliminar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-danger" style="margin: 1px; width: 30px;" title="Eliminar" onclick="return confirm('Eliminar apartado?');"><i class="fas fa-trash"></i></a>
+                        @if(Auth::user()->perfiles_id === 1 || Auth::user()->id == $venta->usuarios_id)
+                        <a href="{{ url('sistema_apartado/eliminar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-danger" style="margin: 1px; width: 30px;" title="Eliminar" onclick="return confirm('Eliminar apartado?');"><i class="fas fa-trash"></i></a>
+                        @endif
                       @endif                     
 
                     </div>
@@ -141,6 +148,7 @@
                   <td>{{ $producto->nombre }}</td>
                   <td>{{ config('sistema.generos')[$venta->producto->genero] }}</td>
                   <td class="text-right">${{ number_format($venta->pago,2,'.',',') }}</td>
+                  <td class="text-{{ ($venta->fecha_plazo < date('Y-m-d'))?'danger':'primary' }}">{{ date('d/m/Y', strtotime($venta->fecha_plazo)) }}</td>
                 </tr>
 
               @endforeach
@@ -148,8 +156,9 @@
             </tbody>
             <tfoot>
               <tr>
-                <th class="text-right" colspan="6">TOTAL</th>
+                <th class="text-right" colspan="6">TOTAL ADEUDO</th>
                 <th class="text-right" colspan="1">${{ number_format(($cliente->adeudo > 0)?$cliente->adeudo:0,2,'.',',') }}</th>
+                <th></th>
               </tr>
             </tfoot>
 

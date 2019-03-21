@@ -32,6 +32,7 @@
                   $icono = array('Catálogos' => 'diagnoses','CRM' => 'users-cog','Ventas' => 'shopping-cart','Configuración'=>'cog');
                 ?>
 
+                @if(Auth::user()->permiso_area($menu->area))
                 <li class="nav-item">
                     <a data-toggle="collapse" href="#{{ $menu->id }}">
                         <i class="fa fa-{{ $icono[$menu->area] }}"></i>
@@ -41,15 +42,19 @@
                     <div class="collapse" id="{{ $menu->id }}">
                         <ul class="nav nav-collapse">
                             @foreach( $opcs as $opc)
-                            <li>
-                                <a href="{{ URL::to($opc->url) }}">
-                                    <span class="sub-item">{{ $opc->opcion }}</span>
-                                </a>
-                            </li>
+                                @if(Auth::user()->permiso(['menu',$opc->codigo]) > 0)
+                                <li>
+                                    <a href="{{ URL::to($opc->url) }}">
+                                        <span class="sub-item">{{ $opc->opcion }}</span>
+                                    </a>
+                                </li>
+                                @endif
                             @endforeach
                         </ul>
                     </div>
-                </li>            
+                </li>
+                @endif
+
                 @endforeach
                 
             </ul>

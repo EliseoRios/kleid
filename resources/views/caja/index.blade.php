@@ -119,7 +119,9 @@
       </div>
       @endif
 
+      @if($ticket_id > 0)
       <a href="{{ url('caja/ticket/eliminar/'.Hashids::encode($ticket_id)) }}" class="btn btn-warning btn-sm" style="color: white; width: 120px;" title="Eliminar Ticket" onclick="return confirm('Eliminar Ticket ?');"><i class="fas fa-trash"></i> Cancelar ticket</a>
+      @endif
 
       <br><br>
       

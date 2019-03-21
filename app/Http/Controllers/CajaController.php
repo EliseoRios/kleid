@@ -8,6 +8,7 @@ use App\Models\Ventas;
 use App\Models\Tickets;
 use App\Models\Productos;
 use App\Models\Existencias;
+use App\Models\Usuarios;
 
 use Hashids;
 use Auth;
@@ -119,5 +120,32 @@ class CajaController extends Controller
         }
 
         return redirect('caja');
+    }
+
+    public function saldar_comision($formulario,$hash_id)
+    {
+        $id = Hashids::decode($hash_id);                
+        $usuario = Usuarios::find($id[0]);
+
+        if ($id[0] == null)
+            return redirect()->back();
+
+        if (isset($usuario)) { 
+            switch ($formulario) {
+                case 'ventas':
+                    $usuario->ventas()->ventas()->comisionAdeuda()->update(['comision_pagada'=>1,'fecha_saldado'=>date('Y-m-d')]);
+                    break;
+
+                case 'apartado':
+                    $usuario->ventas()->apartado()->comisionAdeuda()->update(['comision_pagada'=>1,'fecha_saldado'=>date('Y-m-d')]);
+                    break;
+                
+                default:
+                    dd('Formulario no encontrado');
+                    break;
+            }
+        }
+
+        return redirect()->back();
     }
 }

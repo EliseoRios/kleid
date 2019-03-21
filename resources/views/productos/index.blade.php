@@ -189,7 +189,7 @@
           language: 'es',
           showUpload: false,
           showCancel: false,
-          allowedFileExtensions: ['jpg', 'png', 'gif']
+          allowedFileExtensions: ['jpg', 'jpeg','png', 'gif']
         });
 
         $('#dtProductos').DataTable({

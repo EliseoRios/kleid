@@ -6,8 +6,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Permisos;
+use App\Models\Menus;
 
-//use Auth;
+use Auth;
 //use DB;
 
 class Usuarios extends Authenticatable
@@ -62,6 +63,18 @@ class Usuarios extends Authenticatable
        $permiso->permiso      = $datos[2];
 
        $permiso->save();
+    }
+
+    public function permiso_area($menu) {
+        $permiso = 0;
+        $items = Menus::where('area',$menu)->get();
+
+        foreach ($items as $item) {
+            if (Auth::user()->permiso(['menu',$item->codigo]))
+                $permiso = 1;
+        }
+
+        return $permiso;
     }
 
     public function scopeActivos($query){

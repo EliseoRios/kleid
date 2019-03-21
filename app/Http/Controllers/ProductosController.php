@@ -35,7 +35,7 @@ class ProductosController extends Controller
 
     public function datatables() {
 
-        $datos = Productos::activos()->with('existencia')->get();
+        $datos = Productos::activos()->with('existencia');
 
         return Datatables::of($datos)
         ->addColumn('opciones',function ($registro) {
@@ -71,7 +71,7 @@ class ProductosController extends Controller
             $cantidad = $producto->existencia->disponibles;
             $disponibles = '<span class="badge badge-pill badge-success">'.$cantidad.'</span>';
 
-            if($cantidad === 0)
+            if($cantidad <= 0)
                 $disponibles = '<span class="badge badge-pill badge-danger">AGOTADO</span>';
 
             return $disponibles;
