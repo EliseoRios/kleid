@@ -8,6 +8,11 @@ use PDF;
 
 class FormatosController extends Controller
 {
+	public function index()
+	{
+		return view('formatos.index');
+	}
+
     public function venta_libre()
     {
     	$pdf = PDF::loadView('formatos.venta_libre')->setPaper('a4');

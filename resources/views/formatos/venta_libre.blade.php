@@ -32,6 +32,7 @@
 					<th>C.S.</th>
 					<th>Pzas</th>
 					<th>Efectivo</th>
+					<th>Precio</th>
 					<th>Tipo</th>
 					<th>Fecha</th>
 					<th style="width: 5px;">L</th>
@@ -43,6 +44,7 @@
 			<tbody>
 				@for($i=0;$i<38;$i++)
 				<tr>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>

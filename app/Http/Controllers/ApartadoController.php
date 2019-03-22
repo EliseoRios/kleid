@@ -19,6 +19,7 @@ use App\Http\Requests;
 use Datatables;
 use Auth;
 use Carbon\Carbon;
+use PDF;
 
 class ApartadoController extends Controller
 {
@@ -222,6 +223,25 @@ class ApartadoController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function estado_cuenta($hash_id)
+    {
+        if (Auth::user()->permiso(['menu',4002]) < 2)
+            return redirect()->back();
+
+        $id = Hashids::decode($hash_id);                
+
+        if ($id[0] == null)
+            return redirect()->back();
+
+        $cliente = Usuarios::find($id[0]);
+        $ventas_sin_liquidar = $cliente->compras()->sinLiquidar()->activas()->get();
+        //$ventas_liquidadas = $cliente->compras()->liquidadas()->activas()->get();
+
+        $pdf = PDF::loadView('apartado.pdf.estado_cuenta',compact('cliente','ventas_sin_liquidar','ventas_liquidadas'));
+
+        return $pdf->inline('estado_cuenta.pdf');
     }
 
 

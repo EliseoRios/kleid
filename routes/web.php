@@ -70,7 +70,8 @@ Route::group(['middleware' => ['auth']], function () {
 	//Formatos
 	Route::group(['prefix'=>'formatos'], function(){
 
-		Route::get('venta_libre','FormatosController@venta_libre');    
+		Route::get('/','FormatosController@index');   
+		Route::get('venta_libre','FormatosController@venta_libre');   
 
 	});
 
@@ -126,6 +127,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::get('liquidar/{id}','ApartadoController@liquidar');
 		Route::get('entregar/{id}','ApartadoController@entregar');
 		Route::get('saldar_comision/{id}','ApartadoController@saldar_comision');
+		Route::get('estado_cuenta/{hash}','ApartadoController@estado_cuenta');
 
 		Route::post('guardar','ApartadoController@guardar');
 		Route::post('actualizar','ApartadoController@actualizar');
@@ -145,6 +147,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::get('eliminar/{id}','ProductosController@eliminar');
 		Route::get('del_detalle/{id}','ProductosController@del_detalle');
 		Route::get('existencia/{id}','ProductosController@existencia');
+		Route::get('imprimir/{formato}','ProductosController@imprimir');
 
 		Route::post('guardar','ProductosController@guardar');
 		Route::post('add_detalle','ProductosController@add_detalle');

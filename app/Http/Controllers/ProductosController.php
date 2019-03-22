@@ -10,10 +10,13 @@ use App\Models\Usuarios;
 use App\Models\Imagenes;
 use App\Models\ProductosDetalles;
 use App\Models\Categorias;
+use App\Models\Existencias;
+use App\Models\Ventas;
 
 use Auth;
 use Datatables;
 use Hashids;
+use PDF;
 
 class ProductosController extends Controller
 {
@@ -320,6 +323,49 @@ class ProductosController extends Controller
         $data['precio'] = $precio;
 
         return response()->json($data);
+    }
+
+    public function imprimir($formulario)
+    {
+        $nombre = "archivo.pdf";
+
+        switch ($formulario) {
+            case 'disponibles':
+                $nombre = 'productos_disponibles';
+                $existencias = Existencias::where('disponibles','>',0)->pluck('productos_id','productos_id')->toArray();
+                $sum_existencias = Existencias::where('disponibles','>',0)->sum('disponibles');
+                $productos = Productos::activos()->whereIn('id',$existencias)->get();
+                $pdf = PDF::loadView('productos.pdf.disponibles',compact('productos','sum_existencias'));
+                break;
+
+            case 'agotados':
+                $nombre = 'productos_agotados';
+                $existencias = Existencias::where('disponibles','<=',0)->pluck('productos_id','productos_id')->toArray();
+                $sum_agotados = Existencias::where('disponibles','<=',0)->count();
+                $productos = Productos::activos()->whereIn('id',$existencias)->get();
+                $pdf = PDF::loadView('productos.pdf.agotados',compact('productos','sum_agotados'));
+                break;
+
+            case 'vendidos':
+                $nombre = 'productos_vendidos';
+                $ventas = Ventas::pluck('productos_id','productos_id')->toArray();
+                $sum_piezas_vendias = Ventas::sum('piezas');
+                $productos = Productos::activos()->whereIn('id',$ventas)->get();
+                $pdf = PDF::loadView('productos.pdf.vendidos',compact('productos','sum_piezas_vendias'));
+                break;
+            
+            default:
+                dd('Formato no encontrado');
+                break;
+        }
+
+        $pdf->setOption('margin-top',15);
+        $pdf->setOption('margin-bottom',15);
+        $pdf->setOption('margin-left',15);
+        $pdf->setOption('margin-right',15);
+        $pdf->setOption('footer-right', '[page] de [toPage]');
+
+        return $pdf->inline($nombre.'pdf');
     }
 
 }

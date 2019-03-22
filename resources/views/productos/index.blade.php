@@ -30,7 +30,19 @@
       <div class="d-flex align-items-center">
         <h4 class="card-title"></h4>
 
-        @if (Auth::user()->permiso(array('menu',2002)) == 2 ) 
+        @if (Auth::user()->permiso(array('menu',2002)) == 2 )
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-success btn-round dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-print"></i> Imprimir
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ url('productos/imprimir/disponibles') }}" target="_blank">Disponibles</a>
+            <a class="dropdown-item" href="{{ url('productos/imprimir/agotados') }}" target="_blank">Agotados</a>
+            <a class="dropdown-item" href="{{ url('productos/imprimir/vendidos') }}" target="_blank">Vendidos</a>
+          </div>
+        </div>
+
         <a href="" data-target="#modalNuevo" data-toggle="modal" class="btn btn-primary btn-round ml-auto" title="Agregar" style="color: white;">
             <i class="fa fa-plus"></i>
             Agregar
