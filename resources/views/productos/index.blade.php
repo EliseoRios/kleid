@@ -60,7 +60,7 @@
 
                 <th style="max-width:40px"></th>
                 <th>Foto</th>
-                <th title="Código del sistema">C.S</th>
+                {{-- <th title="Código del sistema">C.S</th> --}}
                 <th>Código</th>
                 <th>Nombre</th>
                 <th>Género</th>
@@ -214,7 +214,7 @@
               {data: 'opciones', name: 'opciones'},                
               {data: 'imagen', name: 'imagen'},
               {data: 'id', name: 'id'},
-              {data: 'codigo', name: 'codigo'},
+              /*{data: 'codigo', name: 'codigo'},*/
               {data: 'nombre', name: 'nombre'},
               {data: 'genero', name: 'genero'},
               {data: 'costo', name: 'costo',render: $.fn.dataTable.render.number(',', '.', 2, '$')},

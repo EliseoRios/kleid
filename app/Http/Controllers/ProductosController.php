@@ -63,10 +63,10 @@ class ProductosController extends Controller
             return $genero;
         })
         ->addcolumn('imagen', function($producto){
-            $primer_imagen= $producto->imagenes()->first();
-            $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
+            /*$primer_imagen= $producto->imagenes()->first();
+            $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;*/
 
-            $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;">';
+            $imagen = '<img src="'.url('imagen/'.'5').'" class="img-thumbnail" alt="Foto" style="width: 80px;">';
 
             return $imagen;
         })
