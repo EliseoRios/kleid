@@ -150,10 +150,7 @@
               @php
                 $producto = $venta->producto;
 
-                $primer_imagen= $producto->imagenes()->first();
-                $imagen_id = (isset($primer_imagen))?$primer_imagen->id:0;
-
-                $imagen = '<img src="'.url('imagen/'.$imagen_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;" title="#'.str_pad($producto->id, 5,'0',STR_PAD_LEFT).'">';
+                $imagen = '<img src="'.url('imagen/'.$producto->imagen_principal_id).'" class="img-thumbnail" alt="Foto" style="width: 80px;" title="#'.str_pad($producto->id, 5,'0',STR_PAD_LEFT).'">';
               @endphp
               
               <tr>
