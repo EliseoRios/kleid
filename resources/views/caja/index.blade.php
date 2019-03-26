@@ -133,7 +133,7 @@
           <thead>
             <tr>
 
-              <th style="max-width:40px"></th>
+              <th style="max-width:25px"></th>
               <th>Foto</th>
               <th title="Código del sistema">C.S</th>
               <th>Nombre</th>

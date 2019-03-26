@@ -45,10 +45,10 @@
 		    	<table id="datatable" class="display table table-bordered table-striped table-hover small">  				                     
 		    		<thead>
 		    			<tr>		    				
-		    				<th style="min-width:80px"></th>
+		    				<th style="min-width:25px"></th>
 		    				<th>Fecha</th>
-		    				<th>Venta</th>
 		    				<th>Costo</th>
+		    				<th>Venta</th>
 		    				<th>Comisión</th>
 		    				<th>Ganancia</th>
 		    			</tr>
@@ -133,8 +133,8 @@
 	            columns: [
 	                {data: 'id', name: 'id'},
 	                {data: 'fecha', name: 'fecha'},
-	                {data: 'venta', name: 'venta',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
 	                {data: 'costo', name: 'costo',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+	                {data: 'venta', name: 'venta',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
 	                {data: 'comision', name: 'comision',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
 	                {data: 'ganancia_total', name: 'ganancia_total',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
                 ],

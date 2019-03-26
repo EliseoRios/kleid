@@ -58,10 +58,10 @@
             <thead>
               <tr>
 
-                <th style="max-width:40px"></th>
+                <th style="max-width:10px"></th>
                 <th>Foto</th>
-                {{-- <th title="Código del sistema">C.S</th> --}}
-                <th>Código</th>
+                <th title="Código del sistema" style="max-width: 25px;">C.S</th>
+                {{-- <th>Código</th> --}}
                 <th>Nombre</th>
                 <th>Género</th>
                 <th>Costo</th>
