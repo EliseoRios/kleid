@@ -32,7 +32,7 @@
     </li>
     <li class="nav-home">
       <a>
-        Abonos
+        Historial
       </a>
     </li>
   </ul>

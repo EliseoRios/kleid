@@ -71,7 +71,7 @@
       <div class="float-left" style="margin-bottom: 15px;">
         <a href="" class="btn btn-dark btn-xs" data-toggle="modal" data-target="#modalResumen" style="color: white;"><i class="fa fa-file"></i> RESUMEN</a>
 
-        <a href="{{ url('sistema_apartado/abonos/'.Hashids::encode($cliente->id)) }}" class="btn btn-info btn-xs" style="color: white;"><i class="fa fa-money-bill-alt"></i> ABONOS</a>
+        <a href="{{ url('sistema_apartado/abonos/'.Hashids::encode($cliente->id)) }}" class="btn btn-info btn-xs" style="color: white;"><i class="fa fa-money-bill-alt"></i> HISTORIAL</a>
 
         <a class="btn btn-danger btn-xs" href="{{ url('sistema_apartado/estado_cuenta/'.Hashids::encode($cliente->id)) }}" target="_blank" style="color: white;"><i class="fas fa-file-pdf"></i> ESTADO DE CUENTA</a>
       </div>        
