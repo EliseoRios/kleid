@@ -53,9 +53,10 @@ return [
             'prefix' => '',
             'prefix_indexes' => false,
             'strict' => false,
-            'options'   => [
+            'engine' => null,
+            /*'options'   => [
                 \PDO::ATTR_EMULATE_PREPARES => true
-            ],
+            ],*/
         ],
 
         'pgsql' => [
