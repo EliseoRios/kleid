@@ -42,7 +42,7 @@
       @if (Auth::user()->permiso(array('menu',2002)) == 2 || in_array(Auth::user()->perfiles_id, [1,2]))
       <div class="float-right" style="margin-bottom: 15px;">
 
-        @if(Auth::user()->permiso(['menu',4002]) === 2)
+        @if(Auth::user()->permiso(['menu',4002]) == 2)
         <div class="btn-group" role="group" aria-label="Basic example">
           
           <a href="" data-toggle="modal" data-target="#modalAbono" class="btn btn-secondary btn-sm" title="Abonar" style="color: white;">
@@ -134,7 +134,7 @@
                       @endif
 
                       @if(!$venta->comision_pagada)
-                        @if(Auth::user()->perfiles_id === 1 || Auth::user()->id == $venta->usuarios_id)
+                        @if(Auth::user()->perfiles_id == 1 || Auth::user()->id == $venta->usuarios_id)
                         <a href="{{ url('sistema_apartado/eliminar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-danger" style="margin: 1px; width: 30px;" title="Eliminar" onclick="return confirm('Eliminar apartado?');"><i class="fas fa-trash"></i></a>
                         @endif
                       @endif                     
