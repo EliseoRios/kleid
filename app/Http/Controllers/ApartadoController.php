@@ -136,8 +136,9 @@ class ApartadoController extends Controller
 
         $cliente = Usuarios::find($id[0]);
         $abonos = $cliente->abonos()->activos()->orderBy('created_at','DESC')->get();
+        $ventas_liquidadas = $cliente->compras()->liquidadas()->activas()->orderBy('updated_at','DESC')->get();
 
-        return view('apartado.abonos',compact('cliente','abonos'));
+        return view('apartado.abonos',compact('cliente','abonos','ventas_liquidadas'));
     }
 
     public function agregar_abono(Request $request)
@@ -186,6 +187,7 @@ class ApartadoController extends Controller
             return redirect()->back();
 
         if ($venta) { 
+            $venta->fecha_saldado = date('Y-m-d');
             $venta->liquidado = 1;
             $venta->save();
         }
