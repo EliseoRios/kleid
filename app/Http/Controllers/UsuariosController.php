@@ -40,7 +40,7 @@ class UsuariosController extends Controller
 
             $opciones = '';
 
-            if (Auth::user()->permiso(array('menu',9001)) === 2 ) {
+            if (Auth::user()->permiso(array('menu',9001)) == 2 ) {
 
                 $opciones .= '<a href="'. url('usuarios/editar/'.  Hashids::encode($usuario->id) ) .'" class="btn btn-xs btn-primary" title="Consultar" style="color: white; margin: 3px;"><i class="fa fa-edit"></i> </a>';
 

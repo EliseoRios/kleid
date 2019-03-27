@@ -46,7 +46,7 @@ class ApartadoController extends Controller
 
             $opciones = '';
 
-            if (Auth::user()->permiso(array('menu',4002)) === 2 ) {
+            if (Auth::user()->permiso(array('menu',4002)) == 2 ) {
 
                 $opciones .= '<a href="'.url('sistema_apartado/cliente/'.Hashids::encode($usuario->id)).'" class="btn btn-xs btn-primary" title="Control de apartados" style="color: white; margin: 3px;"><i class="fas fa-shopping-basket"></i> </a>';      
 

@@ -30,7 +30,7 @@
 			<div class="d-flex align-items-center">
 				<h4 class="card-title">Categorías</h4>
 
-				@if (Auth::user()->permiso(array('menu',2004)) === 2) 
+				@if (Auth::user()->permiso(array('menu',2004)) == 2) 
 				<a href="" data-target="#modalNuevo" data-toggle="modal" data-formulario="crear" data-identifier="0" class="btn btn-primary btn-round ml-auto" title="Agregar" style="color: white;">
 				    <i class="fa fa-plus"></i>
 				    Agregar

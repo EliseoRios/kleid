@@ -45,7 +45,7 @@ class ProductosController extends Controller
 
             $opciones = '';
 
-            if (Auth::user()->permiso(array('menu',2002)) === 2) {
+            if (Auth::user()->permiso(array('menu',2002)) == 2) {
 
                 $opciones .= '<a href="'. url('productos/editar/'.  Hashids::encode($registro->id) ) .'" class="btn btn-primary btn-xs " title="Consultar" style="width: 30px; margin: 3px;"><i class="fa fa-eye"></i> </a>';
 

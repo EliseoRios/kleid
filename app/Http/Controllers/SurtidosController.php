@@ -39,7 +39,7 @@ class SurtidosController extends Controller
 
             $opciones = '<div class="btn-group">';
 
-            if (Auth::user()->permiso(array('menu',2003)) === 2) {
+            if (Auth::user()->permiso(array('menu',2003)) == 2) {
                 $opciones .= '<a href="'. url('surtidos/editar/'.$registro->fecha) .'" class="btn btn-xs btn-primary" title="Consultar"><i class="fas fa-dolly-flatbed"></i> </a>';
             }
 
@@ -68,7 +68,7 @@ class SurtidosController extends Controller
 
             $opciones = '';
 
-            if (Auth::user()->permiso(array('menu',2003)) === 2) {
+            if (Auth::user()->permiso(array('menu',2003)) == 2) {
                 $opciones .= '<a href="'. url('productos/del_detalle/'.  Hashids::encode($registro->id) ) .'"  onclick="return confirm('."' Eliminar registro ?'".')" class="btn btn-danger btn-xs " title="Eliminar" style="width: 30px; margin: 3px; color: white;">   <i class="fa fa-trash"></i> </a>';
             }
 

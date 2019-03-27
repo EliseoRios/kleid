@@ -40,7 +40,7 @@ class ClientesController extends Controller
 
             $opciones = '';
 
-            if (Auth::user()->permiso(array('menu',2001)) === 2) {
+            if (Auth::user()->permiso(array('menu',2001)) == 2) {
 
                 $opciones .= '<a href="" class="btn btn-xs btn-primary" title="Editar" style="color: white; margin: 3px;" data-toggle="modal" data-target="#modalNuevo" data-formulario="editar" data-identifier="'.Hashids::encode($usuario->id).'"><i class="fa fa-edit"></i> </a>';
 

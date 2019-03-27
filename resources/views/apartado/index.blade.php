@@ -30,7 +30,7 @@
 			<div class="d-flex align-items-center">
 				<h4 class="card-title">Clientes</h4>
 
-				@if (Auth::user()->permiso(array('menu',4002)) === 2) 
+				@if (Auth::user()->permiso(array('menu',4002)) == 2) 
 				<a href="" data-target="#modalNuevo" data-toggle="modal" class="btn btn-primary btn-round ml-auto" title="Agregar" style="color: white;">
 				    <i class="fas fa-user-plus"></i>
 				    Agregar cliente

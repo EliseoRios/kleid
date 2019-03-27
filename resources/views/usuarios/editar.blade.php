@@ -42,9 +42,9 @@
     <div class="card-body">
 
       {{-- Perfil --}}
-        @if(Auth::user()->permiso(array('menu',9001)) == 2 || Auth::user()->id === $usuario->id)
+        @if(Auth::user()->permiso(array('menu',9001)) == 2 || Auth::user()->id == $usuario->id)
           <div align="right">
-            @if (Auth::user()->perfiles_id === 1)
+            @if (Auth::user()->perfiles_id == 1)
             <a href="{{ url('caja/saldar_comision/ventas/'.Hashids::encode($usuario->id)) }}" class="btn btn-xs btn-dark" onclick="return confirm('Saldar comisión de ${{ number_format($comision_ventas,2) }}');">
               Saldar comisión ventas <b style="font-size: 12px;">${{ number_format($comision_ventas,2) }}</b>
             </a>
@@ -99,7 +99,7 @@
           </div>
         @endif
 
-        @if (Auth::user()->perfiles_id === 1)
+        @if (Auth::user()->perfiles_id == 1)
         <label class="checkbox-inline">
           {!! Form::checkbox('permiso_comprar', 1, $usuario->permiso_comprar, ['class'=>'input-disabled','disabled']) !!}
           &nbsp; Permiso para comprar
@@ -125,7 +125,7 @@
     </div>
   </div>
 
-  @if (Auth::user()->perfiles_id === 1)
+  @if (Auth::user()->perfiles_id == 1)
   {{-- Card permisos --}}
   <div class="card">
     <div class="card-header card-primary">

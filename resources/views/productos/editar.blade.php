@@ -51,14 +51,14 @@
           <!-- Indicators -->
           <ul class="carousel-indicators">
             @foreach ($imagenes as $index => $imagen)
-            <li data-target="#demo" data-slide-to="{{ $index }}" class="{{ ($index === 0)?'active':'' }}"></li>
+            <li data-target="#demo" data-slide-to="{{ $index }}" class="{{ ($index == 0)?'active':'' }}"></li>
             @endforeach 
           </ul>
 
           <!-- The slideshow -->
           <div class="carousel-inner">
             @foreach ($imagenes as $index => $imagen)
-            <div class="carousel-item {{ ($index === 0)?'active':'' }}">
+            <div class="carousel-item {{ ($index == 0)?'active':'' }}">
               <img src="{{ url('imagen/'.$imagen->id) }}" style="width: 100%;" class="img-fluid" alt="Foto de producto">
             </div>
             @endforeach            
@@ -79,7 +79,7 @@
       {{-- Edicion de producto --}}
       <div class="col-md-8 float-right">
         
-      @if (Auth::user()->permiso(['menu',2002]) === 2){{-- $producto->ventas()->count() <= 0 && --}}
+      @if (Auth::user()->permiso(['menu',2002]) == 2){{-- $producto->ventas()->count() <= 0 && --}}
       <a class="btn btn-success btn-sm ml-auto" data-toggle="modal" href='#modalResumen' style="margin-top: 25px; color: white;"><i class="fa fa-money-bill-alt"></i> Resumen</a>
 
       <div align="right" style="margin-top: 25px;">

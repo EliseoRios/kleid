@@ -109,7 +109,7 @@
 
 
                       @if(!$venta->liquidado && $venta->comision_pagada && $venta->entregado && $venta->pago < $cliente->a_favor)
-                        @if(Auth::user()->perfiles_id === 1 || Auth::user()->id == $venta->usuarios_id)
+                        @if(Auth::user()->perfiles_id == 1 || Auth::user()->id == $venta->usuarios_id)
                         <a href="{{ url('sistema_apartado/liquidar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-primary" style="margin: 1px; width: 30px;" title="Liquidar" onclick="return confirm('Liquidar pieza?');"><i class="fas fa-donate"></i></a>
                         @endif  
                       @elseif($venta->pago < $cliente->a_favor)
@@ -117,7 +117,7 @@
                       @endif
 
                       @if(!$venta->entregado)
-                        @if(Auth::user()->perfiles_id === 1 || Auth::user()->id == $venta->usuarios_id)
+                        @if(Auth::user()->perfiles_id == 1 || Auth::user()->id == $venta->usuarios_id)
                         <a href="{{ url('sistema_apartado/entregar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-success" style="margin: 1px; width: 30px;" title="Entregar" onclick="return confirm('Entregar pieza?');"><i class="fas fa-diagnoses"></i></a>
                         @endif
                       @endif
@@ -126,7 +126,7 @@
                       @endif
 
                       @if(!$venta->comision_pagada)
-                        @if(Auth::user()->perfiles_id === 1)
+                        @if(Auth::user()->perfiles_id == 1)
                         <a href="{{ url('sistema_apartado/saldar_comision/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-dark" style="margin: 1px; width: 30px;" title="Pagar comisión ${{ number_format($venta->comision,2) }}" onclick="return confirm('Pagar comisión?');"><i class="fas fa-golf-ball"></i></a>
                         @endif                      
                       @else
