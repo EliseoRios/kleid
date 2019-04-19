@@ -88,6 +88,9 @@
                 {{-- <th>Código</th> --}}
                 <th>Nombre</th>
                 <th>Género</th>
+                @if(Auth::user()->perfiles_id == 1 || Auth::user()->perfiles_id == 2)
+                <th>Comisión</th>
+                @endif
                 <th>Costo</th>
                 <th>Vencimiento</th>
 
@@ -108,7 +111,7 @@
                     <div role="group" aria-label="Toolbar with button groups">
 
 
-                      @if(!$venta->liquidado && $venta->comision_pagada && $venta->entregado && $venta->pago < $cliente->a_favor)
+                      @if(!$venta->liquidado && $venta->comision_pagada && $venta->entregado && $venta->pago <= $cliente->a_favor)
                         @if(Auth::user()->perfiles_id == 1 || Auth::user()->id == $venta->usuarios_id)
                         <a href="{{ url('sistema_apartado/liquidar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-primary" style="margin: 1px; width: 30px;" title="Liquidar" onclick="return confirm('Liquidar pieza?');"><i class="fas fa-donate"></i></a>
                         @endif  
@@ -146,6 +149,9 @@
                   {{-- <td>{{ $producto->codigo }}</td> --}}
                   <td>{{ $producto->nombre }}</td>
                   <td>{{ config('sistema.generos')[$venta->producto->genero] }}</td>
+                  @if(Auth::user()->perfiles_id == 1 || Auth::user()->perfiles_id == 2)
+                  <td>{{ number_format($venta->comision,2) }}</td>
+                  @endif
                   <td class="text-right">${{ number_format($venta->pago,2,'.',',') }}</td>
                   <td class="text-{{ ($venta->fecha_plazo < date('Y-m-d'))?'danger':'primary' }}">{{ date('d/m/Y', strtotime($venta->fecha_plazo)) }}</td>
                 </tr>
