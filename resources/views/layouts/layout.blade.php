@@ -22,7 +22,7 @@
                 <div class="container-fluid">                    
                     @yield('search')
                     @yield('notificaciones')
-                    @include('layouts.base.notificaciones')
+                    {{-- @include('layouts.base.notificaciones') --}}
                 </div>
             </nav>
             <!-- End Navbar -->

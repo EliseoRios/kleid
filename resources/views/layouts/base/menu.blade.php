@@ -56,6 +56,13 @@
                 @endif
 
                 @endforeach
+
+                <li class="nav-item">
+                    <a class="dropdown-item" href="{{ url('logout') }}">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <p>Salir</p>
+                    </a>
+                </li>
                 
             </ul>
         </div>
