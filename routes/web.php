@@ -133,6 +133,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::post('actualizar','ApartadoController@actualizar');
 		Route::post('apartar','ApartadoController@apartar');
 		Route::post('agregar_abono','ApartadoController@agregar_abono');    
+		Route::post('traslado','ApartadoController@traslado');    
 
 	});
 

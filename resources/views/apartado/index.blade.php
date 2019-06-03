@@ -49,7 +49,6 @@
 		    				<th>Nombre</th>
 		    				<th>Correo</th>
 		    				<th>Adeudo</th>
-		    				<th>Estatus</th>
 		    			</tr>
 		    		</thead>
 		    		<tbody>
@@ -136,8 +135,7 @@
 	                {data: 'id', name: 'id'},                
 	                {data: 'nombre', name: 'nombre'},
 	                {data: 'email', name: 'email'},
-	                {data: 'adeudo', name: 'adeudo',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
-	                {data: 'estatus', name: 'estatus'}
+	                {data: 'adeudo', name: 'adeudo',render: $.fn.dataTable.render.number(',', '.', 2, '$')}
                 ],
                 order: [3,'DESC'],
 	            language: {

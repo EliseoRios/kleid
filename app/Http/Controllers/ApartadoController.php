@@ -39,7 +39,7 @@ class ApartadoController extends Controller
 
         $datos = Usuarios::activos()->where(function($query){
             $query->where('perfiles_id',3)->orWhere('permiso_comprar',1);
-        })->get();
+        });
 
         return Datatables::of($datos)
         ->editcolumn('id',function ($usuario) {
@@ -58,7 +58,7 @@ class ApartadoController extends Controller
         ->addColumn('adeudo',function($usuario){
             return ($usuario->adeudo > 0)?$usuario->adeudo:0;
         })
-        ->editcolumn('estatus',function ($usuario){ 
+        /*->editcolumn('estatus',function ($usuario){ 
 
             if ($usuario->estatus ==1)  {
                 return "Activo";
@@ -66,7 +66,7 @@ class ApartadoController extends Controller
                 return "Suspendido";
             }
 
-        })
+        })*/
         ->escapeColumns([])       
         ->make(TRUE);
     }
@@ -88,7 +88,11 @@ class ApartadoController extends Controller
         $existencias = Existencias::where('disponibles','>',0)->pluck('productos_id','productos_id')->toArray();
         $productos = Productos::activos()->whereIn('id',$existencias)->select(DB::raw("CONCAT(id,' | ',codigo,' | ',nombre) as nuevo_nombre, id"))->pluck('nuevo_nombre','id');
 
-    	return view('apartado.cliente',compact('cliente','ventas_sin_liquidar','ventas_liquidadas','productos'));
+        $clientes = Usuarios::activos()->where(function($query){
+            $query->where('perfiles_id',3)->orWhere('permiso_comprar',1);
+        })->pluck('nombre','id')->toArray();
+
+    	return view('apartado.cliente',compact('cliente','ventas_sin_liquidar','ventas_liquidadas','productos','clientes'));
     }
 
     public function apartar(Request $request)
@@ -246,5 +250,13 @@ class ApartadoController extends Controller
         return $pdf->inline('estado_cuenta.pdf');
     }
 
+    public function traslado(Request $request)
+    {
+        $venta = Ventas::find($request->ventas_id);
+        $venta->cliente_usuarios_id = $request->clientes_id;
+        $venta->save();
+
+        return redirect()->back();
+    }
 
 }

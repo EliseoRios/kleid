@@ -50,7 +50,7 @@
               &nbsp;Abonar
           </a>
 
-          @if($cliente->a_favor > 0)
+          @if($cliente->a_favor > 0 && Auth::user()->perfiles_id == 1)
           <a href="" data-toggle="modal" data-target="#modalReembolso" class="btn btn-dark btn-sm" title="Reembolsar" style="color: white;">
               <i class="far fa-frown"></i>
               &nbsp;Reembolso
@@ -68,7 +68,7 @@
       </div>
       @endif
 
-      <div class="float-left" style="margin-bottom: 15px;">
+      <div class="btn-group float-left" style="margin-bottom: 15px;">
         <a href="" class="btn btn-dark btn-xs" data-toggle="modal" data-target="#modalResumen" style="color: white;"><i class="fa fa-file"></i> RESUMEN</a>
 
         <a href="{{ url('sistema_apartado/abonos/'.Hashids::encode($cliente->id)) }}" class="btn btn-info btn-xs" style="color: white;"><i class="fa fa-money-bill-alt"></i> HISTORIAL</a>
@@ -140,7 +140,11 @@
                         @if(Auth::user()->perfiles_id == 1 || Auth::user()->id == $venta->usuarios_id)
                         <a href="{{ url('sistema_apartado/eliminar/'.Hashids::encode($venta->id)) }}" class="btn btn-xs btn-danger" style="margin: 1px; width: 30px;" title="Eliminar" onclick="return confirm('Eliminar apartado?');"><i class="fas fa-trash"></i></a>
                         @endif
-                      @endif                     
+                      @endif
+
+                      @if (Auth::user()->perfiles_id == 1)
+                        <a href="#" data-toggle="modal" data-target="#modalTraslado" data-identifier="{{ $venta->id }}" class="btn btn-xs btn-secondary" style="color: white;"><i class="fa fa-retweet"></i> </a>
+                      @endif
 
                     </div>
                   </td>
@@ -338,6 +342,34 @@
 </div>
 {{-- /Modal apartar --}}
 
+{{-- Modal traslado --}}
+<div class="modal fade" id="modalTraslado">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><i class="fa fa-retweet"></i> Traslado</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      {!! Form::open(['action'=>'ApartadoController@traslado','class'=>'form']) !!}
+      <div class="modal-body">
+
+        <div class="form-group">
+          {!! Form::select('clientes_id', $clientes, null, ['class'=>'form-control select2','style'=>'width: 100%;','placeholder'=>'-- Seleccionar cliente --','required']) !!}
+        </div>
+
+        {!! Form::hidden('ventas_id', 0, ['id'=>'traslado_ventas_id']) !!}
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"> Cancelar</i></button>
+        <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Confirmar</button>
+      </div>
+      {!! Form::close() !!}
+    </div>
+  </div>
+</div>
+{{-- /Modal traslado --}}
+
 @endsection 
 
 @section('script')
@@ -376,6 +408,11 @@
 
             });
           }          
+        });
+
+        $('#modalTraslado').on('shown.bs.modal',function(e){
+          var ventas_id = $(e.relatedTarget).data('identifier');
+          $('#traslado_ventas_id').val(ventas_id);
         });
     
     });
