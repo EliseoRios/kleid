@@ -39,7 +39,7 @@ class ApartadoController extends Controller
 
         $datos = Usuarios::activos()->where(function($query){
             $query->where('perfiles_id',3)->orWhere('permiso_comprar',1);
-        });
+        })->get();
 
         return Datatables::of($datos)
         ->editcolumn('id',function ($usuario) {
