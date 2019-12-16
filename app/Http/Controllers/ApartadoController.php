@@ -48,7 +48,9 @@ class ApartadoController extends Controller
 
             if (Auth::user()->permiso(array('menu',4002)) == 2 ) {
 
-                $opciones .= '<a href="'.url('sistema_apartado/cliente/'.Hashids::encode($usuario->id)).'" class="btn btn-xs btn-primary" title="Control de apartados" style="color: white; margin: 3px;"><i class="fas fa-shopping-basket"></i> </a>';      
+                $opciones .= '<a href="'.url('sistema_apartado/estado_cuenta/'.Hashids::encode($usuario->id)).'" target="_blank" class="btn btn-xs btn-success" title="Estado de cuenta" style="color: white; margin: 3px; width: 30px;"><i class="fas fa-file-pdf"></i> </a>';
+
+                $opciones .= '<a href="'.url('sistema_apartado/cliente/'.Hashids::encode($usuario->id)).'" class="btn btn-xs btn-primary" title="Control de apartados" style="color: white; margin: 3px; width: 30px;"><i class="fas fa-shopping-basket"></i> </a>';      
 
             } 
 

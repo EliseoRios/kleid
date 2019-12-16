@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Estado de cuenta</title>
+		<title>Estado de cuenta de {{ $cliente->nombre }}</title>
 
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="{{ asset('templates/atlantis/assets/css/bootstrap.min.css') }}">
@@ -65,7 +65,7 @@
 						<td>{{ $producto->nombre }}</td>
 						<td>{{ config('sistema.generos')[$venta->producto->genero] }}</td>
 						<td class="text-right">${{ number_format($venta->pago,2,'.',',') }}</td>
-						<td class="text-{{ ($venta->fecha_plazo < date('Y-m-d'))?'danger':'primary' }}">{{ date('d/m/Y', strtotime($venta->fecha_plazo)) }}</td>
+						<td class="text-{{ ($venta->fecha_plazo < date('Y-m-d'))?'danger':'primary' }}" style="font-weight: bold;">{{ date('d/m/Y', strtotime($venta->fecha_plazo)) }}</td>
 					</tr>
 				@endforeach
 			</tbody>
@@ -77,10 +77,12 @@
 		      <th>Sin liquidar</th>
 		      <td class="text-right">${{ number_format($cliente->suma_sin_liquidar,2,'.',',') }}</td>
 		    </tr>
+		    @if ($cliente->a_favor > 0)
 		    <tr>
 		      <th>Saldo a favor</th>
 		      <td class="text-right">${{ number_format($cliente->a_favor,2,'.',',') }}</td>
-		    </tr>   
+		    </tr>
+		    @endif
 		    <tr>
 		      <th>Total adeudo</th>
 		      <td class="text-right">${{ number_format(($cliente->adeudo > 0)?$cliente->adeudo:0,2,'.',',') }}</td>

@@ -45,7 +45,7 @@
 		    	<table id="dtusuarios" class="display table table-bordered table-striped table-hover small">  				                     
 		    		<thead>
 		    			<tr>		    				
-		    				<th style="min-width:25px"></th>
+		    				<th style="min-width:80px"></th>
 		    				<th>Nombre</th>
 		    				<th>Correo</th>
 		    				<th>Adeudo</th>
