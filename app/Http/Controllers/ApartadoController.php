@@ -249,7 +249,7 @@ class ApartadoController extends Controller
 
         $pdf = PDF::loadView('apartado.pdf.estado_cuenta',compact('cliente','ventas_sin_liquidar','ventas_liquidadas'));
 
-        return $pdf->inline('estado_cuenta.pdf');
+        return $pdf->inline(str_replace(' ','_',strtolower($cliente->nombre)).'_edo_cuenta.pdf');
     }
 
     public function traslado(Request $request)
