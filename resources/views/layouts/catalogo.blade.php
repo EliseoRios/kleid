@@ -129,7 +129,7 @@
 					<ul class="header-cart-wrapitem w-full">
 						<li class="header-cart-item flex-w flex-t m-b-12">
 							<div class="header-cart-item-img">
-								<img src="{{ asset('img/sistema/iconos/candado-large.jpg') }}" alt="IMG">
+								<img src="{{ asset('img/sistema/iconos/usuario-large.jpg') }}" alt="IMG">
 							</div>
 
 							<div class="header-cart-item-txt p-t-8">
@@ -151,7 +151,7 @@
 
 						<li class="header-cart-item flex-w flex-t m-b-12">
 							<div class="header-cart-item-img">
-								<img src="{{ asset('img/sistema/iconos/usuario-large.jpg') }}" alt="IMG">
+								<img src="{{ asset('img/sistema/iconos/candado-large.jpg') }}" alt="IMG">
 							</div>
 
 							<div class="header-cart-item-txt p-t-8">
