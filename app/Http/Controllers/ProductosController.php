@@ -17,6 +17,7 @@ use Auth;
 use Datatables;
 use Hashids;
 use PDF;
+use Image;
 
 class ProductosController extends Controller
 {
@@ -156,7 +157,28 @@ class ProductosController extends Controller
         $archivo = $request_imagen;
        
         file_put_contents($archivo->getClientOriginalName(), file_get_contents($archivo->getRealPath()));
-             
+
+        //Procesamiento
+        $foto  =  \Image::make($archivo->getClientOriginalName()); 
+
+        $ancho = $foto->width();
+        $alto  = $foto->height();
+
+        if ($ancho > $alto)  {  
+            $foto->resize(500, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+        } else { 
+            $foto->resize(null, 500, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+        }
+
+        $foto->save($archivo->getClientOriginalName());
+
+        //Guardar imagen DB             
         $imagen = new Imagenes;
 
         $imagen->archivo = $archivo->getClientOriginalName();
