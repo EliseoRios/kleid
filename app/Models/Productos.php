@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Existencias;
+
 class Productos extends Model
 {
     protected $table = "productos";
@@ -31,6 +33,12 @@ class Productos extends Model
     public function scopeActivos($query)
     {
     	return $query->where('estatus','<>',0);
+    }
+
+    public function scopeDisponibles($query)
+    {
+        $existencias = Existencias::where('disponibles','>',0)->pluck('productos_id','productos_id')->toArray();
+        return $query->whereIn('id',$existencias);
     }
 
     public static function lista_tallas()

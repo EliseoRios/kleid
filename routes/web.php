@@ -17,8 +17,6 @@ Route::get('/home', function () {
 	return redirect('/');
 });
 
-Auth::routes();
-
 Route::get('imagen/{id}', 'ImagenesController@imagen');
 
 Route::group(['middleware' => ['auth']], function () {
