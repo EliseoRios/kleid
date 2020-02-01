@@ -18,6 +18,7 @@ Route::get('/home', function () {
 });
 
 Route::get('imagen/{id}', 'ImagenesController@imagen');
+Route::get('catalogos/modal_producto/{producto_id}', 'CatalogosController@modal_producto');
 
 Route::group(['middleware' => ['auth']], function () {
 	Route::get('/', 'HomeController@index');
