@@ -547,8 +547,13 @@
 								</a>
 
 								<span class="stext-105 cl3">
-									${{ number_format($producto->precio,2,'.',',') }} 
-									{{-- <small class="text-secondary"><s>25.5</s></small> --}}
+									${{ number_format($producto->precio_minimo,2,'.',',') }}
+
+									@if ($producto->precio_minimo < $producto->precio)
+										<small class="text-secondary">
+											<s>${{ number_format($producto->precio,2,'.',',') }}</s>
+										</small>
+									@endif
 								</span>
 							</div>
 

@@ -34,10 +34,15 @@
 			</h4>
 
 			<span class="mtext-106 cl2">
-				${{ number_format($producto->precio_minimo) }}
+				${{ number_format($producto->precio_minimo,2,'.',',') }}
+
 				@if ($producto->precio > $producto->precio_minimo)
-					&nbsp<small class="text-secondary"><s>{{ $producto->precio }}</s></small>
+					&nbsp<small class="text-secondary"><s>${{ number_format($producto->precio,2,'.',',') }}</s></small>
 				@endif
+
+				<span class="badge badge-pill badge-info pull-right" style="font-size: 15px;">
+					{{ $producto->existencia->disponibles }} {{ ($producto->existencia->disponibles == 1)?"pza":"pzas" }}
+				</span>
 			</span>
 
 			<p class="stext-102 cl3 p-t-23">				
