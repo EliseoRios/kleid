@@ -533,7 +533,7 @@
 					<!-- Block2 -->
 					<div class="block2">
 						<div class="block2-pic hov-img0 label-new" data-label="#{{ $producto->id }}">
-							<img src="{{ url('imagen/'.$producto->imagen_principal_id) }}" alt="Imagen no disponible">
+							<img src="{{ url('imagen/'.$producto->imagen_principal_id) }}" alt="Imagen no disponible" height="470">
 
 							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1 btn-show-more" data-identifier="{{ $producto->id }}">
 								Ver más
